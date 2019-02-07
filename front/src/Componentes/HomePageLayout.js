@@ -10,19 +10,12 @@ import {
   List,
   Segment,
 } from 'semantic-ui-react';
-import DesktopContainer from './Componentes/DesktopContainer';
-import MobileContainer from './Componentes/MobileContainer';
+import DesktopContainer from './DesktopContainer';
+import MobileContainer from './MobileContainer';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    
-    this.state = {
-      
-    };
-  }
+class HomePageLayout extends Component {
+
   
-
   render() {
     return (
       <ResponsiveContainer>
@@ -155,7 +148,7 @@ class App extends Component {
   }
 }
 
-export default App;
+export default HomePageLayout;
 
 const ResponsiveContainer = ({ children }) => (
   <div>

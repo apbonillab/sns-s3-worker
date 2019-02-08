@@ -129,3 +129,75 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+ALTER TABLE `cloud`.`archivos` 
+DROP FOREIGN KEY `usuario`,
+DROP FOREIGN KEY `estado`,
+DROP FOREIGN KEY `concurso`;
+ALTER TABLE `cloud`.`archivos` 
+DROP COLUMN `usuario`,
+DROP INDEX `concurso_idx` ,
+DROP INDEX `estado_idx` ,
+DROP INDEX `usuario_idx` ;
+;
+
+ALTER TABLE `cloud`.`usuario` 
+CHANGE COLUMN `idusuario` `idusuario` INT(11) NOT NULL AUTO_INCREMENT ;
+
+ALTER TABLE `cloud`.`archivos` 
+CHANGE COLUMN `idarchivos` `idarchivos` INT(11) NOT NULL AUTO_INCREMENT ;
+
+ALTER TABLE `cloud`.`gestion_concurso` 
+DROP FOREIGN KEY `creador`,
+DROP FOREIGN KEY `concursos`;
+ALTER TABLE `cloud`.`gestion_concurso` 
+DROP INDEX `creador_idx` ,
+DROP INDEX `concursos_idx` ;
+;
+ALTER TABLE `cloud`.`gestion_concurso` 
+CHANGE COLUMN `idgestion_concurso` `idgestion_concurso` INT(11) NOT NULL AUTO_INCREMENT ;
+
+ALTER TABLE `cloud`.`concursos` 
+CHANGE COLUMN `idconcursos` `idconcursos` INT(11) NOT NULL AUTO_INCREMENT ;
+
+
+ALTER TABLE `cloud`.`cuenta` 
+CHANGE COLUMN `idcuenta` `idcuenta` INT(11) NOT NULL AUTO_INCREMENT ;
+
+ALTER TABLE `cloud`.`estado` 
+CHANGE COLUMN `idestado` `idestado` INT(11) NOT NULL AUTO_INCREMENT ;
+
+ALTER TABLE `cloud`.`archivos` 
+ADD INDEX `usuario_idx` (`usuario` ASC) VISIBLE,
+ADD INDEX `estado_idx` (`estado` ASC) VISIBLE,
+ADD INDEX `concurso_idx` (`concurso` ASC) VISIBLE;
+;
+ALTER TABLE `cloud`.`archivos` 
+ADD CONSTRAINT `usuario`
+  FOREIGN KEY (`usuario`)
+  REFERENCES `cloud`.`usuario` (`idusuario`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `estado`
+  FOREIGN KEY (`estado`)
+  REFERENCES `cloud`.`estado` (`idestado`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `concurso`
+  FOREIGN KEY (`concurso`)
+  REFERENCES `cloud`.`concursos` (`idconcursos`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
+  ALTER TABLE `cloud`.`gestion_concurso` 
+ADD CONSTRAINT `concursos`
+  FOREIGN KEY (`concursos`)
+  REFERENCES `cloud`.`concursos` (`idconcursos`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `creador`
+  FOREIGN KEY (`creador`)
+  REFERENCES `cloud`.`cuenta` (`idcuenta`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;

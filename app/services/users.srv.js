@@ -40,11 +40,49 @@ module.exports.autenticarAdmin = (correo, contrasena, success, error) => {
     })
 }
 
-module.exports.showUsers = (success,error)=>{
-    connection.query(`select * from user`,function(err,result,fields){
+module.exports.mostrarTodos = (success,error)=>{
+    connection.query(`select * from usuario`,function(err,result,fields){
         if(err){
             error(err);
         }
         success(result);
     })
 }
+
+module.exports.mostrarUsuarioXid = (idusuario,success,error)=>{
+    connection.query(`select * from usuario where idusuario = ${idusuario}`,function(err,result,fields){
+        if(err){
+            error(err);
+        }
+        success(result);
+    })
+}
+
+    module.exports.mostrarUsuarioXemail = (correo,success,error)=>{
+        connection.query(`select * from usuario where correo = ${correo}`,function(err,result,fields){
+            if(err){
+                error(err);
+            }
+            success(result);
+        })
+}    
+        
+module.exports.eliminar = (idusuario,success,error)=>{
+    connection.query(`delete from usuario where idusuario = ${idusuario}`,function(err,result,fields){
+        if(err){
+            error(err);
+        }
+        success(result);
+    })
+}
+
+module.exports.editar = (idusuario,nombre,segundonombre,apellido,segundoapellido,correo,contrasena,success,error)=>{
+    connection.query(`update usuario set nombre = "${nombre}",segundo_nombre="${segundonombre}",
+    apellido="${apellido}",segundo_apellido="${segundoapellido}",correo="${correo}",
+    contrasena=${contrasena} where idusuario = ${idusuario}`,function(err,result,fields){
+         if(err){
+             error(err);
+         }
+         success(result);
+     });
+ }

@@ -5,7 +5,11 @@ var logger = require('morgan');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const jwt  = require('jsonwebtoken');
+
 const usersController = require('./app/controller/users.ctrl.js');
+const concursosController = require('./app/controller/concurso.ctrl.js');
+
+
 var app = express();
 app.options('*', cors());
 app.use(cors());
@@ -24,5 +28,5 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/admin', [usersController]);
-
+app.use('/concurso', [concursosController]);
 module.exports = app;

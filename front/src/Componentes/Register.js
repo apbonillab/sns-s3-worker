@@ -6,7 +6,7 @@ class Register extends Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
       Nombre:'',
       Segundo_nombre:'',
@@ -25,7 +25,7 @@ class Register extends Component {
       Segundo_apellido,
       Correo,
       Contrasena}=this.state;
-      
+
     axios.post('/admin/creacion',{
       Nombre,
       Segundo_nombre,
@@ -58,9 +58,9 @@ class Register extends Component {
   render() {
 
     const campos = [
-      {name:'Nombre', label:'Nombre', type:'text'},
+      {name:'Nombre', label:'Primer Nombre', type:'text'},
       {name:'Segundo_nombre', label:'Segundo nombre', type:'text'},
-      {name:'Apellido', label:'Apellido', type:'text'},
+      {name:'Apellido', label:'Primer Apellido', type:'text'},
       {name:'Segundo_apellido', label:'Segundo apellido', type:'text'},
       {name:'Correo', label:'Correo Electronico', type:'text'},
       {name:'Contrasena', label:'Contraseña', type:'password'},
@@ -68,7 +68,7 @@ class Register extends Component {
     ];
 
     return (
-      <Modal 
+      <Modal
         open={this.props.open}
         onClose={this.props.onClose}
       >
@@ -79,7 +79,7 @@ class Register extends Component {
             <Form>
               {campos.map(c => {
                 return(
-                  <Form.Input 
+                  <Form.Input
                     key={c.name}
                     value={this.state.c}
                     onChange={this.handleInput}

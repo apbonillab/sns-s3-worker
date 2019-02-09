@@ -13,6 +13,7 @@ function connectDB(){
         connection = mysql.createConnection({
             host: dbParams.host,
             user: dbParams.user,
+            port: dbParams.port,
             password: dbParams.password,
             database: dbParams.database,
             timeoutBeforeReconnection: dbParams.timeoutBeforeReconnection

@@ -2,6 +2,7 @@
 var express = require('express')
 var routr = express.Router();
 var archivosServices = require('../services/archivos.srv.js');
+var convertirServices = require('../services/conversor.srv.js');
 
 routr.post('/creacion',(req, res) => {
     archivosServices.crearArchivo(
@@ -14,7 +15,7 @@ routr.post('/creacion',(req, res) => {
             res.status(201).send({'message':'Archivo creado exitosamente'})
         },function(error){
             console.log(error);
-            res.status(500).send({'message':'Error en la creacion del archivo'});
+            res.status(500).send(error);
             
         }
     )
@@ -33,5 +34,24 @@ routr.get('/obtener/concurso/:concurso', (req, res) => {
     )
 
 })
+
+var cron = require('node-cron');
+ 
+cron.schedule('* * * * *', () => {
+  console.log('running a task every minute');
+  convertirServices.convertirAudio(function (success) {
+            archivosServices.actualizarEstado(success.idarchivos,success.voz_inicial+'_final',success.correo,
+            function(archivo){
+                console.log("OK envio correo y actualizacion estado de archivo ");
+            },function(error){
+                console.log('error actualizacion y envio correo'+error);
+            })
+    },function (error){
+        console.log('error'+error);
+
+  })
+});
+
+
 
 module.exports = routr;

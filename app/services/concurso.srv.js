@@ -3,6 +3,11 @@
 const mysql = require('mysql');
 const connection = require('../../db');
 const security = require('./security.srv');
+var fs = require('fs');
+var conf = require('../../config.js');
+const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos')
+const RUTA_GESTOR_ARCHIVOS_RAIZ = conf.get('ruta_gestion_archivos_raiz')
+
 
 module.exports.crear = (nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner,idcuentaadmin,success,error)=>{
     let userData = [[nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner]];
@@ -11,12 +16,20 @@ module.exports.crear = (nombre,fecha_inicio,fecha_fin,valor,guion,recomendacione
         if(err){
             error(err);
         }
-        let concurso = [[result.insertId,idcuentaadmin]];
+        let idconcurso = result.insertId;
+        let concurso = [[idconcurso,idcuentaadmin]];
         connection.query(`insert into gestion_concurso (concursos,creador) values ? `,
         [concurso],function(err,result,fields){
             if(err){
                 error(err);
             }else{
+                //Si es correcto se crea la carpeta del concurso para la gestion de archivos
+                console.log(RUTA_GESTOR_ARCHIVOS+idconcurso);
+                if(!fs.existsSync(RUTA_GESTOR_ARCHIVOS_RAIZ))
+                     fs.mkdirSync(RUTA_GESTOR_ARCHIVOS_RAIZ);
+                fs.mkdirSync(RUTA_GESTOR_ARCHIVOS+idconcurso);
+                fs.mkdirSync(RUTA_GESTOR_ARCHIVOS+idconcurso+'//inicial');
+                fs.mkdirSync(RUTA_GESTOR_ARCHIVOS+idconcurso+'//convertida');
                 success(result);
             }
          

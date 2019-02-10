@@ -7,5 +7,7 @@
         "database": "cloud",
         "timeoutBeforeReconnection": "10000"
     },
-    "JWT_SECRET":"access987654"
+    "JWT_SECRET":"access987654",
+    "ruta_gestion_archivos_raiz":".//Voces",
+    "ruta_gestion_archivos":".//Voces//concurso_"
 }

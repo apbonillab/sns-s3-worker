@@ -49,13 +49,13 @@ routr.get('/obtener/admin/:idadmin', (req, res) => {
 
 })
 
-routr.get('/obtener/id/:id',(req, res) => {
-    concursoSrv.mostrarConcursoXid(
-        req.params.id,
+routr.get('/obtener/url/:url',(req, res) => {
+    concursoSrv.mostrarConcursoXURL(
+        req.params.url,
         function (concurso) {
             res.status(200).send(concurso)
         },function(error){
-            res.status(500).send({'message':'Error al obtener concurso por id'});
+            res.status(500).send({'message':'Error al obtener concurso por url'});
         }
     )
 

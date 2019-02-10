@@ -20,11 +20,11 @@ class NuevoConcurso extends Component {
       banner: [],
     };
 
-    
+
   }
-  
-  componentDidMount(){
-    this.setState({url:`${localStorage.getItem('iduser')}con_${this.state.nombre}`});
+
+  componentDidMount() {
+    this.setState({ url: `${localStorage.getItem('iduser')}con_${this.state.nombre}` });
   }
 
   onDrop = (picture) => {
@@ -32,7 +32,7 @@ class NuevoConcurso extends Component {
       banner: picture,
     });
   }
-  
+
   handleSave = () => {
     const {
       nombre,
@@ -53,9 +53,9 @@ class NuevoConcurso extends Component {
       guion,
       recomendaciones,
       url,
-      banner,
+      banner: '',
       idusuario
-    },{headers: {'Authorization' : `Bearer ${token}`},}).then(res => {
+    }, { headers: { 'Authorization': `Bearer ${token}` }, }).then(res => {
       console.log(res.data);
       let exito = res.data.exito;
       if (!exito) {
@@ -71,10 +71,10 @@ class NuevoConcurso extends Component {
   handleInput = (e) => {
     let name = e.target.name;
     let value = e.target.value;
-    this.setState({ [name]: value },() => {
-      if (name==='nombre'){
-        let val = `${localStorage.getItem('iduser')}con_${this.state.nombre}`.replace(/\s/g,'');
-        this.setState({url:val});
+    this.setState({ [name]: value }, () => {
+      if (name === 'nombre') {
+        let val = `${localStorage.getItem('iduser')}con_${this.state.nombre}`.replace(/\s/g, '');
+        this.setState({ url: val });
       }
     });
   }
@@ -90,8 +90,8 @@ class NuevoConcurso extends Component {
 
     const campos = [
       { name: 'nombre', label: 'Nombre', type: 'text' },
-      { name: 'fecha_inicio', label: 'Fecha de Inicio', type: 'date', value:this.state.fecha_inicio },
-      { name: 'fecha_fin', label: 'Fecha fin', type: 'date',value:this.state.fecha_fin  },
+      { name: 'fecha_inicio', label: 'Fecha de Inicio', type: 'date', value: this.state.fecha_inicio },
+      { name: 'fecha_fin', label: 'Fecha fin', type: 'date', value: this.state.fecha_fin },
       { name: 'valor', label: 'Valor a pagar', type: 'text' },
       { name: 'guion', label: 'Guion', type: 'text' },
       { name: 'recomendaciones', label: 'Recomendaciones', type: 'text' },
@@ -116,6 +116,7 @@ class NuevoConcurso extends Component {
                 if (c.type === 'date') {
                   return (
                     <DateInput
+                      key={c.name}
                       name={c.name}
                       label={c.label}
                       value={c.value}
@@ -125,9 +126,8 @@ class NuevoConcurso extends Component {
                     />
                   );
                 }
-                else if (c.name==='url')
-                {
-                  return(
+                else if (c.name === 'url') {
+                  return (
                     <Form.Input
                       key={c.name}
                       value={this.state.url}
@@ -138,9 +138,10 @@ class NuevoConcurso extends Component {
                     />
                   );
                 }
-                else if (c.name==='banner'){
-                  return(
+                else if (c.name === 'banner') {
+                  return (
                     <ImageUploader
+                      key={c.name}
                       withIcon={true}
                       buttonText='Choose images'
                       onChange={this.onDrop}

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Button,
   Container,
@@ -9,11 +9,13 @@ import {
   Image,
   List,
   Segment,
+  CardGroup
 } from 'semantic-ui-react';
 
 import JWPlayer from './Componentes/JWPlayer';
 import ResponsiveContainer from './Componentes/ResponsiveContainer';
-import NuevoConcurso from './Componentes/NuevoConcurso';
+import Axios from 'axios';
+import CardConcurso from './Componentes/CardConcurso';
 
 
 class App extends Component {
@@ -21,24 +23,61 @@ class App extends Component {
     super(props);
 
     this.state = {
-      admin:localStorage.getItem('usuario'),
-      openConcurso:false
+      admin: localStorage.getItem('usuario'),
+      openConcurso: false,
+      listaConcursos: [],
+      concursoActual: ''
     };
   }
 
+  componentDidMount() {
+    this.getConcursos();
+  }
+
   setAdmin = (user) => {
-    this.setState({admin:user});
+    this.setState({ admin: user });
   }
 
   onCloseConcurso = () => {
     this.setState({
-      openConcurso:false
+      openConcurso: false
     });
+  }
+
+  viewConcurso = (idConcurso) => {
+    this.setState({
+      concursoActual: idConcurso
+    });
+  }
+
+  getConcursos = () => {
+    let token = localStorage.getItem('JWToken');
+    Axios.get(`/concurso/obtener/admin/${localStorage.getItem('iduser')}`, { headers: { 'Authorization': `Bearer ${token}` }, })
+      .then(res => {
+        console.log(res.data);
+        this.setState({listaConcursos:res.data});
+        /* res.data.map(c => {
+          console.log(c);
+          this.setState({
+            listaConcursos: this.state.listaConcursos.push(
+              {
+                key: c.idConcurso,
+                urlImagen: c.banner,
+                nombreConcurso: c.nombre,
+                fechaInicio: c.fecha_inicio,
+                fechaFin: c.fecha_fin,
+                valor: c.valor,
+                onClick: this.viewConcurso
+              }
+            )
+          });
+        }); */
+      }).catch(err => console.log(err));
   }
 
   render() {
 
-    if (!this.state.admin){
+    if (!this.state.admin) {
       return (
         <ResponsiveContainer setAdmin={this.setAdmin}>
           <Segment style={{ padding: '8em 0em' }} vertical>
@@ -46,18 +85,18 @@ class App extends Component {
               <Grid.Row>
                 <Grid.Column width={8}>
                   <Header as='h3' style={{ fontSize: '2em' }}>
-              We Help Companies and Companions
+                    We Help Companies and Companions
                   </Header>
                   <p style={{ fontSize: '1.33em' }}>
-              We can give your company superpowers to do things that they never thought possible.
-              Let us delight your customers and empower your needs... through pure data analytics.
+                    We can give your company superpowers to do things that they never thought possible.
+                    Let us delight your customers and empower your needs... through pure data analytics.
                   </p>
                   <Header as='h3' style={{ fontSize: '2em' }}>
-              We Make Bananas That Can Dance
+                    We Make Bananas That Can Dance
                   </Header>
                   <p style={{ fontSize: '1.33em' }}>
-              Yes that's right, you thought it was the stuff of dreams, but even bananas can be
-              bioengineered.
+                    Yes that's right, you thought it was the stuff of dreams, but even bananas can be
+                    bioengineered.
                   </p>
                 </Grid.Column>
                 <Grid.Column floated='right' width={6}>
@@ -77,13 +116,13 @@ class App extends Component {
               <Grid.Row textAlign='center'>
                 <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
                   <Header as='h3' style={{ fontSize: '2em' }}>
-              "What a Company"
+                    "What a Company"
                   </Header>
                   <p style={{ fontSize: '1.33em' }}>That is what they all say about us</p>
                 </Grid.Column>
                 <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
                   <Header as='h3' style={{ fontSize: '2em' }}>
-              "I shouldn't have gone with their competitor."
+                    "I shouldn't have gone with their competitor."
                   </Header>
                   <p style={{ fontSize: '1.33em' }}>
                     <Image avatar src='/images/avatar/large/nan.jpg' />
@@ -97,15 +136,15 @@ class App extends Component {
           <Segment style={{ padding: '8em 0em' }} vertical>
             <Container text>
               <Header as='h3' style={{ fontSize: '2em' }}>
-          Breaking The Grid, Grabs Your Attention
+                Breaking The Grid, Grabs Your Attention
               </Header>
               <p style={{ fontSize: '1.33em' }}>
-          Instead of focusing on content creation and hard work, we have learned how to master the
-          art of doing nothing by providing massive amounts of whitespace and generic content that
-          can seem massive, monolithic and worth your attention.
+                Instead of focusing on content creation and hard work, we have learned how to master the
+                art of doing nothing by providing massive amounts of whitespace and generic content that
+                can seem massive, monolithic and worth your attention.
               </p>
               <Button as='a' size='large'>
-          Read More
+                Read More
               </Button>
 
               <Divider
@@ -118,15 +157,15 @@ class App extends Component {
               </Divider>
 
               <Header as='h3' style={{ fontSize: '2em' }}>
-          Did We Tell You About Our Bananas?
+                Did We Tell You About Our Bananas?
               </Header>
               <p style={{ fontSize: '1.33em' }}>
-          Yes I know you probably disregarded the earlier boasts as non-sequitur filler content, but
-          it's really true. It took years of gene splicing and combinatory DNA research, but our
-          bananas can really dance.
+                Yes I know you probably disregarded the earlier boasts as non-sequitur filler content, but
+                it's really true. It took years of gene splicing and combinatory DNA research, but our
+                bananas can really dance.
               </p>
               <Button as='a' size='large'>
-          I'm Still Quite Interested
+                I'm Still Quite Interested
               </Button>
             </Container>
           </Segment>
@@ -155,10 +194,10 @@ class App extends Component {
                   </Grid.Column>
                   <Grid.Column width={7}>
                     <Header as='h4' inverted>
-                Footer Header
+                      Footer Header
                     </Header>
                     <p>
-                Extra space for a call to action inside the footer that could help re-engage users.
+                      Extra space for a call to action inside the footer that could help re-engage users.
                     </p>
                   </Grid.Column>
                 </Grid.Row>
@@ -168,23 +207,50 @@ class App extends Component {
         </ResponsiveContainer>
       );
     }
-    else{
-      return(
-        <ResponsiveContainer setAdmin={this.setAdmin}
-          openConcurso={this.state.openConcurso}
-          onCloseConcurso={this.onCloseConcurso}
-        >
-          <p>Hola admin {this.state.admin}</p>
-          <Container>
-            <Button
-              primary
-              onClick={()=>this.setState({openConcurso:true})}
-            >
-              Nuevo Concuso
-            </Button>
-          </Container>
-        </ResponsiveContainer>
-      );
+    else {
+      if (!this.state.concursoActual) {
+        return (
+          <ResponsiveContainer setAdmin={this.setAdmin}
+            openConcurso={this.state.openConcurso}
+            onCloseConcurso={this.onCloseConcurso}
+          >
+            <p>Hola admin {this.state.admin}</p>
+            <Container>
+              <Button
+                primary
+                onClick={() => this.setState({ openConcurso: true })}
+              >
+                Nuevo Concuso
+              </Button>
+            </Container>
+            <Container>
+              <CardGroup>
+                {this.state.listaConcursos.map(card => {
+                  return (
+                    <CardConcurso
+                      key={card.idconcurso}
+                      urlImagen={card.banner}
+                      nombreConcurso={card.nombre}
+                      fechaInicio={card.fecha_inicio}
+                      fechaFin={card.fecha_fin}
+                      valor={card.valor}
+                      onClick={this.viewConcurso}
+                    >
+                    </CardConcurso>
+                  );
+                })}
+              </CardGroup>
+            </Container>
+          </ResponsiveContainer>
+        );
+      }
+      else {
+        return (
+          <div>
+            esta en el concurso {this.state.concursoActual}
+          </div>
+        );
+      }
     }
   }
 }

@@ -50,10 +50,11 @@ module.exports.mostrarTodos = (success,error)=>{
     })
 }
 
-module.exports.mostrarConcursoXid = (idconcursos,success,error)=>{
-    connection.query(`select * from concursos where idconcursos = ${idconcursos}`,function(err,result,fields){
+module.exports.mostrarConcursoXURL = (urlconcurso,success,error)=>{
+    connection.query(`select * from concursos where url = '${urlconcurso}'`,function(err,result,fields){
         if(err){
             error(err);
+            console.log(err);
         }else{
             success(result);
         }

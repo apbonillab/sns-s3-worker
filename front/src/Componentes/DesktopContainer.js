@@ -138,11 +138,6 @@ class DesktopContainer extends Component {
                       inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
                     Sign Up
                     </Button>
-                    <Button
-                      onClick={this.handleConcurso}
-                      as='a' inverted={!fixed}>
-                    Crear Concurso
-                    </Button>
                   </Menu.Item>}
               </Container>
             </Menu>

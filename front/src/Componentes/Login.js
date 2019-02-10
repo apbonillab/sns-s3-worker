@@ -6,13 +6,13 @@ class Login extends Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state={
       correo:'',
       contrasena:''
     };
   }
-  
+
 
   handleInput = (e) => {
     let name = e.target.name;
@@ -36,7 +36,7 @@ class Login extends Component {
         else{
           let data = res.data;
           localStorage.setItem('JWToken',data.token);
-          localStorage.setItem('usuario',data.usuario);
+          localStorage.setItem('usuario',data.user);
           this.props.verificar();
         }
       }).catch(err => console.log(err));
@@ -44,7 +44,7 @@ class Login extends Component {
 
   render() {
     return (
-      <Modal 
+      <Modal
         open={this.props.open}
         onClose={this.props.onClose}
       >
@@ -67,7 +67,7 @@ class Login extends Component {
                     icon='lock'
                     iconPosition='left'
                     placeholder='Contraseña'
-                    type='contrasena'
+                    type='password'
                     name='contrasena'
                     onChange={this.handleInput}
                   />

@@ -2,49 +2,54 @@ import React, { Component } from 'react';
 import { Button, Form, Modal } from 'semantic-ui-react';
 import axios from 'axios';
 
-class Register extends Component {
+class Concurso extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      nombre:'',
-      segundo_nombre:'',
-      apellido:'',
-      segundo_apellido:'',
-      correo:'',
-      contrasena:'',
-      contrasena2:'',
+      Nombre:'',
+      Fecha_inicio:'',
+      Fecha_fin:'',
+      valor:'',
+      guion:'',
+      recomendaciones:'',
+      url_concurso:'',
+      banner:'',
+      id_usuario:'',
     };
   }
 
   handleSave = () =>{
-    const {nombre,
-      segundo_nombre,
-      apellido,
-      segundo_apellido,
-      correo,
-      contrasena}=this.state;
+    const {
+      Nombre,
+      Fecha_inicio,
+      Fecha_fin,
+      valor,
+      guion,
+      recomendaciones,
+      url_concurso,
+      banner,
+      id_usuario}=this.state;
 
-    axios.post('/admin/creacion',{
-      nombre,
-      segundo_nombre,
-      apellido,
-      segundo_apellido,
-      correo,
-      contrasena
+    axios.post('/concurso/creacion',{
+      Nombre,
+      Fecha_inicio,
+      Fecha_fin,
+      valor,
+      guion,
+      recomendaciones,
+      url_concurso,
+      banner,
+      id_usuario
     }).then(res => {
       console.log(res.data);
       let exito = res.data.exito;
       if(!exito){
-        console.log(res.data.mensaje);
+        alert("Intentelo nuevamente");
       }
       else{
-        //queda logueado
-        let data = res.data;
-        localStorage.setItem('JWToken',data.token);
-        localStorage.setItem('usuario',data.usuario);
-        this.props.verificar();
+        console.log(exito)
       }
     }).catch(err => console.log(err));
   }
@@ -58,21 +63,24 @@ class Register extends Component {
   render() {
 
     const campos = [
-      {name:'nombre', label:'Primer Nombre', type:'text'},
-      {name:'segundo_nombre', label:'Segundo nombre', type:'text'},
-      {name:'apellido', label:'Primer Apellido', type:'text'},
-      {name:'segundo_apellido', label:'Segundo apellido', type:'text'},
-      {name:'correo', label:'Correo Electronico', type:'text'},
-      {name:'contrasena', label:'Contraseña', type:'password'},
-      {name:'contrasena2', label:'Repetir contraseña', type:'password'},
+      {name:'Nombre', label:'Nombre', type:'text'},
+      {name:'fecha_inicio', label:'Fecha de Inicio', type:'text'},
+      {name:'fecha_fin', label:'Fecha_fin', type:'text'},
+      {name:'valor', label:'Valor a pagar', type:'text'},
+      {name:'guion', label:'Guion', type:'text'},
+      {name:'recomendaciones', label:'Recomendaciones', type:'text'},
+      {name:'url_concurso', label:'Url/Direccion Web', type:'text'},
+      {name:'banner', label:'Banner/Imagen', type:'text'},
+
     ];
 
     return (
       <Modal
         open={this.props.open}
         onClose={this.props.onClose}
+
       >
-        <Modal.Header>Registrarse como administrador</Modal.Header>
+        <Modal.Header>Crear un Concurso</Modal.Header>
         <Modal.Content image>
           <Modal.Description>
             {/* <Header>{this.props.id}</Header> */}
@@ -94,7 +102,7 @@ class Register extends Component {
         </Modal.Content>
         <Modal.Actions>
           <Button primary
-            content='Registrar'
+            content='Crear Concurso'
             icon='save'
             onClick={this.handleSave}
           />
@@ -104,4 +112,4 @@ class Register extends Component {
   }
 }
 
-export default Register;
+export default Concurso;

@@ -74,6 +74,27 @@ routr.delete('/eliminar/:id',ensureToken, (req, res) => {
 
 })
 
+routr.post('/editar',ensureToken,(req, res) => {
+    concursoSrv.crear(
+        rea.body.idconcursos,
+        req.body.nombre,
+        req.body.fecha_inicio,
+        req.body.fecha_fin,
+        req.body.valor,
+        req.body.guion,
+        req.body.recomendaciones,
+        req.body.url,
+        req.body.banner,
+        function (concurso) {
+            res.status(200).send({'message':'Concurso actualizado exitosamente'})
+        },function(error){
+            res.status(500).send({'message':'Error en la actualizacion del concurso'});
+            
+        }
+    )
+
+})
+
 function ensureToken(req,res,next){
     const beareheader = req.headers['authorization'];
     console.log('bearerheader: '+beareheader);

@@ -7,9 +7,6 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "atob": "^2.1.2",
-    "b64-to-blob": "^1.2.19",
-    "blob": "0.0.5",
     "body-parser": "^1.18.3",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.5",
@@ -24,6 +21,7 @@
     "mysql": "^2.16.0",
     "nconf": "^0.10.0",
     "node-cron": "^2.0.3",
-    "nodemailer": "^5.1.1"
+    "nodemailer": "^5.1.1",
+    "react-jw-player": "^1.19.0"
   }
 }

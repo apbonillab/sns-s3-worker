@@ -20,7 +20,7 @@ class CardConcurso extends Component {
             content='Ver concurso'
             color='teal'
             as='a'
-            onClick={this.props.onClick}
+            onClick={() => {this.props.onClick(this.props.id);}}
           />
         </Card.Content>
       </Card>

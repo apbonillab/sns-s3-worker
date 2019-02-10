@@ -12,16 +12,17 @@ import {
 } from 'semantic-ui-react';
 import DesktopContainer from './Componentes/DesktopContainer';
 import MobileContainer from './Componentes/MobileContainer';
+import JWPlayer from './Componentes/JWPlayer';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
-      
+
     };
   }
-  
+
 
   render() {
     return (
@@ -113,6 +114,7 @@ class App extends Component {
             <Button as='a' size='large'>
           I'm Still Quite Interested
             </Button>
+            <JWPlayer>Reproductor</JWPlayer>
           </Container>
         </Segment>
 
@@ -151,6 +153,8 @@ class App extends Component {
           </Container>
         </Segment>
       </ResponsiveContainer>
+
+
     );
   }
 }

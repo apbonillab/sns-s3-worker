@@ -11,6 +11,8 @@ import {
 import HomepageHeading from './HomepageHeading';
 import Register from './Register';
 import Login from './Login';
+import Concurso from './Concurso';
+
 
 class DesktopContainer extends Component {
   constructor(props) {
@@ -19,7 +21,8 @@ class DesktopContainer extends Component {
       usuario: JSON.parse(localStorage.getItem('usuario')),
       token: localStorage.getItem('JWToken'),
       modalRegistro:false,
-      modalLogin:false
+      modalLogin:false,
+      modalConcurso:false
     };
   }
 
@@ -51,7 +54,7 @@ class DesktopContainer extends Component {
       window.location.reload()
     );
   }
-  
+
   handleRegistro = () => {
     this.setState({ modalRegistro: true });
   }
@@ -59,7 +62,12 @@ class DesktopContainer extends Component {
   handleLogin = () => {
     this.setState({ modalLogin: true });
   }
+  handleConcurso = () => {
+    this.setState({ modalConcurso: true });
+  }
+  handleCloseRegistro = () => this.setState({ modalRegistro: false })
   handleCloseLogin = () => this.setState({ modalLogin: false })
+  handleCloseConcurso = () => this.setState({ modalConcurso: false })
   hideFixedMenu = () => this.setState({ fixed: false })
   showFixedMenu = () => this.setState({ fixed: true })
 
@@ -105,21 +113,26 @@ class DesktopContainer extends Component {
                 <Menu.Item as='a'>Careers</Menu.Item>
                 {this.state.sesionIniciada?
                   <Menu.Item position='right'>
-                    <Button 
+                    <Button
                       content={this.state.usuario}
                       as='a' inverted={!fixed}
                     /></Menu.Item>:
                   <Menu.Item position='right'>
-                    <Button 
+                    <Button
                       onClick={this.handleLogin}
                       as='a' inverted={!fixed}>
                     Log in
                     </Button>
-                    <Button as='a' 
+                    <Button as='a'
                       onClick={this.handleRegistro}
                       inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
                     Sign Up
-                    </Button> 
+                    </Button>
+                    <Button
+                      onClick={this.handleConcurso}
+                      as='a' inverted={!fixed}>
+                    Crear Concurso
+                    </Button>
                   </Menu.Item>}
               </Container>
             </Menu>
@@ -136,13 +149,17 @@ class DesktopContainer extends Component {
           onClose={this.handleCloseLogin}
           verificar={this.verificarStorage}
         />
+        <Concurso
+          open={this.state.modalConcurso}
+          onClose={this.handleCloseConcurso}
+        />
         {children}
       </Responsive>
     );
   }
-  
-  
-  
+
+
+
 }
 
 DesktopContainer.propTypes = {

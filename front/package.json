@@ -20,6 +20,9 @@
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:3000",
+  "resolutions": {
+    "ajv": "6.8.1"
+  },
   "eslintConfig": {
     "extends": "react-app"
   },

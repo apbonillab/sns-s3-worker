@@ -8,31 +8,31 @@ class Register extends Component {
     super(props);
 
     this.state = {
-      Nombre:'',
-      Segundo_nombre:'',
-      Apellido:'',
-      Segundo_apellido:'',
-      Correo:'',
-      Contrasena:'',
-      Contrasena2:'',
+      nombre:'',
+      segundo_nombre:'',
+      apellido:'',
+      segundo_apellido:'',
+      correo:'',
+      contrasena:'',
+      contrasena2:'',
     };
   }
 
   handleSave = () =>{
-    const {Nombre,
-      Segundo_nombre,
-      Apellido,
-      Segundo_apellido,
-      Correo,
-      Contrasena}=this.state;
+    const {nombre,
+      segundo_nombre,
+      apellido,
+      segundo_apellido,
+      correo,
+      contrasena}=this.state;
 
     axios.post('/admin/creacion',{
-      Nombre,
-      Segundo_nombre,
-      Apellido,
-      Segundo_apellido,
-      Correo,
-      Contrasena
+      nombre,
+      segundo_nombre,
+      apellido,
+      segundo_apellido,
+      correo,
+      contrasena
     }).then(res => {
       console.log(res.data);
       let exito = res.data.exito;
@@ -58,13 +58,13 @@ class Register extends Component {
   render() {
 
     const campos = [
-      {name:'Nombre', label:'Primer Nombre', type:'text'},
-      {name:'Segundo_nombre', label:'Segundo nombre', type:'text'},
-      {name:'Apellido', label:'Primer Apellido', type:'text'},
-      {name:'Segundo_apellido', label:'Segundo apellido', type:'text'},
-      {name:'Correo', label:'Correo Electronico', type:'text'},
-      {name:'Contrasena', label:'Contraseña', type:'password'},
-      {name:'Contrasena2', label:'Repetir contraseña', type:'password'},
+      {name:'nombre', label:'Primer Nombre', type:'text'},
+      {name:'segundo_nombre', label:'Segundo nombre', type:'text'},
+      {name:'apellido', label:'Primer Apellido', type:'text'},
+      {name:'segundo_apellido', label:'Segundo apellido', type:'text'},
+      {name:'correo', label:'Correo Electronico', type:'text'},
+      {name:'contrasena', label:'Contraseña', type:'password'},
+      {name:'contrasena2', label:'Repetir contraseña', type:'password'},
     ];
 
     return (

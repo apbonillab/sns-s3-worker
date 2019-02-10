@@ -36,7 +36,7 @@ class Login extends Component {
         else{
           let data = res.data;
           localStorage.setItem('JWToken',data.token);
-          localStorage.setItem('usuario',data.usuario);
+          localStorage.setItem('usuario',data.user);
           this.props.verificar();
         }
       }).catch(err => console.log(err));

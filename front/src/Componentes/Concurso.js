@@ -78,6 +78,7 @@ class Concurso extends Component {
       <Modal
         open={this.props.open}
         onClose={this.props.onClose}
+
       >
         <Modal.Header>Crear un Concurso</Modal.Header>
         <Modal.Content image>

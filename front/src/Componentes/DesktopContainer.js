@@ -18,7 +18,7 @@ class DesktopContainer extends Component {
   constructor(props) {
     super(props);
     this.state={
-      usuario: JSON.parse(localStorage.getItem('usuario')),
+      usuario: localStorage.getItem('usuario'),
       token: localStorage.getItem('JWToken'),
       modalRegistro:false,
       modalLogin:false,
@@ -33,11 +33,15 @@ class DesktopContainer extends Component {
     ) {
       this.setState(
         {
-          usuario: JSON.parse(localStorage.getItem('usuario')),
+          usuario: localStorage.getItem('usuario'),
           token: localStorage.getItem('JWToken'),
           sesionIniciada: true
         },
-        window.location.reload()
+        () => {
+          this.handleCloseLogin();
+          this.props.setAdmin(localStorage.getItem('usuario'));
+          //window.location.reload()
+        }
       );
     }
   }
@@ -83,7 +87,7 @@ class DesktopContainer extends Component {
   render() {
     const { children } = this.props;
     const { fixed } = this.state;
-
+    const h = !this.state.usuario?700:100;
     return (
       <Responsive getWidth={this.getWidth} minWidth={Responsive.onlyTablet.minWidth}>
         <Visibility
@@ -94,7 +98,7 @@ class DesktopContainer extends Component {
           <Segment
             inverted
             textAlign='center'
-            style={{ minHeight: 700, padding: '1em 0em' }}
+            style={{ minHeight: h, padding: '1em 0em' }}
             vertical
           >
             <Menu
@@ -111,12 +115,18 @@ class DesktopContainer extends Component {
                 <Menu.Item as='a'>Work</Menu.Item>
                 <Menu.Item as='a'>Company</Menu.Item>
                 <Menu.Item as='a'>Careers</Menu.Item>
-                {this.state.sesionIniciada?
+                {this.state.usuario?
                   <Menu.Item position='right'>
                     <Button
                       content={this.state.usuario}
                       as='a' inverted={!fixed}
-                    /></Menu.Item>:
+                    />
+                    <Button 
+                      content='Cerrar Sesión'
+                      onClick={this.cerrarSesion}
+                      as='a' inverted={!fixed}
+                    />
+                  </Menu.Item>:
                   <Menu.Item position='right'>
                     <Button
                       onClick={this.handleLogin}
@@ -136,7 +146,7 @@ class DesktopContainer extends Component {
                   </Menu.Item>}
               </Container>
             </Menu>
-            <HomepageHeading />
+            {!this.state.usuario?<HomepageHeading />:<div></div>}
           </Segment>
         </Visibility>
         <Register

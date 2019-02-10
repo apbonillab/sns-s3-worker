@@ -10,8 +10,7 @@ import {
   List,
   Segment,
 } from 'semantic-ui-react';
-import DesktopContainer from './DesktopContainer';
-import MobileContainer from './MobileContainer';
+import ResponsiveContainer from './ResponsiveContainer';
 
 class HomePageLayout extends Component {
 
@@ -149,14 +148,3 @@ class HomePageLayout extends Component {
 }
 
 export default HomePageLayout;
-
-const ResponsiveContainer = ({ children }) => (
-  <div>
-    <DesktopContainer>{children}</DesktopContainer>
-    <MobileContainer>{children}</MobileContainer>
-  </div>
-);
-
-ResponsiveContainer.propTypes = {
-  children: PropTypes.node,
-};

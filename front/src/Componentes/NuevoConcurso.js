@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Form, Modal } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react';
 import axios from 'axios';
+import ImageUploader from 'react-images-upload';
 
 class NuevoConcurso extends Component {
 
@@ -15,12 +16,23 @@ class NuevoConcurso extends Component {
       valor: '',
       guion: '',
       recomendaciones: '',
-      url_concurso: '',
-      banner: '',
-      id_usuario: '',
+      url: '',
+      banner: [],
     };
+
+    
+  }
+  
+  componentDidMount(){
+    this.setState({url:`${localStorage.getItem('iduser')}con_${this.state.nombre}`});
   }
 
+  onDrop = (picture) => {
+    this.setState({
+      banner: picture,
+    });
+  }
+  
   handleSave = () => {
     const {
       nombre,
@@ -29,10 +41,10 @@ class NuevoConcurso extends Component {
       valor,
       guion,
       recomendaciones,
-      url_concurso,
-      banner,
-      id_usuario } = this.state;
-
+      url,
+      banner } = this.state;
+    let idusuario = localStorage.getItem('iduser');
+    let token = localStorage.getItem('JWToken');
     axios.post('/concurso/creacion', {
       nombre,
       fecha_inicio,
@@ -40,17 +52,18 @@ class NuevoConcurso extends Component {
       valor,
       guion,
       recomendaciones,
-      url_concurso,
+      url,
       banner,
-      id_usuario
-    }).then(res => {
+      idusuario
+    },{headers: {'Authorization' : `Bearer ${token}`},}).then(res => {
       console.log(res.data);
       let exito = res.data.exito;
       if (!exito) {
-        alert("Intentelo nuevamente");
+        //alert("Intentelo nuevamente");
+        console.log('no exito');
       }
       else {
-        console.log(exito)
+        console.log(exito);
       }
     }).catch(err => console.log(err));
   }
@@ -58,7 +71,12 @@ class NuevoConcurso extends Component {
   handleInput = (e) => {
     let name = e.target.name;
     let value = e.target.value;
-    this.setState({ [name]: value });
+    this.setState({ [name]: value },() => {
+      if (name==='nombre'){
+        let val = `${localStorage.getItem('iduser')}con_${this.state.nombre}`.replace(/\s/g,'');
+        this.setState({url:val});
+      }
+    });
   }
 
 
@@ -72,12 +90,12 @@ class NuevoConcurso extends Component {
 
     const campos = [
       { name: 'nombre', label: 'Nombre', type: 'text' },
-      { name: 'fecha_inicio', label: 'Fecha de Inicio', type: 'date' },
-      { name: 'fecha_fin', label: 'Fecha fin', type: 'date' },
+      { name: 'fecha_inicio', label: 'Fecha de Inicio', type: 'date', value:this.state.fecha_inicio },
+      { name: 'fecha_fin', label: 'Fecha fin', type: 'date',value:this.state.fecha_fin  },
       { name: 'valor', label: 'Valor a pagar', type: 'text' },
       { name: 'guion', label: 'Guion', type: 'text' },
       { name: 'recomendaciones', label: 'Recomendaciones', type: 'text' },
-      { name: 'url_concurso', label: 'Url/Direccion Web', type: 'text' },
+      { name: 'url', label: 'Url/Direccion Web', type: 'text' },
       { name: 'banner', label: 'Banner/Imagen', type: 'text' },
 
     ];
@@ -100,10 +118,34 @@ class NuevoConcurso extends Component {
                     <DateInput
                       name={c.name}
                       label={c.label}
-                      value={this.state.c}
+                      value={c.value}
                       iconPosition="left"
                       dateFormat='YYYY-MM-DD'
                       onChange={this.handleChange}
+                    />
+                  );
+                }
+                else if (c.name==='url')
+                {
+                  return(
+                    <Form.Input
+                      key={c.name}
+                      value={this.state.url}
+                      onChange={this.handleInput}
+                      name={c.name}
+                      label={c.label}
+                      type={c.type}
+                    />
+                  );
+                }
+                else if (c.name==='banner'){
+                  return(
+                    <ImageUploader
+                      withIcon={true}
+                      buttonText='Choose images'
+                      onChange={this.onDrop}
+                      imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                      maxFileSize={5242880}
                     />
                   );
                 }

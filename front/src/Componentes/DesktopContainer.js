@@ -11,7 +11,7 @@ import {
 import HomepageHeading from './HomepageHeading';
 import Register from './Register';
 import Login from './Login';
-import Concurso from './Concurso';
+import Concurso from './NuevoConcurso';
 
 
 class DesktopContainer extends Component {
@@ -160,8 +160,8 @@ class DesktopContainer extends Component {
           verificar={this.verificarStorage}
         />
         <Concurso
-          open={this.state.modalConcurso}
-          onClose={this.handleCloseConcurso}
+          open={this.props.openConcurso}
+          onClose={this.props.onCloseConcurso}
         />
         {children}
       </Responsive>

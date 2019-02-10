@@ -7,8 +7,8 @@ class ResponsiveContainer extends Component {
   render() {
     return (
       <div>
-        <DesktopContainer setAdmin={this.props.setAdmin}>{this.props.children}</DesktopContainer>
-        <MobileContainer setAdmin={this.props.setAdmin}>{this.props.children}</MobileContainer>
+        <DesktopContainer {...this.props}>{this.props.children}</DesktopContainer>
+        <MobileContainer {...this.props}>{this.props.children}</MobileContainer>
       </div>
     );
   }

@@ -13,6 +13,7 @@ import {
 
 import JWPlayer from './Componentes/JWPlayer';
 import ResponsiveContainer from './Componentes/ResponsiveContainer';
+import NuevoConcurso from './Componentes/NuevoConcurso';
 
 
 class App extends Component {
@@ -20,12 +21,19 @@ class App extends Component {
     super(props);
 
     this.state = {
-      admin:localStorage.getItem('usuario')
+      admin:localStorage.getItem('usuario'),
+      openConcurso:false
     };
   }
 
   setAdmin = (user) => {
     this.setState({admin:user});
+  }
+
+  onCloseConcurso = () => {
+    this.setState({
+      openConcurso:false
+    });
   }
 
   render() {
@@ -162,8 +170,19 @@ class App extends Component {
     }
     else{
       return(
-        <ResponsiveContainer setAdmin={this.setAdmin}>
+        <ResponsiveContainer setAdmin={this.setAdmin}
+          openConcurso={this.state.openConcurso}
+          onCloseConcurso={this.onCloseConcurso}
+        >
           <p>Hola admin {this.state.admin}</p>
+          <Container>
+            <Button
+              primary
+              onClick={()=>this.setState({openConcurso:true})}
+            >
+              Nuevo Concuso
+            </Button>
+          </Container>
         </ResponsiveContainer>
       );
     }

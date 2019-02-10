@@ -42,9 +42,11 @@ class Register extends Component {
       else{
         //queda logueado
         let data = res.data;
-        localStorage.setItem('JWToken',data.token);
+        localStorage.setItem('JWToken',data.JWToken);
         localStorage.setItem('usuario',data.usuario);
+        localStorage.setItem('iduser',data.iduser);
         this.props.verificar();
+        this.props.onClose();
       }
     }).catch(err => console.log(err));
   }

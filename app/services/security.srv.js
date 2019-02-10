@@ -12,6 +12,11 @@ generateToken: (email) => {
     })
   },
 verifyToken: (token) => {
-    return jwt.verify(token, JWT_SECRET)
+  return new Promise((resolve, reject) => {
+    return jwt.verify(token, JWT_SECRET,(err,res)=>{
+      if (err) reject(err)
+      else resolve(res)
+    })
+  })
   }
 }

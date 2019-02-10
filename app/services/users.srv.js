@@ -10,8 +10,10 @@ module.exports.crearAdmin = (nombre,segundonombre,apellido,segundoapellido,corre
     [userData],function(err,result,fields){
         if(err){
             error(err);
+        }else{
+            success(result);
         }
-        success(result);
+     
     })
 }
 
@@ -25,15 +27,16 @@ module.exports.autenticarAdmin = (correo, contrasena, success, error) => {
         if(result[0]!=undefined){
             if (result[0].contrasena === contrasena) {
                 let user = result[0].idusuario;
+                let correo = result[0].correo;
                 security.generateToken(correo).then(function(result){
-                    success({'exito':true,'token':result,'user':user});
+                    success({'exito':true,'JWToken':result,'iduser':user,'correo':correo});
               });
                 
             }else{
-                success(403);
+                error({'message': 'Contraseña errada'});
             }
         }else{
-            success(403);
+            error({'message': 'Correo no registrado'});
         }
        
         
@@ -44,8 +47,10 @@ module.exports.mostrarTodos = (success,error)=>{
     connection.query(`select * from usuario`,function(err,result,fields){
         if(err){
             error(err);
+        }else{
+            success(result);
         }
-        success(result);
+        
     })
 }
 
@@ -53,17 +58,21 @@ module.exports.mostrarUsuarioXid = (idusuario,success,error)=>{
     connection.query(`select * from usuario where idusuario = ${idusuario}`,function(err,result,fields){
         if(err){
             error(err);
+        }else{
+            success(result);
         }
-        success(result);
+    
     })
 }
 
     module.exports.mostrarUsuarioXemail = (correo,success,error)=>{
-        connection.query(`select * from usuario where correo = ${correo}`,function(err,result,fields){
+        connection.query(`select * from usuario where correo = "${correo}"`,function(err,result,fields){
             if(err){
                 error(err);
+            }else{
+                success(result);
             }
-            success(result);
+           
         })
 }    
         
@@ -71,8 +80,10 @@ module.exports.eliminar = (idusuario,success,error)=>{
     connection.query(`delete from usuario where idusuario = ${idusuario}`,function(err,result,fields){
         if(err){
             error(err);
+        }else{
+            success(result);
         }
-        success(result);
+     
     })
 }
 
@@ -82,7 +93,9 @@ module.exports.editar = (idusuario,nombre,segundonombre,apellido,segundoapellido
     contrasena=${contrasena} where idusuario = ${idusuario}`,function(err,result,fields){
          if(err){
              error(err);
+         }else{
+            success(result);
          }
-         success(result);
+        
      });
  }

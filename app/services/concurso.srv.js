@@ -11,9 +11,9 @@ module.exports.crear = (nombre,fecha_inicio,fecha_fin,valor,guion,recomendacione
         if(err){
             error(err);
         }
-        let userData = [[result.idconcurso,idusuario]];
+        let concurso = [[result.insertId,idusuario]];
         connection.query(`insert into gestion_concurso (concursos,creador) values ? `,
-        [userData],function(err,result,fields){
+        [concurso],function(err,result,fields){
             if(err){
                 error(err);
             }

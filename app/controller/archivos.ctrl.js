@@ -38,16 +38,16 @@ routr.get('/obtener/concurso/:concurso', (req, res) => {
 var cron = require('node-cron');
  
 cron.schedule('* * * * *', () => {
-  console.log('running a task every minute');
+  console.log('corriendo cron');
   convertirServices.convertirAudio(function (success) {
             archivosServices.actualizarEstado(success.idarchivos,success.voz_inicial+'_final',success.correo,
             function(archivo){
-                console.log("OK envio correo y actualizacion estado de archivo ");
+                console.log("OK envio correo y actualizacion estado de archivo "+success.idarchivos);
             },function(error){
                 console.log('error actualizacion y envio correo'+error);
             })
     },function (error){
-        console.log('error'+error);
+        console.log('error '+error);
 
   })
 });

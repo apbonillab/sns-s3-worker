@@ -14,26 +14,24 @@ module.exports.convertirAudio = (success,error)=>{
 
         }else{
             result.forEach(archivo => {
-                convertirVozFinal(archivo.voz_inicial,archivo.concurso,archivo.ext_voz_inicial,archivo.correo);
-                success(archivo);
+                var proc = new ffmpeg({ source: RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//inicial//'+archivo.voz_inicial+"."+archivo.ext_voz_inicial, nolog: true })
+                proc.setFfmpegPath("C:\\ffmpeg\\bin\\ffmpeg.exe")
+                .toFormat('mp3')
+                 .on('error', (err) => {
+                     return error(err.message);
+                 })
+                 .on('progress', (progress) => {
+                     console.log('Processing: ' + progress.targetSize + ' KB converted' + archivo.concurso);
+                    })
+                 .on('end', () => {
+                     console.log('Processing finished !');
+                    success(archivo);                     
+                 })
+                 .saveToFile(RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//convertida//'+archivo.voz_inicial+'_final.mp3');//path where you want to save your file
+                       
             });
         }
     
    })
 }
-   convertirVozFinal = function(voz,idconcurso,extension,correo){
-       var proc = new ffmpeg({ source: RUTA_GESTOR_ARCHIVOS+idconcurso+'//inicial//'+voz+"."+extension, nolog: true })
-       proc.setFfmpegPath("C:\\ffmpeg\\bin\\ffmpeg.exe")
-       .toFormat('mp3')
-        .on('error', (err) => {
-            console.log('An error occurred: ' + err.message);
-        })
-        .on('progress', (progress) => {
-            // console.log(JSON.stringify(progress));
-            console.log('Processing: ' + progress.targetSize + ' KB converted');
-        })
-        .on('end', () => {
-            console.log('Processing finished !');
-        })
-        .saveToFile(RUTA_GESTOR_ARCHIVOS+idconcurso+'//convertida//'+voz+'_final.mp3');//path where you want to save your file
-   }
+

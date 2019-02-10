@@ -6,9 +6,11 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const jwt  = require('jsonwebtoken');
 
+
 const usersController = require('./app/controller/users.ctrl.js');
 const concursosController = require('./app/controller/concurso.ctrl.js');
-
+const locutorController = require('./app/controller/locutor.ctrl.js');
+const archivosController = require('./app/controller/archivos.ctrl.js');
 
 var app = express();
 app.options('*', cors());
@@ -29,4 +31,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/admin', [usersController]);
 app.use('/concurso', [concursosController]);
+app.use('/locutor', [locutorController]);
+app.use('/archivo', [archivosController]);
 module.exports = app;

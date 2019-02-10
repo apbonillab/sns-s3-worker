@@ -201,3 +201,7 @@ ADD CONSTRAINT `creador`
   REFERENCES `cloud`.`cuenta` (`idcuenta`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+
+
+INSERT INTO `cloud`.`estado` (`idestado`, `nombre`, `descripcion`) VALUES ('1', 'En proceso', 'Estado inicial');
+INSERT INTO `cloud`.`estado` (`idestado`, `nombre`, `descripcion`) VALUES ('2', 'Convertida', 'Voz procesada');

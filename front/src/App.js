@@ -13,7 +13,7 @@ import {
   Icon
 } from 'semantic-ui-react';
 
-import JWPlayer from './Componentes/JWPlayer';
+import Player from './Componentes/Player';
 import ResponsiveContainer from './Componentes/ResponsiveContainer';
 import Axios from 'axios';
 import CardConcurso from './Componentes/CardConcurso';
@@ -76,6 +76,7 @@ class App extends Component {
           <Grid container stackable verticalAlign='middle'>
             <Grid.Row>
               <Grid.Column width={8}>
+                <Player></Player>
                 <Header as='h3' style={{ fontSize: '2em' }}>
                   We Help Companies and Companions
                 </Header>

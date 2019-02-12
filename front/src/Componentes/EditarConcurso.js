@@ -4,7 +4,7 @@ import { DateInput } from 'semantic-ui-calendar-react';
 import axios from 'axios';
 import ImageUploader from 'react-images-upload';
 
-class NuevoConcurso extends Component {
+class EditarConcurso extends Component {
 
   constructor(props) {
     super(props);
@@ -168,7 +168,7 @@ class NuevoConcurso extends Component {
         </Modal.Content>
         <Modal.Actions>
           <Button primary
-            content='Crear Concurso'
+            content='Editar Concurso'
             icon='save'
             onClick={this.handleSave}
           />
@@ -178,4 +178,4 @@ class NuevoConcurso extends Component {
   }
 }
 
-export default NuevoConcurso;
+export default EditarConcurso;

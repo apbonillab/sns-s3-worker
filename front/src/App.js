@@ -13,7 +13,6 @@ import {
   Icon
 } from 'semantic-ui-react';
 
-import JWPlayer from './Componentes/JWPlayer';
 import ResponsiveContainer from './Componentes/ResponsiveContainer';
 import Axios from 'axios';
 import CardConcurso from './Componentes/CardConcurso';
@@ -28,7 +27,8 @@ class App extends Component {
       admin: localStorage.getItem('usuario'),
       openConcurso: false,
       listaConcursos: [],
-      concursoActual: ''
+      concursoActual: '',
+      listaVoces:[],
     };
   }
 
@@ -201,7 +201,7 @@ class App extends Component {
   }
 
   render() {
-
+    console.log("this.state.admin = ",this.state.admin);
     if (!this.state.admin) {
       let path = window.location.pathname;
       console.log(path, this.state.admin);
@@ -230,7 +230,7 @@ class App extends Component {
                 primary
                 onClick={() => this.setState({ openConcurso: true })}
               >
-                Nuevo Concuso
+                Nuevo Concurso
               </Button>
             </Container>
             <Container>

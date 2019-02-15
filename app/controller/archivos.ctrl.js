@@ -35,6 +35,19 @@ routr.get('/obtener/concurso/:concurso', (req, res) => {
 
 })
 
+routr.get('/obtener/concurso/url/:url', (req, res) => {
+    archivosServices.obtenerArchxConcursoURL(
+        req.params.url,
+        function (archivos) {
+            res.status(200).send(archivos)
+        },function(error){
+            console.log(error);
+            res.status(500).send({'message':'Error al obtener todos las voces por concurso'});
+        }
+    )
+
+})
+
 var cron = require('node-cron');
  
 cron.schedule('* * * * *', () => {

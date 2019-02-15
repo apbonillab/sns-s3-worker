@@ -18,13 +18,24 @@ class DetalleConcurso extends Component {
   }
 
   componentDidMount() {
-    if (!this.state.borrarVoz) {
+    if (this.props.admin) {
       this.getVoces();
+    }else{
+      this.getVocesxUrl();
     }
+
   }
   
   getVoces = () => {
     Axios.get(`/archivo/obtener/concurso/${this.props.id}`)
+      .then(res => {
+        console.log(res.data);
+        this.setState({ listaVoces: res.data });
+      }).catch(err => console.log(err));
+  }
+
+  getVocesxUrl = () => {
+    Axios.get(`/archivo/obtener/concurso/url/${this.props.id}`)
       .then(res => {
         console.log(res.data);
         this.setState({ listaVoces: res.data });

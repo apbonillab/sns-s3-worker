@@ -26,6 +26,34 @@ module.exports.crearArchivo = (observaciones,idlocutor,voz_inicial,concurso,exte
     })
 }
 
+module.exports.obtenerArchxConcursoURL = (urlConcurso,success,error)=>{
+    connection.query(`Select a.idarchivos 'idarchivos',
+    a.observaciones 'observaciones', l.correo 'correo',
+    a.estado 'estado',
+    e.nombre 'estado_nombre',
+    l.nombre 'nombre',
+    l.segundo_nombre 'segundo_nombre' ,
+    l.apellido 'apellido',
+    l.segundo_apellido 'segundo_apellido',
+    a.voz_inicial 'voz_inicial',
+    a.voz_convertida 'voz_convertida',
+    a.concurso 'concurso',
+    a.ext_voz_inicial 'extension',
+    a.fecha 'fecha'
+    from archivos as a
+    inner join concursos as c on c.idconcursos=a.concurso
+    inner join locutor as l on l.idlocutor = a.usuario
+    inner join estado as e on e.idestado = a.estado
+    where c.url = '${urlConcurso}' order by  a.fecha DESC`,function(err,result,fields){
+        if(err){
+            error(err);
+        }else{
+            success(result);
+        }
+
+    })
+}
+
 
 module.exports.obtenerArchxConcurso = (idconcurso,success,error)=>{
     connection.query(`Select a.idarchivos 'idarchivos',

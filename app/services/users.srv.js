@@ -65,7 +65,7 @@ module.exports.mostrarUsuarioXid = (idcuenta,success,error)=>{
     })
 }
 
-    module.exports.mostrarUsuarioXemail = (correo,success,error)=>{
+module.exports.mostrarUsuarioXemail = (correo,success,error)=>{
         connection.query(`select * from administrador where correo = "${correo}"`,function(err,result,fields){
             if(err){
                 error(err);

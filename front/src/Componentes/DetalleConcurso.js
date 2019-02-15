@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Container, Button, CardGroup } from 'semantic-ui-react';
+import { Container, Button, CardGroup, Responsive } from 'semantic-ui-react';
 import Axios from 'axios';
-import CardVoice from './CardVoice'
-import NewVoice from './NewVoice'
+import TarjetaVoz from './CardVoice'
+import NuevaVoz from './NuevaVoz'
+import EditarConcurso from './EditarConcurso'
 
 class DetalleConcurso extends Component {
 
@@ -12,13 +13,12 @@ class DetalleConcurso extends Component {
       url_concurso: localStorage.getItem('url'),  
       listaVoces:[],
       borrarVoz:false,
-      opencreateVoice:false
+      openCrearVoz:false,
     };
   }
 
   componentDidMount() {
     if (!this.state.borrarVoz) {
-      
       this.getVoces();
     }
   }
@@ -31,84 +31,93 @@ class DetalleConcurso extends Component {
       }).catch(err => console.log(err));
   }
 
-  onCloseCreateVoice = () => {
+  onCloseCrearVoz = () => {
     this.setState({
-      opencreateVoice: false
+      openCrearVoz: false
     });
   }
 
   crearNuevaVoz =() =>{
-      return(
-        <NewVoice 
-            idLocutor='23'
-            vozInicial="hola"
-            idConcurso={this.props.id}
-            observaciones="Nada"
-            extension= "mp3"
-        />
-      );
+      this.setState({openCrearVoz:true});
+      console.log("va a entrar: ", this.state.openCrearVoz);
   }
 
+  editarConcurso = () => {
+      return(
+        <EditarConcurso />
+      );
+  }
 
 
   render() {
     if (this.props.admin) {
         this.setState.borrarVoz=true;
         return (
-              <Container>
-                <h1>Detalle del concurso {this.props.id}</h1>
-                <Button>Editar concurso</Button>
-                <Button onClick={this.crearNuevaVoz()}>
-                  Subir Voz
-                </Button>
-                <br></br>
-                <h2>Locutores Participantes</h2>
-                <CardGroup>
-                  {this.state.listaVoces.map(card => {
-                      return(
-                        <CardVoice
-                            key={card.id}
-                            voz_id={card.id}
-                            nombreLocutor={card.nombre}
-                            apellidoLocutor={card.apellido}
-                            fecha={card.fecha}
-                            estado={card.estado_nombre}
-                            voz_inicial={card.voz_inicial}
-                            observaciones={card.observaciones}
-                            borrar={this.state.borrar}
-                        >
-                        </CardVoice>
-                      );
-                  })}
-                </CardGroup>
-              </Container>
+          <Container>
+            <h1>Detalle del concurso {this.props.id}</h1>
+            <Button onClick={this.editarConcurso()}>Editar concurso</Button>
+            <br></br>
+            <h2>Locutores Participantes</h2>
+            <CardGroup>
+              {this.state.listaVoces.map(card => {
+                  return(
+                    <TarjetaVoz
+                        key={card.id}
+                        voz_id={card.id}
+                        nombreLocutor={card.nombre}
+                        apellidoLocutor={card.apellido}
+                        fecha={card.fecha}
+                        estado={card.estado_nombre}
+                        voz_inicial={card.voz_inicial}
+                        observaciones={card.observaciones}
+                        borrar={this.state.borrar}
+                    >
+                    </TarjetaVoz>
+                  );
+              })}
+            </CardGroup>
+            
+          </Container>
           );
         }
         else {
           return (
+            
             <Container>
-              <h1>Detalle del concurso {this.props.id}</h1>
-              <Button onClick={this.crearNuevaVoz()}>Subir nueva voz</Button>
-              <h2>Aca va la lista de tarjetas para usuario regular</h2>
-                <CardGroup>
-                  {this.state.listaVoces.map(card => {
-                      return(
-                        <CardVoice
-                            key={card.id}
-                            voz_id={card.id}
-                            nombreLocutor={card.nombre}
-                            apellidoLocutor={card.apellido}
-                            fecha={card.fecha}
-                            estado={card.estado_nombre}
-                            voz_inicial={card.voz_inicial}
-                            observaciones={card.observaciones}
-                            borrar={this.state.borrar}
-                        >
-                        </CardVoice>
-                      );
-                  })}
-                </CardGroup>
-            </Container>
+                <h1>Detalle del concurso {this.props.id}</h1>
+                  <Container>
+                    <Button
+                      //primary
+                      //onClick={() => this.setState({ openCrearVoz: true })}
+                      onClick={this.crearNuevaVoz}
+                    >
+                     Subir voz
+                    </Button>
+                </Container>
+                <h2>Aca va la lista de tarjetas para usuario regular</h2>
+                  <CardGroup>
+                    {this.state.listaVoces.map(card => {
+                        return(
+                          <TarjetaVoz
+                              key={card.id}
+                              voz_id={card.id}
+                              nombreLocutor={card.nombre}
+                              apellidoLocutor={card.apellido}
+                              fecha={card.fecha}
+                              estado={card.estado_nombre}
+                              voz_inicial={card.voz_inicial}
+                              observaciones={card.observaciones}
+                              borrar={this.state.borrar}
+                          >
+                          </TarjetaVoz>
+                        );
+                    })}
+                  </CardGroup>
+                  <NuevaVoz
+              open={this.state.openCrearVoz}
+              onClose={this.state.onCloseCrearVoz}  
+        />
+              </Container>
           );
         }
     }

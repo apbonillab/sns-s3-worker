@@ -13,8 +13,6 @@ import Register from './Register';
 import Login from './Login';
 import Concurso from './NuevoConcurso';
 
-
-
 class DesktopContainer extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +21,7 @@ class DesktopContainer extends Component {
       token: localStorage.getItem('JWToken'),
       modalRegistro:false,
       modalLogin:false,
-      modalConcurso:false
+      modalConcurso:false,
     };
   }
 

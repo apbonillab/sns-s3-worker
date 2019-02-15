@@ -201,7 +201,6 @@ class App extends Component {
   }
 
   render() {
-    console.log("this.state.admin = ",this.state.admin);
     if (!this.state.admin) {
       let path = window.location.pathname;
       console.log(path, this.state.admin);

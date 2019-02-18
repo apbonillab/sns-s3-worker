@@ -37,7 +37,7 @@ class DetalleConcurso extends Component {
   getVocesxUrl = () => {
     Axios.get(`/archivo/obtener/concurso/url/${this.props.id}`)
       .then(res => {
-        console.log(res.data);
+        console.log('voces',res.data);
         this.setState({ listaVoces: res.data });
       }).catch(err => console.log(err));
   }
@@ -66,7 +66,7 @@ class DetalleConcurso extends Component {
         return (
           <Container>
             <h1>Detalle del concurso {this.props.id}</h1>
-            <Button onClick={this.editarConcurso()}>Editar concurso</Button>
+            <Button onClick={this.editarConcurso}>Editar concurso</Button>
             <br></br>
             <h2>Locutores Participantes</h2>
             <CardGroup>
@@ -82,6 +82,7 @@ class DetalleConcurso extends Component {
                         voz_inicial={card.voz_inicial}
                         observaciones={card.observaciones}
                         borrar={this.state.borrar}
+                        file={`http://localhost:3000/Voces/concurso_${card.concurso}/convertida/${card.idarchivos}.mp3`}
                     >
                     </TarjetaVoz>
                   );
@@ -110,8 +111,8 @@ class DetalleConcurso extends Component {
                     {this.state.listaVoces.map(card => {
                         return(
                           <TarjetaVoz
-                              key={card.id}
-                              voz_id={card.id}
+                              key={card.idarchivos}
+                              voz_id={card.idarchivos}
                               nombreLocutor={card.nombre}
                               apellidoLocutor={card.apellido}
                               fecha={card.fecha}
@@ -119,6 +120,7 @@ class DetalleConcurso extends Component {
                               voz_inicial={card.voz_inicial}
                               observaciones={card.observaciones}
                               borrar={this.state.borrar}
+                              file={`http://localhost:3000/Voces/concurso_${card.concurso}/convertida/${card.idarchivos}.mp3`}
                           >
                           </TarjetaVoz>
                         );

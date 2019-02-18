@@ -14,6 +14,7 @@ class DetalleConcurso extends Component {
       listaVoces:[],
       borrarVoz:false,
       openCrearVoz:false,
+      onCloseCrearVoz:false,
     };
   }
 
@@ -127,9 +128,9 @@ class DetalleConcurso extends Component {
                     })}
                   </CardGroup>
                   <NuevaVoz
-              open={this.state.openCrearVoz}
-              onClose={this.state.onCloseCrearVoz}  
-        />
+                    open={this.state.openCrearVoz}
+                    onClose={this.onCloseCrearVoz}  
+                  />
               </Container>
           );
         }

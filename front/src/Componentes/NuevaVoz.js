@@ -64,6 +64,11 @@ class NuevaVoz extends Component {
   }
   render(){
           const campos = [
+            { name: 'nombre', label: 'Primer Nombre', type: 'text' },
+            { name: 'segundo_nombre', label: 'Segundo Nombre', type: 'text' },
+            { name: 'apellido', label: 'Primer Apellido', type: 'text' },
+            { name: 'segundo_apellido', label: 'Segundo apellido', type: 'text' },
+            { name: 'correo', label: 'Correo', type: 'text' },
             { name: 'vozInicial', label: 'Sube tu Voz', type: 'file' },
             { name: 'observaciones', label: 'Coloca tus observaciones', type: 'text'},
           ];

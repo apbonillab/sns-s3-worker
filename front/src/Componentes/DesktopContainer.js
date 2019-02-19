@@ -86,7 +86,8 @@ class DesktopContainer extends Component {
   render() {
     const { children } = this.props;
     const { fixed } = this.state;
-    const h = !this.state.usuario?700:100;
+    const h = this.state.usuario!==null?700:100;
+    console.log('usuarioContainer',this.state.usuario);
     return (
       <Responsive getWidth={this.getWidth} minWidth={Responsive.onlyTablet.minWidth}>
         <Visibility
@@ -140,7 +141,7 @@ class DesktopContainer extends Component {
                   </Menu.Item>}
               </Container>
             </Menu>
-            {!this.state.usuario?<HomepageHeading />:<div></div>}
+            {this.state.usuario!==null?<HomepageHeading />:<div></div>}
           </Segment>
         </Visibility>
         <Register

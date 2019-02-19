@@ -46,25 +46,26 @@ class NuevoConcurso extends Component {
     let idusuario = localStorage.getItem('iduser');
     let token = localStorage.getItem('JWToken');
     localStorage.setItem('url',this.state.url);
-    axios.post('/concurso/creacion', {
-      nombre,
-      fecha_inicio,
-      fecha_fin,
-      valor,
-      guion,
-      recomendaciones,
-      url,
-      banner: '',
-      idusuario
-    }, { headers: { 'Authorization': `Bearer ${token}` }, }).then(res => {
+    let formData = new FormData();
+    formData.append('banner',banner[0]);
+    formData.append('nombre',nombre);
+    formData.append('fecha_inicio',fecha_inicio);
+    formData.append('fecha_fin',fecha_fin);
+    formData.append('valor',valor);
+    formData.append('guion',guion);
+    formData.append('recomendaciones',recomendaciones);
+    formData.append('url',url);
+    formData.append('idusuario',idusuario);
+    axios.post('/concurso/creacion',formData , { headers: { 'Authorization': `Bearer ${token}` }, }).then(res => {
       console.log(res.data);
       let exito = res.data.exito;
       if (!exito) {
-        //alert("Intentelo nuevamente");
+        alert('Intentelo nuevamente');
         console.log('no exito');
       }
       else {
         console.log(exito);
+        this.props.onClose();
       }
     }).catch(err => console.log(err));
   }

@@ -6,7 +6,7 @@ class CardConcurso extends Component {
   render() {
     return (
       <Card>
-        <Image src={this.props.urlImagen} />
+        <Image src={this.props.urlImagen?`Voces/concurso_${this.props.id}/${this.props.urlImagen}`:'images/default.jpg'} />
         <Card.Content>
           <Card.Header>{this.props.nombreConcurso}</Card.Header>
           <Card.Meta>

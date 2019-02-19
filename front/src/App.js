@@ -53,6 +53,7 @@ class App extends Component {
     this.setState({
       openConcurso: false
     });
+    this.getConcursos();
   }
 
   viewConcurso = (idConcurso) => {

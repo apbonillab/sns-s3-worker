@@ -1,10 +1,17 @@
 'use strict'
 var express = require('express')
+const fileUpload = require('express-fileupload');
 var routr = express.Router();
 var concursoSrv = require('../services/concurso.srv.js');
 const security = require('../services/security.srv');
 
+routr.use(fileUpload());
+
 routr.post('/creacion',ensureToken,(req, res) => {
+
+    if (Object.keys(req.files).length == 0) {
+        return res.status(400).send('No files were uploaded.');
+      }
     concursoSrv.crear(
         req.body.nombre,
         req.body.fecha_inicio,
@@ -13,12 +20,12 @@ routr.post('/creacion',ensureToken,(req, res) => {
         req.body.guion,
         req.body.recomendaciones,
         req.body.url,
-        req.body.banner,
+        req.files.banner,
         req.body.idusuario,
         function (concurso) {
-            res.status(201).send({'message':'Concurso creado exitosamente'})
+                res.status(201).send({'exito':true,'message':'Concurso creado exitosamente'})
         },function(error){
-            res.status(500).send({'message':'Error en la creacion del concurso'});
+            res.status(500).send({'exito':false,'message':'Error en la creacion del concurso'});
             
         }
     )

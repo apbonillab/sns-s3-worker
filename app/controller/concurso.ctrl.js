@@ -126,7 +126,7 @@ function ensureToken(req,res,next){
     
 }
 
-routr.put('/seleccion_ganador', (req, res) => {
+routr.put('/seleccion_ganador',ensureToken, (req, res) => {
     concursoSrv.seleccionganador(
         req.body.idarchivo,
         req.body.idconcurso,

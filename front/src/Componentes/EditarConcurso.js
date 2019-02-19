@@ -64,7 +64,7 @@ class EditarConcurso extends Component {
     let idusuario = localStorage.getItem('iduser');
     let token = localStorage.getItem('JWToken');
     localStorage.setItem('url',this.state.url);
-    axios.post('/concurso/creacion', {
+    axios.post('/concurso/editar', {
       nombre,
       fecha_inicio,
       fecha_fin,
@@ -111,9 +111,9 @@ class EditarConcurso extends Component {
       { name: 'nombre', label: 'Nombre', type: 'text', value:this.state.nombre},
       { name: 'fecha_inicio', label: 'Fecha de Inicio', type: 'date', value: this.state.fecha_inicio },
       { name: 'fecha_fin', label: 'Fecha fin', type: 'date', value: this.state.fecha_fin },
-      { name: 'valor', label: 'Valor a pagar', type: 'text' },
-      { name: 'guion', label: 'Guion', type: 'text' },
-      { name: 'recomendaciones', label: 'Recomendaciones', type: 'text' },
+      { name: 'valor', label: 'Valor a pagar', type: 'text', value:this.state.valor},
+      { name: 'guion', label: 'Guion', type: 'text' , value:this.state.guion},
+      { name: 'recomendaciones', label: 'Recomendaciones', type: 'text' , value:this.state.recomendaciones },
       { name: 'url', label: 'Url/Direccion Web', type: 'text' },
       { name: 'banner', label: 'Banner/Imagen', type: 'text' },
 
@@ -171,7 +171,7 @@ class EditarConcurso extends Component {
                   return (
                     <Form.Input
                       key={c.name}
-                      value={this.state.c}
+                      value={c.value}
                       onChange={this.handleInput}
                       name={c.name}
                       label={c.label}

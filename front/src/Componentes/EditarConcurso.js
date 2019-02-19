@@ -18,6 +18,7 @@ class EditarConcurso extends Component {
       recomendaciones: '',
       url: '',
       banner: [],
+      idconcursos:'',
     };
 
 
@@ -28,6 +29,7 @@ class EditarConcurso extends Component {
     .then(res => {
       console.log('Concurso',res.data);
       this.setState({
+        idconcursos:res.data[0].idconcursos,
         nombre:res.data[0].nombre,
         fecha_inicio:res.data[0].fecha_inicio,
         fecha_fin:res.data[0].fecha_fin,
@@ -53,6 +55,7 @@ class EditarConcurso extends Component {
 
   handleSave = () => {
     const {
+      idconcursos,
       nombre,
       fecha_inicio,
       fecha_fin,
@@ -60,11 +63,12 @@ class EditarConcurso extends Component {
       guion,
       recomendaciones,
       url,
-      banner } = this.state;
-    let idusuario = localStorage.getItem('iduser');
+      banner 
+    } = this.state;
     let token = localStorage.getItem('JWToken');
     localStorage.setItem('url',this.state.url);
     axios.post('/concurso/editar', {
+      idconcursos,
       nombre,
       fecha_inicio,
       fecha_fin,
@@ -72,9 +76,8 @@ class EditarConcurso extends Component {
       guion,
       recomendaciones,
       url,
-      banner: '',
-      idusuario
-    }, { headers: { 'Authorization': `Bearer ${token}` }, }).then(res => {
+      banner,
+    },{ headers: { 'Authorization': `Bearer ${token}`}, }).then(res => {
       console.log(res.data);
       let exito = res.data.exito;
       if (!exito) {

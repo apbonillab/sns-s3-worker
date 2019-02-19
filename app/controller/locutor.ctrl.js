@@ -14,7 +14,7 @@ routr.post('/creacion',(req, res) => {
         function (locutor) {
             res.status(201).send({'message':'Locutor creado exitosamente','idlocutor':locutor.insertId})
         },function(error){
-            res.status(500).send({'message':'Error en la creacion del locutor'});
+            res.status(500).send({'message':'Error en la creacion del locutor'+error});
             
         }
     )

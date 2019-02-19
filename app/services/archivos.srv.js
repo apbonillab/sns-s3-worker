@@ -4,6 +4,7 @@ const mysql = require('mysql');
 const connection = require('../../db');
 const moment = require('moment');
 var nodemailer = require('nodemailer');
+var concursoSrv = require('../services/concurso.srv.js');
 
 module.exports.crearArchivo = (observaciones,idlocutor,voz_inicial,concurso,extension,success,error)=>{
     let d = new Date();
@@ -82,13 +83,13 @@ module.exports.obtenerArchxConcurso = (idconcurso,success,error)=>{
     })
 }
 
-module.exports.actualizarEstado = (idarchivos,voz_convertida,correo,success,error)=>{
+module.exports.actualizarEstado = (idarchivos,voz_convertida,correo,idconcurso,success,error)=>{
     connection.query(`update archivos set estado = 2,voz_convertida="${voz_convertida}"
      where idarchivos = ${idarchivos}`,function(err,result,fields){
          if(err){
              error(err);
          }else{            
-            envioCorreo(correo);
+            envioCorreo(correo,idconcurso);
             success("ok");
          }
         
@@ -104,21 +105,25 @@ module.exports.actualizarEstado = (idarchivos,voz_convertida,correo,success,erro
     }
 });
 
-function envioCorreo (correo){
-    console.log("correo "+ correo);
-    var mailOptions = {
-        from: 'TheVoice',
-        to: correo,
-        subject: 'Voz Procesada',
-        text: 'Tú voz ha sido procesada, lista para concursar!!'
-     };
+function envioCorreo (correo,idconcurso){
+    concursoSrv.mostrarConcursoXid(idconcurso,function(concurso){
+        var mailOptions = {
+            from: 'TheVoice',
+            to: correo,
+            subject: 'Voz Procesada',
+            text: `Tú voz ha sido procesada, en el concurso: ${concurso.url} ..lista para concursar!!`
+         };
+    
+         transporter.sendMail(mailOptions, function(error, info){
+            if (error){
+                console.log(error);
+            } else {
+                console.log("Email sent");
+                return;
+            }
+        });
+    }, function(err){
 
-     transporter.sendMail(mailOptions, function(error, info){
-        if (error){
-            console.log(error);
-        } else {
-            console.log("Email sent");
-            return;
-        }
-    });
+    })
+    
  }

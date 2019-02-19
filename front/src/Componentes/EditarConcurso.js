@@ -23,8 +23,26 @@ class EditarConcurso extends Component {
 
   }
 
+  getConcursoData = () => {
+    axios.get(`/concurso/obtener/url/${this.props.urlConcurso}`)
+    .then(res => {
+      console.log('Concurso',res.data);
+      this.setState({
+        nombre:res.data[0].nombre,
+        fecha_inicio:res.data[0].fecha_inicio,
+        fecha_fin:res.data[0].fecha_fin,
+        valor:res.data[0].valor,
+        guion:res.data[0].guion,
+        recomendaciones:res.data[0].recomendaciones,
+        url:res.data[0].url,
+        banner:res.data[0].banner,
+      });
+    }).catch(err => console.log(err));
+    
+  }
+
   componentDidMount() {
-    this.setState({ url: `${localStorage.getItem('iduser')}con_${this.state.nombre}` });
+    this.getConcursoData();
   }
 
   onDrop = (picture) => {
@@ -90,7 +108,7 @@ class EditarConcurso extends Component {
   render() {
 
     const campos = [
-      { name: 'nombre', label: 'Nombre', type: 'text' },
+      { name: 'nombre', label: 'Nombre', type: 'text', value:this.state.nombre},
       { name: 'fecha_inicio', label: 'Fecha de Inicio', type: 'date', value: this.state.fecha_inicio },
       { name: 'fecha_fin', label: 'Fecha fin', type: 'date', value: this.state.fecha_fin },
       { name: 'valor', label: 'Valor a pagar', type: 'text' },
@@ -100,13 +118,12 @@ class EditarConcurso extends Component {
       { name: 'banner', label: 'Banner/Imagen', type: 'text' },
 
     ];
-
     return (
       <Modal
         open={this.props.open}
         onClose={this.props.onClose}
       >
-        <Modal.Header>Crear un Concurso</Modal.Header>
+        <Modal.Header>Editar Concurso {this.state.nombre}</Modal.Header>
         <Modal.Content image>
           <Modal.Description>
             {/* <Header>{this.props.id}</Header> */}

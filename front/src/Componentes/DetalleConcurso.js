@@ -14,7 +14,8 @@ class DetalleConcurso extends Component {
       listaVoces:[],
       borrarVoz:false,
       openCrearVoz:false,
-      onCloseCrearVoz:false,
+      openEditarConcurso:false,
+      idConcurso:'',
     };
   }
 
@@ -36,10 +37,11 @@ class DetalleConcurso extends Component {
   }
 
   getVocesxUrl = () => {
-    Axios.get(`/archivo/obtener/concurso/url/${this.props.id}`)
+    Axios.get(`/archivo/obtener/concurso/url/${this.props.url}`)
       .then(res => {
         console.log('voces',res.data);
-        this.setState({ listaVoces: res.data });
+        this.setState({ listaVoces: res.data});
+        this.setState({ idConcurso:res.data[0].concurso });
       }).catch(err => console.log(err));
   }
 
@@ -49,15 +51,20 @@ class DetalleConcurso extends Component {
     });
   }
 
+  onCloseEditarConcurso = () => {
+    this.setState({
+      openEditarConcurso: false
+    });
+  }
+
   crearNuevaVoz =() =>{
       this.setState({openCrearVoz:true});
       console.log("va a entrar: ", this.state.openCrearVoz);
   }
 
   editarConcurso = () => {
-      return(
-        <EditarConcurso />
-      );
+    console.log("url en detalle concurso: ", this.state.url_concurso);
+    this.setState({openEditarConcurso:true});
   }
 
 
@@ -89,6 +96,11 @@ class DetalleConcurso extends Component {
                   );
               })}
             </CardGroup>
+            <EditarConcurso
+                    open={this.state.openEditarConcurso}
+                    onClose={this.onCloseEditarConcurso}
+                    urlConcurso={this.props.url}  
+            />
             
           </Container>
           );
@@ -97,7 +109,7 @@ class DetalleConcurso extends Component {
           return (
             
             <Container>
-                <h1>Detalle del concurso {this.props.id}</h1>
+                <h1>Detalle del concurso {this.props.url}</h1>
                   <Container>
                     <Button
                       //primary
@@ -130,7 +142,7 @@ class DetalleConcurso extends Component {
                   <NuevaVoz
                     open={this.state.openCrearVoz}
                     onClose={this.onCloseCrearVoz}
-                    idConcurso={this.props.id}  
+                    id_concurso={this.state.idConcurso}  
                   />
               </Container>
           );

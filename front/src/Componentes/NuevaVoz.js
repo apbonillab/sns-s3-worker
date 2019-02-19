@@ -26,7 +26,11 @@ class NuevaVoz extends Component {
   }
 
   componentDidMount() {
-    this.setState({concursoId:this.props.idConcurso});  
+    this.setState({concursoId:this.props.id_concurso});  
+  }
+
+  getLocutor=()=>{
+
   }
 
   handleSave = () => {
@@ -50,14 +54,15 @@ class NuevaVoz extends Component {
       segundo_apellido,
       correo
     })*/
-    console.log("Nombre Archivo :", vozInicial);
-    axios.post('/archivo/creacion', {
+    console.log("Nombre Archivo :", this.state.vozInicial);
+    console.log("concursoId :", this.props.id_concurso);
+    /*axios.post('/archivo/creacion', {
       idLocutor,
       vozInicial,
       concursoId,
       observaciones,
       extension
-    })/*.then(res => {
+    }).then(res => {
       console.log(res.data);
       let exito = res.data.exito;
       if (!exito) {
@@ -66,8 +71,8 @@ class NuevaVoz extends Component {
       }
       else {
         console.log(exito);
-      }*/
-    //}).catch(err => console.log(err)))*/
+      }
+    }).catch(err => console.log(err))*/
   }
   
   handleChange = (event, { name, value }) => {
@@ -81,14 +86,12 @@ class NuevaVoz extends Component {
     let value = e.target.value;
     this.setState({ [name]: value }, () => {
       if (name === 'vozInit') {
-        let nombreVoz=this.state.vozInicial.split(".");
-        //let val = `${this.state.vozInicial}`.replace(/\s/g, '');
-        let val = nombreVoz[0];
-        let ext = nombreVoz[1];
-        console.log("Nombre voz completa :", nombreVoz);
-        console.log("Nombre voz inicial :", nombreVoz[0]);
-        console.log("Extension :", nombreVoz[1]);
-        this.setState({ vozInicial: val, extension:ext });
+        let nombreVoz=this.state.vozInit.split("\.");
+        let long=nombreVoz.length;
+        let val = nombreVoz[long-2].split("\\");
+        let long2=val.length;
+        let ext = nombreVoz[long-1];
+        this.setState({ vozInicial: val[long2-1], extension:ext });
       }
     });
   }

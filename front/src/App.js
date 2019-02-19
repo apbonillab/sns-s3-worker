@@ -29,6 +29,7 @@ class App extends Component {
       openConcurso: false,
       listaConcursos: [],
       concursoActual: '',
+      urlConcursoActual: '',
       listaVoces:[],
     };
   }
@@ -38,9 +39,9 @@ class App extends Component {
       this.getConcursos();
     }
     let url_concurso = window.location.pathname.match(/\/concurso\/url\/([^/\n]*)/);
-    console.log(url_concurso);
+    console.log("url concurso App.js: ", url_concurso);
     if (url_concurso !== null) {
-      this.setState({ concursoActual: url_concurso[1] });
+      this.setState({ urlConcursoActual: url_concurso[1] });
     }
   }
 
@@ -55,8 +56,15 @@ class App extends Component {
   }
 
   viewConcurso = (idConcurso) => {
+    console.log("Lista de concursos", this.state.listaConcursos);
+    console.log("idConcurso", idConcurso);
     this.setState({
-      concursoActual: idConcurso
+      concursoActual: idConcurso,
+    });
+    this.state.listaConcursos.map(con=>{
+        if(con.idconcurso === idConcurso){
+          this.setState({urlConcursoActual: con.url});
+        }
     });
   }
 
@@ -205,12 +213,13 @@ class App extends Component {
   render() {
     if (!this.state.admin) {
       let path = window.location.pathname;
-      console.log(path, this.state.admin);
-      if (this.state.concursoActual) {
+      console.log("Path: ",path,"Admin: ", this.state.admin);
+      if (this.state.urlConcursoActual) {
         //Render Concurso para locutores
         return (
           <DetalleConcurso
             id={this.state.concursoActual}
+            url={this.state.urlConcursoActual}
           />
         );
       }
@@ -257,6 +266,7 @@ class App extends Component {
         );
       }
       else {
+        console.log("url concurso actual", this.state.urlConcursoActual);
         return (
           <ResponsiveContainer setAdmin={this.setAdmin}
             openConcurso={this.state.openConcurso}
@@ -274,6 +284,7 @@ class App extends Component {
               <DetalleConcurso
                 admin={this.state.admin}
                 id={this.state.concursoActual}
+                url={this.state.urlConcursoActual}
               />
             </Container>
           </ResponsiveContainer>

@@ -10,6 +10,11 @@ class NuevaVoz extends Component {
     super(props);
     this.state = {
       idLocutor: '',
+      nombre:'',
+      segundo_nombre:'',
+      apellido:'',
+      segundo_apellido:'',
+      correo:'',
       vozInicial: '',
       idConcurso: '',
       observaciones: '',
@@ -22,11 +27,23 @@ class NuevaVoz extends Component {
   handleSave = () => {
     const {
       idLocutor,
+      nombre,
+      segundo_nombre,
+      apellido,
+      segundo_apellido,
+      correo,
       vozInicial,
       idConcurso,
       observaciones,
       extension,
     } = this.state;
+    axios.post('/locutor/creacion',{
+      nombre,
+      segundo_nombre,
+      apellido,
+      segundo_apellido,
+      correo
+    })
     axios.post('/archivo/creacion', {
       idLocutor,
       vozInicial,

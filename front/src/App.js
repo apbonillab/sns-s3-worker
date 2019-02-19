@@ -77,9 +77,9 @@ class App extends Component {
           <Grid container stackable verticalAlign='middle'>
             <Grid.Row>
               <Grid.Column width={8}>
-                <Player></Player>
+                {/*<Player></Player>*/}
                 <Header as='h3' style={{ fontSize: '2em' }}>
-                  We Help Companies and Companions
+                  La mejor herramienta para encontrar la voz que necesitas!!
                 </Header>
                 <p style={{ fontSize: '1.33em' }}>
                   We can give your company superpowers to do things that they never thought possible.

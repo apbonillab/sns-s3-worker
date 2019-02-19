@@ -37,6 +37,18 @@ routr.get('/obtener/todos', (req, res) => {
 
 })
 
+routr.get('/obtener/todosvigentes', (req, res) => {
+    concursoSrv.mostrarTodosVigentes(
+        function (user) {
+            res.status(200).send(user)
+        },function(error){
+            res.status(500).send({'message':'Error al obtener todos los concursos'})
+        }
+    )
+
+})
+
+
 routr.get('/obtener/admin/:idadmin', (req, res) => {
     concursoSrv.mostrarConcursosXUsuario(
         req.params.idadmin,
@@ -113,4 +125,20 @@ function ensureToken(req,res,next){
     }
     
 }
+
+routr.put('/seleccion_ganador', (req, res) => {
+    concursoSrv.seleccionganador(
+        req.body.idarchivo,
+        req.body.idconcurso,
+        function (user) {
+            res.status(200).send({'message':'Actualizacion correcta'})
+        },function(error){
+            res.status(500).send({'message':'Error en la actualizacion: '+error.sqlMessage});
+            
+        }
+    )
+
+})
+
+
 module.exports = routr;

@@ -33,10 +33,10 @@ module.exports.autenticarAdmin = (correo, contrasena, success, error) => {
               });
                 
             }else{
-                error({'message': 'Contraseña errada'});
+                error({'exito':false,'message': 'Contraseña errada'});
             }
         }else{
-            error({'message': 'Correo no registrado'});
+            error({'exito':false,'message': 'Correo no registrado'});
         }
        
         

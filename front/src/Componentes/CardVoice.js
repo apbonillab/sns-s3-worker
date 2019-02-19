@@ -28,7 +28,6 @@ class CardVoice extends Component {
           <Player
             idplayer={this.props.voz_id}
             archivo={this.props.file}
-          
           ></Player>
          {/*  <Button
             content='Reproducir Voz'

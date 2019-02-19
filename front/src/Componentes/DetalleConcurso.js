@@ -74,8 +74,8 @@ class DetalleConcurso extends Component {
               {this.state.listaVoces.map(card => {
                   return(
                     <TarjetaVoz
-                        key={card.id}
-                        voz_id={card.id}
+                        key={card.idarchivos}
+                        voz_id={card.idarchivos}
                         nombreLocutor={card.nombre}
                         apellidoLocutor={card.apellido}
                         fecha={card.fecha}
@@ -129,7 +129,8 @@ class DetalleConcurso extends Component {
                   </CardGroup>
                   <NuevaVoz
                     open={this.state.openCrearVoz}
-                    onClose={this.onCloseCrearVoz}  
+                    onClose={this.onCloseCrearVoz}
+                    idConcurso={this.props.id}  
                   />
               </Container>
           );

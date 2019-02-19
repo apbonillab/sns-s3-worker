@@ -4,6 +4,7 @@ import axios from 'axios';
 import FilePond  from 'react-filepond';
 import 'filepond/dist/filepond.min.css';
 
+
 class NuevaVoz extends Component {
 
   constructor(props) {
@@ -16,7 +17,7 @@ class NuevaVoz extends Component {
       segundo_apellido:'',
       correo:'',
       vozInicial: '',
-      idConcurso: '',
+      concursoId:'',
       observaciones: '',
       extension: '',
       abrirModalVoz:'',
@@ -24,7 +25,12 @@ class NuevaVoz extends Component {
 
   }
 
+  componentDidMount() {
+    this.setState({concursoId:this.props.idConcurso});  
+  }
+
   handleSave = () => {
+    
     const {
       idLocutor,
       nombre,
@@ -33,24 +39,25 @@ class NuevaVoz extends Component {
       segundo_apellido,
       correo,
       vozInicial,
-      idConcurso,
+      concursoId,
       observaciones,
       extension,
     } = this.state;
-    axios.post('/locutor/creacion',{
+    /*axios.post('/locutor/creacion',{
       nombre,
       segundo_nombre,
       apellido,
       segundo_apellido,
       correo
-    })
+    })*/
+    console.log("Nombre Archivo :", vozInicial);
     axios.post('/archivo/creacion', {
       idLocutor,
       vozInicial,
-      idConcurso,
+      concursoId,
       observaciones,
       extension
-    }.then(res => {
+    })/*.then(res => {
       console.log(res.data);
       let exito = res.data.exito;
       if (!exito) {
@@ -59,8 +66,8 @@ class NuevaVoz extends Component {
       }
       else {
         console.log(exito);
-      }
-    }).catch(err => console.log(err)))
+      }*/
+    //}).catch(err => console.log(err)))*/
   }
   
   handleChange = (event, { name, value }) => {
@@ -68,16 +75,22 @@ class NuevaVoz extends Component {
       this.setState({ [name]: value });
     }
   }
-  crearVoz=()=>{
-    console.log("Entra a Crear Voz ")
-    this.setState.idLocutor=this.props.idLocutor
-    this.setState.vozInicial=this.props.vozInicial
-    this.setState.idConcurso=this.props.idConcurso
-    this.setState.observaciones=this.props.observaciones
-    this.setState.extension=this.props.extension
-    return(
-      this.handleSave
-    );      
+  
+  handleInput = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    this.setState({ [name]: value }, () => {
+      if (name === 'vozInit') {
+        let nombreVoz=this.state.vozInicial.split(".");
+        //let val = `${this.state.vozInicial}`.replace(/\s/g, '');
+        let val = nombreVoz[0];
+        let ext = nombreVoz[1];
+        console.log("Nombre voz completa :", nombreVoz);
+        console.log("Nombre voz inicial :", nombreVoz[0]);
+        console.log("Extension :", nombreVoz[1]);
+        this.setState({ vozInicial: val, extension:ext });
+      }
+    });
   }
   render(){
           const campos = [
@@ -86,9 +99,10 @@ class NuevaVoz extends Component {
             { name: 'apellido', label: 'Primer Apellido', type: 'text' },
             { name: 'segundo_apellido', label: 'Segundo apellido', type: 'text' },
             { name: 'correo', label: 'Correo', type: 'text' },
-            { name: 'vozInicial', label: 'Sube tu Voz', type: 'file' },
+            { name: 'vozInit', label: 'Sube tu Voz', type: 'file' },
             { name: 'observaciones', label: 'Coloca tus observaciones', type: 'text'},
           ];
+          
           this.setState.abrirModalVoz=this.props.open;
           console.log("Open Crear Voz", this.props.open);
           return (

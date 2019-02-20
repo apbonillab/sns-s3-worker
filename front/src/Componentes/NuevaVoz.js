@@ -51,7 +51,7 @@ class NuevaVoz extends Component {
     formData.append('correo', correo);
     formData.append('concurso', this.props.id_concurso);
     formData.append('observaciones', observaciones);
-    axios.post('/locutor/creacion', formData)
+    axios.post('http://localhost:3000/locutor/creacion', formData)
       .then(res => {
         console.log(res.data);
       })

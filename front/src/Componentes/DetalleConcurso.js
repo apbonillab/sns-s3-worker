@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Button, CardGroup, Image, Accordion, Icon, Divider, Confirm } from 'semantic-ui-react';
+import { Container, Button, CardGroup, Image, Accordion, Icon, Divider, Confirm, Input } from 'semantic-ui-react';
 import Axios from 'axios';
 import TarjetaVoz from './CardVoice';
 import NuevaVoz from './NuevaVoz';
@@ -18,7 +18,7 @@ class DetalleConcurso extends Component {
       idConcurso: this.props.id,
       activeIndex: 0,
       info: {},
-      openConfirm:false,
+      openConfirm: false,
     };
   }
 
@@ -41,11 +41,11 @@ class DetalleConcurso extends Component {
   }
 
   handleClick = (e, titleProps) => {
-    const { index } = titleProps
-    const { activeIndex } = this.state
-    const newIndex = activeIndex === index ? -1 : index
+    const { index } = titleProps;
+    const { activeIndex } = this.state;
+    const newIndex = activeIndex === index ? -1 : index;
 
-    this.setState({ activeIndex: newIndex })
+    this.setState({ activeIndex: newIndex });
   }
 
   getInfoConcurso = () => {
@@ -96,28 +96,46 @@ class DetalleConcurso extends Component {
     this.setState({ openEditarConcurso: true });
   }
 
-  borrarConcurso =()=>{
+  borrarConcurso = () => {
     let token = localStorage.getItem('JWToken');
-    console.log("Concurso a borrar props: ", this.props.id);
+    console.log('Concurso a borrar props: ', this.props.id);
     Axios.delete(`/concurso/eliminar/${this.props.id}`, { headers: { 'Authorization': `Bearer ${token}` }, })
-    .then(res => {
-      console.log(res.data);
-    }).catch(err => console.log(err));
+      .then(res => {
+        console.log(res.data);
+      }).catch(err => console.log(err));
     this.handleCancel();
-    window.location = window.location.origin
+    window.location = window.location.origin;
   }
 
+  copyToClipboard = (e) => {
+    this.textArea.select();
+    document.execCommand('copy');
+    // This is just personal preference.
+    // I prefer to not show the the whole text area selected.
+    e.target.focus();
+    console.log('copiado');
+    this.setState({ copySuccess: 'Copied!' });
+  }
 
   render() {
-    const { activeIndex } = this.state
+    const { activeIndex } = this.state;
     if (this.props.admin) {
       this.setState.borrarVoz = true;
       return (
         <Container>
           <h1>{this.state.info.nombre}</h1>
-          <Button onClick={this.editarConcurso} >Editar concurso  <Icon name="edit"/></Button>
-          <Button onClick={this.show}>Borrar concurso  <Icon name="delete"/></Button>
-          <Image size='medium' centered src={this.state.info.banner!==null && this.state.info.banner!=='no-image' ? `http://localhost:3000/Voces/concurso_${this.props.id}/${this.state.info.banner}` : 'images/default.jpg'}></Image>
+          {this.state.info.url?
+            <Input
+              style={{width:500}}
+              ref={(textarea) => this.textArea = textarea}
+              action={{ color: 'teal', labelPosition: 'right', icon: 'copy', content: 'Copy', onClick:this.copyToClipboard }}
+              defaultValue={`${window.location.origin}/concurso/url/${this.state.info.url}`}
+            />
+            :<div></div>}
+          <Divider />
+          <Button onClick={this.editarConcurso} >Editar concurso  <Icon name="edit" /></Button>
+          <Button onClick={this.show}>Borrar concurso  <Icon name="delete" /></Button>
+          <Image size='medium' centered src={this.state.info.banner !== null && this.state.info.banner !== 'no-image' ? `http://localhost:3000/Voces/concurso_${this.props.id}/${this.state.info.banner}` : 'images/default.jpg'}></Image>
           <Divider />
           <Accordion fluid styled>
             <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
@@ -159,7 +177,7 @@ class DetalleConcurso extends Component {
           <br></br>
           <h2>Locutores Participantes</h2>
           <CardGroup>
-            
+
             {this.state.listaVoces.map(card => {
               return (
                 <TarjetaVoz
@@ -190,10 +208,10 @@ class DetalleConcurso extends Component {
             refrescar={this.getInfoConcurso}
           />
           <Confirm
-              open={this.state.openConfirm}
-              content='Esta seguro de eliminar el concurso'
-              onCancel={this.handleCancel}
-              onConfirm={this.borrarConcurso}
+            open={this.state.openConfirm}
+            content='Esta seguro de eliminar el concurso'
+            onCancel={this.handleCancel}
+            onConfirm={this.borrarConcurso}
           />
         </Container>
       );
@@ -254,7 +272,7 @@ class DetalleConcurso extends Component {
           <h2>Locutores Participantes</h2>
           <CardGroup>
             {this.state.listaVoces.map(card => {
-              if(card.estado_nombre==="Convertida"){
+              if (card.estado_nombre === 'Convertida') {
                 return (
                   <TarjetaVoz
                     key={card.idarchivos}
@@ -269,9 +287,9 @@ class DetalleConcurso extends Component {
                     file={`http://localhost:3000/Voces/concurso_${card.concurso}/convertida/${card.voz_convertida}.mp3`}
                   >
                   </TarjetaVoz>
-                );  
+                );
               }
-              
+
             })}
           </CardGroup>
           <NuevaVoz

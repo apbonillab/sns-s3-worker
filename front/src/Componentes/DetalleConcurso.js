@@ -159,6 +159,7 @@ class DetalleConcurso extends Component {
           <br></br>
           <h2>Locutores Participantes</h2>
           <CardGroup>
+            
             {this.state.listaVoces.map(card => {
               return (
                 <TarjetaVoz
@@ -253,21 +254,24 @@ class DetalleConcurso extends Component {
           <h2>Locutores Participantes</h2>
           <CardGroup>
             {this.state.listaVoces.map(card => {
-              return (
-                <TarjetaVoz
-                  key={card.idarchivos}
-                  voz_id={card.idarchivos}
-                  nombreLocutor={card.nombre}
-                  apellidoLocutor={card.apellido}
-                  fecha={card.fecha}
-                  estado={card.estado_nombre}
-                  voz_inicial={card.voz_inicial}
-                  observaciones={card.observaciones}
-                  borrar={this.state.borrar}
-                  file={`http://localhost:3000/Voces/concurso_${card.concurso}/convertida/${card.voz_convertida}.mp3`}
-                >
-                </TarjetaVoz>
-              );
+              if(card.estado_nombre==="Convertida"){
+                return (
+                  <TarjetaVoz
+                    key={card.idarchivos}
+                    voz_id={card.idarchivos}
+                    nombreLocutor={card.nombre}
+                    apellidoLocutor={card.apellido}
+                    fecha={card.fecha}
+                    estado={card.estado_nombre}
+                    voz_inicial={card.voz_inicial}
+                    observaciones={card.observaciones}
+                    borrar={this.state.borrar}
+                    file={`http://localhost:3000/Voces/concurso_${card.concurso}/convertida/${card.voz_convertida}.mp3`}
+                  >
+                  </TarjetaVoz>
+                );  
+              }
+              
             })}
           </CardGroup>
           <NuevaVoz

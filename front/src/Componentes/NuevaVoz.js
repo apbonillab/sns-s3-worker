@@ -55,33 +55,7 @@ class NuevaVoz extends Component {
       .then(res => {
         console.log(res.data);
       })
-      .catch(err => console.log(err));
-    /*axios.post('/locutor/creacion',{
-      nombre,
-      segundo_nombre,
-      apellido,
-      segundo_apellido,
-      correo
-    })*/
-    //console.log("Nombre Archivo :", this.state.vozInicial);
-    //console.log("concursoId :", this.props.id_concurso);
-    /*axios.post('/archivo/creacion', {
-      idLocutor,
-      vozInicial,
-      concursoId,
-      observaciones,
-      extension
-    }).then(res => {
-      console.log(res.data);
-      let exito = res.data.exito;
-      if (!exito) {
-        //alert("Intentelo nuevamente");
-        console.log('no exito');
-      }
-      else {
-        console.log(exito);
-      }
-    }).catch(err => console.log(err))*/
+      .catch(err => console.log(err));    
   }
 
   handleChange = (event, { name, value }) => {

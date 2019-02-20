@@ -228,14 +228,14 @@ class App extends Component {
             onCloseConcurso={this.onCloseConcurso}
           >
             <Container>
-              <Button
+              {/*<Button
                 as='a'
                 icon
                 labelPosition='right'
                 onClick={() => this.setState({ concursoActual: '' })}
               >Atras
                 <Icon name='left arrow' />
-              </Button>
+              </Button>*/}
               <DetalleConcurso
                 info={this.state.concursoInfo}
                 id={this.state.concursoActual}

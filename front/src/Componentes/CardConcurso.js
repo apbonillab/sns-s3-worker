@@ -14,6 +14,8 @@ class CardConcurso extends Component {
           <Card.Header>{this.props.nombreConcurso}</Card.Header>
           <Card.Meta>
             <span className='date'>Fecha inicio {this.props.fechaInicio}</span>
+          </Card.Meta>
+          <Card.Meta>
             <span className='date'>Fecha fin {this.props.fechaFin}</span>
           </Card.Meta>
           <Card.Description>Premio: {this.props.valor}</Card.Description>

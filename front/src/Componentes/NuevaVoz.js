@@ -54,6 +54,7 @@ class NuevaVoz extends Component {
     axios.post('http://localhost:3000/locutor/creacion', formData)
       .then(res => {
         console.log(res.data);
+        alert("Ha cargado su voz correctamente, a su correo llegara la notificación para poder reproducirla");
       })
       .catch(err => console.log(err));    
   }

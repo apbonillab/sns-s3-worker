@@ -46,7 +46,9 @@ class App extends Component {
   }
 
   setAdmin = (user) => {
-    this.setState({ admin: user });
+    this.setState({ admin: user },() =>{
+      this.getConcursos();
+    });
   }
 
   onCloseConcurso = () => {

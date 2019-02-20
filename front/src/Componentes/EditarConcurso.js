@@ -88,7 +88,9 @@ class EditarConcurso extends Component {
       recomendaciones,
       url,
       banner,
-    },{ headers: { 'Authorization': `Bearer ${token}`}, }).then(res => {
+    },{ headers: { 'Authorization': `Bearer ${token}`}, })
+    
+    .then(res => {
       console.log(res.data);
       let exito = res.data.exito;
       if (!exito) {
@@ -100,7 +102,19 @@ class EditarConcurso extends Component {
         this.props.refrescar();
         console.log(exito);
       }
-    }).catch(err => console.log(err));
+    }).catch(function (error){
+      if(error.response.status===500){
+        alert("No se pudo crear el concurso, intentelo nuevamente");
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      }else if(error.request){
+        console.log(error.request);
+      }else{
+        console.log('Error: ',error.message);
+      }
+      console.log(error.config);
+    });
   }
 
   handleInput = (e) => {

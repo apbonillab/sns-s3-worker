@@ -67,9 +67,18 @@ class NuevoConcurso extends Component {
         console.log(exito);
         this.props.onClose();
       }
-    }).catch(err => {
-      console.log(err);
-      alert(err);
+    }).catch(function (error){
+      if(error.response.status===500){
+        alert("No se pudo crear el concurso, intentelo nuevamente");
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      }else if(error.request){
+        console.log(error.request);
+      }else{
+        console.log('Error: ',error.message);
+      }
+      console.log(error.config);
     });
   }
 

@@ -16,12 +16,12 @@ import Concurso from './NuevoConcurso';
 class DesktopContainer extends Component {
   constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       usuario: localStorage.getItem('usuario'),
       token: localStorage.getItem('JWToken'),
-      modalRegistro:false,
-      modalLogin:false,
-      modalConcurso:false,
+      modalRegistro: false,
+      modalLogin: false,
+      modalConcurso: false,
     };
   }
 
@@ -86,7 +86,8 @@ class DesktopContainer extends Component {
   render() {
     const { children } = this.props;
     const { fixed } = this.state;
-    const h = !this.state.usuario?700:100;
+    const h = 100;
+    //console.log('usuarioContainer', this.state.usuario);
     return (
       <Responsive getWidth={this.getWidth} minWidth={Responsive.onlyTablet.minWidth}>
         <Visibility
@@ -108,39 +109,41 @@ class DesktopContainer extends Component {
               size='large'
             >
               <Container>
-                <Menu.Item as='a' active>
+                <Menu.Item
+                  onClick={() => { window.location = window.location.origin; }}
+                  as='a' active>
                   Home
                 </Menu.Item>
                 <Menu.Item as='a'>Work</Menu.Item>
                 <Menu.Item as='a'>Company</Menu.Item>
                 <Menu.Item as='a'>Careers</Menu.Item>
-                {this.state.usuario?
+                {this.state.usuario ?
                   <Menu.Item position='right'>
                     <Button
                       content={this.state.usuario}
                       as='a' inverted={!fixed}
                     />
-                    <Button 
+                    <Button
                       content='Cerrar Sesión'
                       onClick={this.cerrarSesion}
                       as='a' inverted={!fixed}
                     />
-                  </Menu.Item>:
+                  </Menu.Item> :
                   <Menu.Item position='right'>
                     <Button
                       onClick={this.handleLogin}
                       as='a' inverted={!fixed}>
-                    Log in
+                      Log in
                     </Button>
                     <Button as='a'
                       onClick={this.handleRegistro}
                       inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
-                    Sign Up
+                      Sign Up
                     </Button>
                   </Menu.Item>}
               </Container>
             </Menu>
-            {!this.state.usuario?<HomepageHeading />:<div></div>}
+            {/* this.state.usuario !== null ? <HomepageHeading /> : <div></div> */}
           </Segment>
         </Visibility>
         <Register

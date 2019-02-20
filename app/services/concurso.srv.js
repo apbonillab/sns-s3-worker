@@ -8,9 +8,8 @@ var conf = require('../../config.js');
 const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos')
 const RUTA_GESTOR_ARCHIVOS_RAIZ = conf.get('ruta_gestion_archivos_raiz')
 
-
 module.exports.crear = (nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner,idcuentaadmin,success,error)=>{
-    let userData = [[nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner]];
+    let userData = [[nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner.name]];
     connection.query(`insert into concursos (nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner) values ? `,
     [userData],function(err,result,fields){
         if(err){
@@ -30,7 +29,12 @@ module.exports.crear = (nombre,fecha_inicio,fecha_fin,valor,guion,recomendacione
                 fs.mkdirSync(RUTA_GESTOR_ARCHIVOS+idconcurso);
                 fs.mkdirSync(RUTA_GESTOR_ARCHIVOS+idconcurso+'//inicial');
                 fs.mkdirSync(RUTA_GESTOR_ARCHIVOS+idconcurso+'//convertida');
-                success(result);
+                banner.mv(RUTA_GESTOR_ARCHIVOS+idconcurso+`//${banner.name}`,function(err){
+                if(err){
+                    return res.status(500).send(err);
+                }
+                    success(result);
+                });
             }
          
             
@@ -145,20 +149,14 @@ module.exports.eliminarArchivosXconcurso = (idconcursos,success,error)=>{
 }
 
 module.exports.editar = (idconcursos,nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner,success,error)=>{
-    connection.query(`update concursos set
-    nombre="${nombre}",
-    fecha_inicio = "${fecha_inicio}",
-    fecha_fin="${fecha_fin}",
-    valor="${valor}",
-    guion="${guion}",
-    correo="${correo}",
-    recomendaciones=${recomendaciones},
-    url=${url},
-    banner=${banner},
-    where idconcursos = ${idconcursos}`,function(err,result,fields){
+    let data = [nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner,idconcursos];
+    connection.query(`update concursos set nombre=?, fecha_inicio = ?, fecha_fin=?, valor=?, guion=?, recomendaciones=?, url=?, banner=? where idconcursos = ?`,
+    data,function(err,result,fields){
          if(err){
+             console.log(err);
              error(err);
          }else{
+             console.log(result)
             success(result);
          }
         

@@ -1,10 +1,17 @@
 'use strict'
 var express = require('express')
+const fileUpload = require('express-fileupload');
 var routr = express.Router();
 var concursoSrv = require('../services/concurso.srv.js');
 const security = require('../services/security.srv');
 
+routr.use(fileUpload());
+
 routr.post('/creacion',ensureToken,(req, res) => {
+
+    if (Object.keys(req.files).length == 0) {
+        return res.status(400).send('No files were uploaded.');
+      }
     concursoSrv.crear(
         req.body.nombre,
         req.body.fecha_inicio,
@@ -13,12 +20,12 @@ routr.post('/creacion',ensureToken,(req, res) => {
         req.body.guion,
         req.body.recomendaciones,
         req.body.url,
-        req.body.banner,
+        req.files.banner,
         req.body.idusuario,
         function (concurso) {
-            res.status(201).send({'message':'Concurso creado exitosamente'})
+                res.status(201).send({'exito':true,'message':'Concurso creado exitosamente'})
         },function(error){
-            res.status(500).send({'message':'Error en la creacion del concurso'});
+            res.status(500).send({'exito':false,'message':'Error en la creacion del concurso'});
             
         }
     )
@@ -87,20 +94,20 @@ routr.delete('/eliminar/:id',ensureToken, (req, res) => {
 })
 
 routr.post('/editar',ensureToken,(req, res) => {
-    concursoSrv.crear(
-        rea.body.idconcursos,
+    concursoSrv.editar(
+        req.body.idconcurso,
         req.body.nombre,
-        req.body.fecha_inicio,
-        req.body.fecha_fin,
+        new Date(req.body.fecha_inicio),
+        new Date(req.body.fecha_fin),
         req.body.valor,
         req.body.guion,
         req.body.recomendaciones,
         req.body.url,
         req.body.banner,
         function (concurso) {
-            res.status(200).send({'message':'Concurso actualizado exitosamente'})
+            res.status(200).send({'exito':true,'message':'Concurso actualizado exitosamente'})
         },function(error){
-            res.status(500).send({'message':'Error en la actualizacion del concurso'});
+            res.status(500).send({'exito':false,'message':'Error al actualizar concurso'});
             
         }
     )

@@ -30,7 +30,7 @@ class App extends Component {
       listaConcursos: [],
       concursoActual: '',
       urlConcursoActual: '',
-      listaVoces:[],
+      listaVoces: [],
     };
   }
 
@@ -53,6 +53,7 @@ class App extends Component {
     this.setState({
       openConcurso: false
     });
+    this.getConcursos();
   }
 
   viewConcurso = (idConcurso) => {
@@ -61,10 +62,13 @@ class App extends Component {
     this.setState({
       concursoActual: idConcurso,
     });
-    this.state.listaConcursos.map(con=>{
-        if(con.idconcurso === idConcurso){
-          this.setState({urlConcursoActual: con.url});
-        }
+    this.state.listaConcursos.map(con => {
+      if (con.idconcurso === idConcurso) {
+        this.setState({
+          urlConcursoActual: con.url,
+          concursoInfo: con
+        });
+      }
     });
   }
 
@@ -213,14 +217,30 @@ class App extends Component {
   render() {
     if (!this.state.admin) {
       let path = window.location.pathname;
-      console.log("Path: ",path,"Admin: ", this.state.admin);
+      console.log("Path: ", path, "Admin: ", this.state.admin);
       if (this.state.urlConcursoActual) {
         //Render Concurso para locutores
         return (
-          <DetalleConcurso
-            id={this.state.concursoActual}
-            url={this.state.urlConcursoActual}
-          />
+          <ResponsiveContainer setAdmin={this.setAdmin}
+            openConcurso={this.state.openConcurso}
+            onCloseConcurso={this.onCloseConcurso}
+          >
+            <Container>
+              <Button
+                as='a'
+                icon
+                labelPosition='right'
+                onClick={() => this.setState({ concursoActual: '' })}
+              >Atras
+                <Icon name='left arrow' />
+              </Button>
+              <DetalleConcurso
+                info={this.state.concursoInfo}
+                id={this.state.concursoActual}
+                url={this.state.urlConcursoActual}
+              />
+            </Container>
+          </ResponsiveContainer>
         );
       }
       else {
@@ -283,6 +303,7 @@ class App extends Component {
               </Button>
               <DetalleConcurso
                 admin={this.state.admin}
+                info={this.state.concursoInfo}
                 id={this.state.concursoActual}
                 url={this.state.urlConcursoActual}
               />

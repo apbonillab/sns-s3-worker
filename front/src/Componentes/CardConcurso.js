@@ -3,6 +3,9 @@ import { Card, Icon, Image, Button } from 'semantic-ui-react';
 
 class CardConcurso extends Component {
 
+  borrarConcurso=()=>{
+
+  }
   render() {
     return (
       <Card>

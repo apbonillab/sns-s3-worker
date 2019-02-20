@@ -56,9 +56,8 @@ class App extends Component {
     this.getConcursos();
   }
 
+
   viewConcurso = (idConcurso) => {
-    console.log("Lista de concursos", this.state.listaConcursos);
-    console.log("idConcurso", idConcurso);
     this.setState({
       concursoActual: idConcurso,
     });
@@ -218,6 +217,7 @@ class App extends Component {
     if (!this.state.admin) {
       let path = window.location.pathname;
       console.log("Path: ", path, "Admin: ", this.state.admin);
+      console.log("Concurso actual para locutor: ", this.state.urlConcursoActual);
       if (this.state.urlConcursoActual) {
         //Render Concurso para locutores
         return (
@@ -286,7 +286,6 @@ class App extends Component {
         );
       }
       else {
-        console.log("url concurso actual", this.state.urlConcursoActual);
         return (
           <ResponsiveContainer setAdmin={this.setAdmin}
             openConcurso={this.state.openConcurso}

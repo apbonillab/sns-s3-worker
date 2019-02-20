@@ -36,6 +36,7 @@ module.exports.obtenerArchxConcursoURL = (urlConcurso,success,error)=>{
     l.segundo_nombre 'segundo_nombre' ,
     l.apellido 'apellido',
     l.segundo_apellido 'segundo_apellido',
+    l.correo 'correo',
     a.voz_inicial 'voz_inicial',
     a.voz_convertida 'voz_convertida',
     a.concurso 'concurso',

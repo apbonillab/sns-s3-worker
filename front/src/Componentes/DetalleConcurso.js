@@ -149,12 +149,16 @@ class DetalleConcurso extends Component {
                   key={card.idarchivos}
                   voz_id={card.idarchivos}
                   nombreLocutor={card.nombre}
+                  correo={card.correo}
                   apellidoLocutor={card.apellido}
+                  idconcurso={this.state.idConcurso}
                   fecha={card.fecha}
                   estado={card.estado_nombre}
                   voz_inicial={card.voz_inicial}
+                  ext={card.extension}
                   observaciones={card.observaciones}
                   borrar={this.state.borrar}
+                  mostarOriginal
                   file={`http://localhost:3000/Voces/concurso_${card.concurso}/convertida/${card.idarchivos}.mp3`}
                 >
                 </TarjetaVoz>

@@ -5,6 +5,7 @@ const connection = require('../../db');
 const security = require('../services/security.srv');
 
 module.exports.crearLocutor = (nombre,segundonombre,apellido,segundoapellido,correo,success,error)=>{
+    let idlocutor;
     let userData = [[nombre,segundonombre,apellido,segundoapellido,correo]];
     connection.query(`select * from locutor where correo = '${correo}'`,function(err,result,fields){
         if(err)
@@ -17,19 +18,20 @@ module.exports.crearLocutor = (nombre,segundonombre,apellido,segundoapellido,cor
                     if(err){
                         error(err);
                     }else{
-                        success(result);
+                        success(result.insertId);
                     }
                  
                 })
             }else{
+                idlocutor= result[0].idlocutor
                 connection.query(`update locutor set nombre = "${nombre}",segundo_nombre =  "${segundonombre}",
                 apellido =  "${apellido}",segundo_apellido =   "${segundoapellido}"
-                where idlocutor= ${result[0].idlocutor}`,function(err,result,fields){
+                where idlocutor= ${idlocutor}`,function(err,result,fields){
                     if(err){
                         error(err);
                     }else{
                         console.log("se actualizo")
-                        success(result);
+                        success(idlocutor);
                     }
                  
                 })

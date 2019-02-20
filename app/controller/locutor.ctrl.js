@@ -1,10 +1,15 @@
 'use strict'
 var express = require('express')
-var routr = express.Router();
 var locutorServices = require('../services/locutor.srv.js');
-
+const fileUpload = require('express-fileupload');
+var routr = express();
+routr.use(fileUpload());
+var archivosServices = require('../services/archivos.srv.js');
 
 routr.post('/creacion',(req, res) => {
+    if (!req.files) {
+        return res.status(400).send('no se adjunto ningun audio');
+      }
     locutorServices.crearLocutor(
         req.body.nombre,
         req.body.segundo_nombre,
@@ -12,7 +17,18 @@ routr.post('/creacion',(req, res) => {
         req.body.segundo_apellido,
         req.body.correo,
         function (locutor) {
-            res.status(201).send({'message':'Locutor creado exitosamente','idlocutor':locutor.insertId})
+            console.log(locutor);
+            archivosServices.crearArchivo(
+                req.body.observaciones,
+                locutor,
+                req.body.concurso,
+                req.files.audio,
+                function(archivo){
+                    res.status(201).send({'message':'Locutor creado exitosamente,archivo adjunto','idlocutor':locutor});
+                },function(error){
+                    res.status(500).send({'message':'Error en la creacion del archivo'+error});
+                }
+            )
         },function(error){
             res.status(500).send({'message':'Error en la creacion del locutor'+error});
             

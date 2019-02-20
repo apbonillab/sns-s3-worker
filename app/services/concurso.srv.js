@@ -50,8 +50,44 @@ module.exports.mostrarTodos = (success,error)=>{
     })
 }
 
+module.exports.mostrarTodosVigentes = (success,error)=>{
+    connection.query(`select * from concursos where archivo_ganador is null and fecha_fin > curdate() and fecha_inicio<fecha_fin;`,function(err,result,fields){
+        if(err){
+            error(err);
+        }else{
+            success(result);
+        }
+    
+    })
+}
+
+module.exports.seleccionganador = (idarchivo,idconcurso,success,error)=>{
+    connection.query(`update concursos set archivo_ganador = ${idarchivo} where idconcursos = ${idconcurso}`
+    ,function(err,result,fields){
+        if(err){
+            error(err);
+            console.log(err);
+        }else{
+            success(result);
+        }
+
+    })
+}
+
 module.exports.mostrarConcursoXURL = (urlconcurso,success,error)=>{
     connection.query(`select * from concursos where url = '${urlconcurso}'`,function(err,result,fields){
+        if(err){
+            error(err);
+            console.log(err);
+        }else{
+            success(result);
+        }
+
+    })
+}
+
+module.exports.mostrarConcursoXid = (idconcurso,success,error)=>{
+    connection.query(`select * from concursos where id = '${idconcurso}'`,function(err,result,fields){
         if(err){
             error(err);
             console.log(err);

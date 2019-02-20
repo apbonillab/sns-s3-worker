@@ -1,12 +1,9 @@
 'use strict'
 var express = require('express')
 const fileUpload = require('express-fileupload');
-//var fs  = require('fs');
-// default options
 var app = express();
 app.use(fileUpload());
 
-//var routr = express.Router();
 var archivosServices = require('../services/archivos.srv.js');
 var convertirServices = require('../services/conversor.srv.js');
 

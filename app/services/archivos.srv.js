@@ -5,16 +5,31 @@ const connection = require('../../db');
 const moment = require('moment');
 var nodemailer = require('nodemailer');
 
-module.exports.crearArchivo = (observaciones,idlocutor,voz_inicial,concurso,extension,success,error)=>{
+
+var conf = require('../../config.js');
+const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos')
+
+module.exports.crearArchivo = (observaciones,idlocutor,concurso,file,success,error)=>{
+    var archivo =  file;
+    var nombreCompleto =  archivo.name.split('.'); 
+    var  extension = nombreCompleto[ nombreCompleto.length - 1];
+    archivo.mv(RUTA_GESTOR_ARCHIVOS+concurso+'/inicial/' + archivo.name, function(err) {
+                if (err)
+                    error(err)
+                });
     let d = new Date();
     let dateAudit =  moment(d).format("YYYY-MM-DD HH:mm:ss");
     let voz_convertida= null;
     let estado = 1;
     if(extension.toLowerCase() ==='mp3'){
-        voz_convertida= voz_inicial;
+        archivo.mv(RUTA_GESTOR_ARCHIVOS+concurso+'/convertida/' + archivo.name, function(err) {
+                if (err)
+                    error(err)
+                });
+        voz_convertida= archivo.name+concurso;
         estado = 2;
     }
-    let userData = [[observaciones,idlocutor,estado,voz_inicial,concurso,dateAudit,extension,voz_convertida]];
+    let userData = [[observaciones,idlocutor,estado,archivo.name+concurso,concurso,dateAudit,extension,voz_convertida]];
     connection.query(`insert into archivos (observaciones,usuario,estado,voz_inicial,concurso,fecha,ext_voz_inicial,voz_convertida) values ? `,
     [userData],function(err,result,fields){
         if(err){

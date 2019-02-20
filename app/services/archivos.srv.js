@@ -25,6 +25,7 @@ module.exports.crearArchivo = (observaciones,idlocutor,concurso,file,success,err
     if(extension.toLowerCase() ==='mp3'){
         archivo.mv(RUTA_GESTOR_ARCHIVOS+concurso+'/convertida/' + archivo.name+"_"+concurso+"."+extension, function(err) {
                 if (err)
+                    console.log(err)
                     error(err)
                 });
         voz_convertida= archivo.name+"_"+concurso;
@@ -34,8 +35,10 @@ module.exports.crearArchivo = (observaciones,idlocutor,concurso,file,success,err
     connection.query(`insert into archivos (observaciones,usuario,estado,voz_inicial,concurso,fecha,ext_voz_inicial,voz_convertida) values ? `,
     [userData],function(err,result,fields){
         if(err){
+            console.log(err)
             error(err);
         }else{
+            console.log(result)
             success(result);
         }
      

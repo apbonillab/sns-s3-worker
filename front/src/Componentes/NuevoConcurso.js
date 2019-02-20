@@ -67,7 +67,10 @@ class NuevoConcurso extends Component {
         console.log(exito);
         this.props.onClose();
       }
-    }).catch(err => console.log(err));
+    }).catch(err => {
+      console.log(err);
+      alert(err);
+    });
   }
 
   handleInput = (e) => {

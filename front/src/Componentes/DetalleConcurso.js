@@ -273,7 +273,7 @@ class DetalleConcurso extends Component {
           <NuevaVoz
             open={this.state.openCrearVoz}
             onClose={this.onCloseCrearVoz}
-            id_concurso={this.state.idConcurso}
+            id_concurso={this.state.info.idconcursos}
           />
         </Container>
       );

@@ -117,7 +117,7 @@ class DetalleConcurso extends Component {
           <h1>{this.state.info.nombre}</h1>
           <Button onClick={this.editarConcurso} >Editar concurso  <Icon name="edit"/></Button>
           <Button onClick={this.show}>Borrar concurso  <Icon name="delete"/></Button>
-          <Image size='medium' centered src={this.state.info.banner ? `http://localhost:3000/Voces/concurso_${this.props.id}/${this.state.info.banner}` : 'images/default.jpg'}></Image>
+          <Image size='medium' centered src={this.state.info.banner!==null && this.state.info.banner!=='no-image' ? `http://localhost:3000/Voces/concurso_${this.props.id}/${this.state.info.banner}` : 'images/default.jpg'}></Image>
           <Divider />
           <Accordion fluid styled>
             <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>

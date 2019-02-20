@@ -24,9 +24,10 @@ module.exports.crearArchivo = (observaciones,idlocutor,concurso,file,success,err
     let estado = 1;
     if(extension.toLowerCase() ==='mp3'){
         archivo.mv(RUTA_GESTOR_ARCHIVOS+concurso+'/convertida/' + archivo.name+"_"+concurso+"."+extension, function(err) {
-                if (err)
-                    console.log(err)
-                    error(err)
+                    if (err){
+                        console.log(err)
+                        error(err)
+                    }
                 });
         voz_convertida= archivo.name+"_"+concurso;
         estado = 2;

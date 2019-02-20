@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Form, Modal, Container } from 'semantic-ui-react';
 import axios from 'axios';
 import ImageUploader from 'react-images-upload';
-
+import { toast } from 'react-toastify';
 import 'filepond/dist/filepond.min.css';
 
 
@@ -53,10 +53,46 @@ class NuevaVoz extends Component {
     formData.append('observaciones', observaciones);
     axios.post('http://localhost:3000/locutor/creacion', formData)
       .then(res => {
-        console.log(res.data);
-        alert("Ha cargado su voz correctamente, a su correo llegara la notificación para poder reproducirla");
+        let exito = res.data.exito;
+        if (!exito) {
+          //alert('Intentelo nuevamente');
+          toast.error('Algo salio mal. Intentalo nuevamente',
+            {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true
+            });
+          console.log('no exito');
+        }
+        else {
+          toast.info('Tu voz 🎤 ha sido cargada correctamente, seras notificado por correo cuando este lista para reproducir.',
+            {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true
+            });
+          console.log(exito);
+          this.props.onClose();
+        }
       })
-      .catch(err => console.log(err));    
+      .catch(err => {
+        console.log(err);
+        toast.error('Algo salio mal. Intentalo nuevamente',
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true
+          });
+      });
   }
 
   handleChange = (event, { name, value }) => {
@@ -70,9 +106,9 @@ class NuevaVoz extends Component {
     let value = e.target.value;
     this.setState({ [name]: value }, () => {
       if (name === 'vozInit') {
-        let nombreVoz = this.state.vozInit.split("\.");
+        let nombreVoz = this.state.vozInit.split('\.');
         let long = nombreVoz.length;
-        let val = nombreVoz[long - 2].split("\\");
+        let val = nombreVoz[long - 2].split('\\');
         let long2 = val.length;
         let ext = nombreVoz[long - 1];
         this.setState({ vozInicial: val[long2 - 1], extension: ext, audio: e.target.files[0] });
@@ -98,54 +134,57 @@ class NuevaVoz extends Component {
     ];
 
     return (
-      <Modal open={this.props.open}
-        onClose={this.props.onClose}
-      >
-        <Modal.Header>Subir una Voz</Modal.Header>
-        <Modal.Content>
-          <Container>
-            <Form>
-              {campos.map(c => {
-                if (c.type === 'text') {
-                  return (
-                    <Form.Input
-                      key={c.name}
-                      value={this.state.c}
-                      onChange={this.handleInput}
-                      name={c.name}
-                      label={c.label}
-                      type={c.type}
-                    />
-                  );
-                }
-                else if (c.type === 'file') {
-                  return (
-                    <ImageUploader
-                      key={c.name}
-                      withIcon={false}
-                      label='Max file size: 10MB'
-                      buttonText='Seleccionar archivo'
-                      onChange={this.onDrop}
-                      imgExtension={['mp3','midi','ogg','m4a','wav',]}
-                      accept='audio/*'
-                      maxFileSize={10485760}
-                      singleImage
-                    />
-                  );
-                }
-              })}
-            </Form>
-          </Container>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button primary
-            content='Subir Voz'
-            icon='save'
-            onClick={this.handleSave}
-          />
-        </Modal.Actions>
+      <React.Fragment>
 
-      </Modal>
+        <Modal open={this.props.open}
+          onClose={this.props.onClose}
+        >
+          <Modal.Header>Subir una Voz</Modal.Header>
+          <Modal.Content>
+            <Container>
+              <Form>
+                {campos.map(c => {
+                  if (c.type === 'text') {
+                    return (
+                      <Form.Input
+                        key={c.name}
+                        value={this.state.c}
+                        onChange={this.handleInput}
+                        name={c.name}
+                        label={c.label}
+                        type={c.type}
+                      />
+                    );
+                  }
+                  else if (c.type === 'file') {
+                    return (
+                      <ImageUploader
+                        key={c.name}
+                        withIcon={false}
+                        label='Max file size: 10MB'
+                        buttonText='Seleccionar archivo'
+                        onChange={this.onDrop}
+                        imgExtension={['mp3', 'midi', 'ogg', 'm4a', 'wav',]}
+                        accept='audio/*'
+                        maxFileSize={10485760}
+                        singleImage
+                      />
+                    );
+                  }
+                })}
+              </Form>
+            </Container>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button primary
+              content='Subir Voz'
+              icon='save'
+              onClick={this.handleSave}
+            />
+          </Modal.Actions>
+
+        </Modal>
+      </React.Fragment>
     );
   }
 }

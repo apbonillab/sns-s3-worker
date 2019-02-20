@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import { Button, Form, Modal, Grid, Segment,Header } from 'semantic-ui-react';
+import { Button, Form, Modal, Grid, Segment, Header } from 'semantic-ui-react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 class Login extends Component {
 
   constructor(props) {
     super(props);
 
-    this.state={
-      correo:'',
-      contrasena:''
+    this.state = {
+      correo: '',
+      contrasena: ''
     };
   }
 
@@ -27,20 +28,29 @@ class Login extends Component {
     axios.post('/admin/login', {
       correo, contrasena
     }).then(res => {
-        console.log("valor exito: ",res.data.exito);
-        let exito = res.data.exito;
-        if(!exito){
-          alert(res.data.message);
-          console.log(res.data.message);
-        }
-        else{
-          let data = res.data;
-          localStorage.setItem('JWToken',data.JWToken);
-          localStorage.setItem('usuario',data.correo);
-          localStorage.setItem('iduser',data.iduser);
-          this.props.verificar();
-        }
-      }).catch(err => console.log(err));
+      console.log("valor exito: ", res.data.exito);
+      let exito = res.data.exito;
+      if (!exito) {
+        alert(res.data.message);
+        toast.error(`Algo salio mal. Intentalo nuevamente\n ${res.data.message}`,
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true
+          });
+        console.log(res.data.message);
+      }
+      else {
+        let data = res.data;
+        localStorage.setItem('JWToken', data.JWToken);
+        localStorage.setItem('usuario', data.correo);
+        localStorage.setItem('iduser', data.iduser);
+        this.props.verificar();
+      }
+    }).catch(err => console.log(err));
   };
 
   render() {
@@ -49,10 +59,10 @@ class Login extends Component {
         open={this.props.open}
         onClose={this.props.onClose}
       >
-        <Grid textAlign='center' style={{ height: '100%', margin:'40px' }} verticalAlign='middle'>
+        <Grid textAlign='center' style={{ height: '100%', margin: '40px' }} verticalAlign='middle'>
           <Grid.Column style={{ maxWidth: 450 }}>
             <Header as='h2' color='teal' textAlign='center'>
-                Iniciar Sesión como Administrador
+              Iniciar Sesión como Administrador
             </Header>
             <Modal.Content image>
               <Form>
@@ -74,11 +84,11 @@ class Login extends Component {
                   />
                 </Segment>
               </Form>
-              <Grid.Row style={{margin:'20px'}}>
+              <Grid.Row style={{ margin: '20px' }}>
                 <Button color='teal'
                   size='large'
                   onClick={this.handleLogin}>
-                      Iniciar Sesión
+                  Iniciar Sesión
                 </Button>
               </Grid.Row>
             </Modal.Content>

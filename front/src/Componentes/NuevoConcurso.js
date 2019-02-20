@@ -3,6 +3,7 @@ import { Button, Form, Modal } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react';
 import axios from 'axios';
 import ImageUploader from 'react-images-upload';
+import { toast } from 'react-toastify';
 
 class NuevoConcurso extends Component {
 
@@ -60,7 +61,16 @@ class NuevoConcurso extends Component {
       console.log(res.data);
       let exito = res.data.exito;
       if (!exito) {
-        alert('Intentelo nuevamente');
+        //alert('Intentelo nuevamente');
+        toast.error('No se pudo crear el concurso, intentelo nuevamente',
+            {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true
+            });
         console.log('no exito');
       }
       else {
@@ -69,7 +79,16 @@ class NuevoConcurso extends Component {
       }
     }).catch(function (error){
       if(error.response.status===500){
-        alert("No se pudo crear el concurso, intentelo nuevamente");
+        toast.error('No se pudo crear el concurso, intentelo nuevamente',
+            {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true
+            });
+        //alert("No se pudo crear el concurso, intentelo nuevamente");
         console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);

@@ -3,6 +3,7 @@ import { Button, Form, Modal } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react';
 import axios from 'axios';
 import ImageUploader from 'react-images-upload';
+import { toast } from 'react-toastify';
 
 class EditarConcurso extends Component {
 
@@ -18,28 +19,28 @@ class EditarConcurso extends Component {
       recomendaciones: '',
       url: '',
       banner: [],
-      idconcurso:'',
+      idconcurso: '',
     };
   }
 
   getConcursoData = () => {
     axios.get(`/concurso/obtener/url/${this.props.urlConcurso}`)
-    .then(res => {
-      console.log('Concurso',res.data);
-      this.setState({
-        idconcursos:res.data[0].idconcursos,
-        nombre:res.data[0].nombre,
-        fecha_inicio:res.data[0].fecha_inicio,
-        fecha_fin:res.data[0].fecha_fin,
-        valor:res.data[0].valor,
-        guion:res.data[0].guion,
-        recomendaciones:res.data[0].recomendaciones,
-        url:res.data[0].url,
-        banner:res.data[0].banner,
-        info:{},
-      });
-    }).catch(err => console.log(err));
-    
+      .then(res => {
+        console.log('Concurso', res.data);
+        this.setState({
+          idconcursos: res.data[0].idconcursos,
+          nombre: res.data[0].nombre,
+          fecha_inicio: res.data[0].fecha_inicio,
+          fecha_fin: res.data[0].fecha_fin,
+          valor: res.data[0].valor,
+          guion: res.data[0].guion,
+          recomendaciones: res.data[0].recomendaciones,
+          url: res.data[0].url,
+          banner: res.data[0].banner,
+          info: {},
+        });
+      }).catch(err => console.log(err));
+
   }
 
   componentWillReceiveProps(nextProps) {
@@ -53,7 +54,7 @@ class EditarConcurso extends Component {
         recomendaciones: nextProps.infoConcurso.recomendaciones,
         url: nextProps.infoConcurso.url,
         banner: nextProps.infoConcurso.banner,
-        idconcurso:nextProps.infoConcurso.idconcurso,
+        idconcurso: nextProps.infoConcurso.idconcurso,
       });
     }
   }
@@ -74,10 +75,10 @@ class EditarConcurso extends Component {
       guion,
       recomendaciones,
       url,
-      banner 
+      banner
     } = this.state;
     let token = localStorage.getItem('JWToken');
-    localStorage.setItem('url',this.state.url);
+    localStorage.setItem('url', this.state.url);
     axios.post('/concurso/editar', {
       idconcurso,
       nombre,
@@ -88,33 +89,59 @@ class EditarConcurso extends Component {
       recomendaciones,
       url,
       banner,
-    },{ headers: { 'Authorization': `Bearer ${token}`}, })
-    
-    .then(res => {
-      console.log(res.data);
-      let exito = res.data.exito;
-      if (!exito) {
-        //alert("Intentelo nuevamente");
-        console.log('no exito');
-      }
-      else {
-        this.props.onClose();
-        this.props.refrescar();
-        console.log(exito);
-      }
-    }).catch(function (error){
-      if(error.response.status===500){
-        alert("No se pudo crear el concurso, intentelo nuevamente");
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      }else if(error.request){
-        console.log(error.request);
-      }else{
-        console.log('Error: ',error.message);
-      }
-      console.log(error.config);
-    });
+    }, { headers: { 'Authorization': `Bearer ${token}` }, })
+
+      .then(res => {
+        console.log(res.data);
+        let exito = res.data.exito;
+        if (!exito) {
+          toast.error('Algo salio mal. Intentalo nuevamente',
+            {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true
+            });
+          console.log('no exito');
+        }
+        else {
+          toast.info('Tu concurso ha sido actualizado.',
+            {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true
+            });
+          this.props.onClose();
+          this.props.refrescar();
+          console.log(exito);
+        }
+      }).catch(function (error) {
+        if (error.response.status === 500) {
+          //alert("No se pudo crear el concurso, intentelo nuevamente");
+          toast.error('Algo salio mal. Intentalo nuevamente',
+            {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true
+            });
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log('Error: ', error.message);
+        }
+        console.log(error.config);
+      });
   }
 
   handleInput = (e) => {
@@ -137,12 +164,12 @@ class EditarConcurso extends Component {
 
   render() {
     const campos = [
-      { name: 'nombre', label: 'Nombre', type: 'text', value:this.state.nombre},
+      { name: 'nombre', label: 'Nombre', type: 'text', value: this.state.nombre },
       { name: 'fecha_inicio', label: 'Fecha de Inicio', type: 'date', value: this.state.fecha_inicio },
       { name: 'fecha_fin', label: 'Fecha fin', type: 'date', value: this.state.fecha_fin },
-      { name: 'valor', label: 'Valor a pagar', type: 'text', value:this.state.valor},
-      { name: 'guion', label: 'Guion', type: 'text' , value:this.state.guion},
-      { name: 'recomendaciones', label: 'Recomendaciones', type: 'text' , value:this.state.recomendaciones },
+      { name: 'valor', label: 'Valor a pagar', type: 'text', value: this.state.valor },
+      { name: 'guion', label: 'Guion', type: 'text', value: this.state.guion },
+      { name: 'recomendaciones', label: 'Recomendaciones', type: 'text', value: this.state.recomendaciones },
       { name: 'url', label: 'Url/Direccion Web', type: 'text' },
       { name: 'banner', label: 'Banner/Imagen', type: 'text' },
 

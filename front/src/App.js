@@ -12,7 +12,8 @@ import {
   CardGroup,
   Icon
 } from 'semantic-ui-react';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Player from './Componentes/Player';
 import ResponsiveContainer from './Componentes/ResponsiveContainer';
 import Axios from 'axios';
@@ -227,6 +228,17 @@ class App extends Component {
             openConcurso={this.state.openConcurso}
             onCloseConcurso={this.onCloseConcurso}
           >
+            <ToastContainer 
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnVisibilityChange
+              draggable
+              pauseOnHover
+            />
             <Container>
               {/*<Button
                 as='a'
@@ -256,6 +268,17 @@ class App extends Component {
             openConcurso={this.state.openConcurso}
             onCloseConcurso={this.onCloseConcurso}
           >
+            <ToastContainer 
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnVisibilityChange
+              draggable
+              pauseOnHover
+            />
             <p>Hola admin {this.state.admin}</p>
             <Container>
               <Button
@@ -293,6 +316,17 @@ class App extends Component {
             openConcurso={this.state.openConcurso}
             onCloseConcurso={this.onCloseConcurso}
           >
+            <ToastContainer 
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnVisibilityChange
+              draggable
+              pauseOnHover
+            />
             <Container>
               <Button
                 as='a'

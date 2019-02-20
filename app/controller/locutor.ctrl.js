@@ -25,7 +25,7 @@ routr.post('/creacion',(req, res) => {
                 req.files.audio,
                 function(archivo){
                     //console.log(res)
-                    res.status(201).send({'message':'locutor OK','locutorId':locutor});
+                    res.status(201).send({'exito':true,'message':'locutor OK','locutorId':locutor});
                 },function(error){
                     res.status(500).send({'message':'Error en la creacion del archivo'+error});
                 }

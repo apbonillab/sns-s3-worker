@@ -24,7 +24,9 @@ routr.post('/creacion',(req, res) => {
                 req.body.concurso,
                 req.files.audio,
                 function(archivo){
-                    res.status(201).send({'message':'Locutor creado exitosamente,archivo adjunto','idlocutor':locutor});
+                    res.writeHead(201);
+                    res.write({'message':'Locutor creado exitosamente,archivo adjunto','idlocutor':locutor});
+                    res.end({'message':'Locutor creado exitosamente,archivo adjunto','idlocutor':locutor});
                 },function(error){
                     res.status(500).send({'message':'Error en la creacion del archivo'+error});
                 }

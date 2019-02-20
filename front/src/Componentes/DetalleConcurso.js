@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Button, CardGroup, Image, Accordion, Icon, Divider } from 'semantic-ui-react';
+import { Container, Button, CardGroup, Image, Accordion, Icon, Divider, Confirm } from 'semantic-ui-react';
 import Axios from 'axios';
 import TarjetaVoz from './CardVoice';
 import NuevaVoz from './NuevaVoz';
@@ -17,9 +17,13 @@ class DetalleConcurso extends Component {
       openEditarConcurso: false,
       idConcurso: this.props.id,
       activeIndex: 0,
-      info: {}
+      info: {},
+      openConfirm:false,
     };
   }
+
+  show = () => this.setState({ openConfirm: true })
+  handleCancel = () => this.setState({ openConfirm: false })
 
   componentDidMount() {
     if (!this.props.info) {
@@ -92,6 +96,17 @@ class DetalleConcurso extends Component {
     this.setState({ openEditarConcurso: true });
   }
 
+  borrarConcurso =()=>{
+    let token = localStorage.getItem('JWToken');
+    console.log("Concurso a borrar props: ", this.props.id);
+    Axios.delete(`/concurso/eliminar/${this.props.id}`, { headers: { 'Authorization': `Bearer ${token}` }, })
+    .then(res => {
+      console.log(res.data);
+    }).catch(err => console.log(err));
+    this.handleCancel();
+    window.location = window.location.origin
+  }
+
 
   render() {
     const { activeIndex } = this.state
@@ -100,8 +115,9 @@ class DetalleConcurso extends Component {
       return (
         <Container>
           <h1>{this.state.info.nombre}</h1>
-          <Button onClick={this.editarConcurso}>Editar concurso</Button>
-          <Image size='medium' centered src={this.state.info.banner!=='no-image' && this.state.info.banner!==null ? `http://localhost:3000/Voces/concurso_${this.props.id}/${this.state.info.banner}` : 'images/default.jpg'}></Image>
+          <Button onClick={this.editarConcurso} >Editar concurso  <Icon name="edit"/></Button>
+          <Button onClick={this.show}>Borrar concurso  <Icon name="delete"/></Button>
+          <Image size='medium' centered src={this.state.info.banner ? `http://localhost:3000/Voces/concurso_${this.props.id}/${this.state.info.banner}` : 'images/default.jpg'}></Image>
           <Divider />
           <Accordion fluid styled>
             <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
@@ -172,7 +188,12 @@ class DetalleConcurso extends Component {
             infoConcurso={this.state.info}
             refrescar={this.getInfoConcurso}
           />
-
+          <Confirm
+              open={this.state.openConfirm}
+              content='Esta seguro de eliminar el concurso'
+              onCancel={this.handleCancel}
+              onConfirm={this.borrarConcurso}
+          />
         </Container>
       );
     }

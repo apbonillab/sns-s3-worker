@@ -146,20 +146,14 @@ module.exports.eliminarArchivosXconcurso = (idconcursos,success,error)=>{
 }
 
 module.exports.editar = (idconcursos,nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner,success,error)=>{
-    connection.query(`update concursos set
-    nombre="${nombre}",
-    fecha_inicio = "${fecha_inicio}",
-    fecha_fin="${fecha_fin}",
-    valor="${valor}",
-    guion="${guion}",
-    correo="${correo}",
-    recomendaciones=${recomendaciones},
-    url=${url},
-    banner=${banner},
-    where idconcursos = ${idconcursos}`,function(err,result,fields){
+    let data = [nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner,idconcursos];
+    connection.query(`update concursos set nombre=?, fecha_inicio = ?, fecha_fin=?, valor=?, guion=?, recomendaciones=?, url=?, banner=? where idconcursos = ?`,
+    data,function(err,result,fields){
          if(err){
+             console.log(err);
              error(err);
          }else{
+             console.log(result)
             success(result);
          }
         

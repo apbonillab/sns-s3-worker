@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Button, CardGroup, Image, Accordion, Icon } from 'semantic-ui-react';
+import { Container, Button, CardGroup, Image, Accordion, Icon, Divider } from 'semantic-ui-react';
 import Axios from 'axios';
 import TarjetaVoz from './CardVoice';
 import NuevaVoz from './NuevaVoz';
@@ -10,28 +10,23 @@ class DetalleConcurso extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      url_concurso: localStorage.getItem('url'),
+      url_concurso: this.props.url,
       listaVoces: [],
       borrarVoz: false,
       openCrearVoz: false,
       openEditarConcurso: false,
       idConcurso: this.props.id,
       activeIndex: 0,
-      info:{}
+      info: {}
     };
   }
 
   componentDidMount() {
     if (!this.props.info) {
-      Axios.get(`http://localhost:3000/concurso/obtener/url/${this.state.url_concurso}`)
-        .then(res => {
-          let datos = res.data[0];
-          console.log(datos);
-          this.setState({info:datos});
-        }).catch(err => console.log(err));
+      this.getInfoConcurso();
     }
-    else{
-      this.setState({info:this.props.info});
+    else {
+      this.setState({ info: this.props.info });
     }
     if (this.props.admin) {
       this.getVoces();
@@ -50,7 +45,12 @@ class DetalleConcurso extends Component {
   }
 
   getInfoConcurso = () => {
-    Axios.get();
+    Axios.get(`http://localhost:3000/concurso/obtener/url/${this.state.url_concurso}`)
+      .then(res => {
+        let datos = res.data[0];
+        console.log(datos);
+        this.setState({ info: datos });
+      }).catch(err => console.log(err));
   }
 
   getVoces = () => {
@@ -102,6 +102,7 @@ class DetalleConcurso extends Component {
           <h1>{this.state.info.nombre}</h1>
           <Button onClick={this.editarConcurso}>Editar concurso</Button>
           <Image size='medium' centered src={this.state.info.banner ? `http://localhost:3000/Voces/concurso_${this.props.id}/${this.state.info.banner}` : 'images/default.jpg'}></Image>
+          <Divider />
           <Accordion fluid styled>
             <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
               <Icon name='dropdown' />
@@ -164,6 +165,8 @@ class DetalleConcurso extends Component {
             open={this.state.openEditarConcurso}
             onClose={this.onCloseEditarConcurso}
             urlConcurso={this.props.url}
+            infoConcurso={this.state.info}
+            refrescar={this.getInfoConcurso}
           />
 
         </Container>
@@ -183,7 +186,7 @@ class DetalleConcurso extends Component {
               Subir voz
             </Button>
           </Container>
-          <Image size='medium' centered src={this.state.info.banner ? `http://localhost:3000/Voces/concurso_${this.state.info.idconcursos}/${this.state.info.banner}` : 'images/default.jpg'}></Image>
+          <Image size='medium' centered src={this.state.info.banner ? `http://localhost:3000/Voces/concurso_${this.state.info.idconcursos}/${this.state.info.banner}` : 'http://localhost:3000/images/default.jpg'}></Image>
           <Accordion fluid styled>
             <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
               <Icon name='dropdown' />

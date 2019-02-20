@@ -29,7 +29,7 @@ class Register extends Component {
     
     if(nombre===''||apellido==='' || correo===''||contrasena===''){
         alert("Por favor llene los campos obligatorios");
-    }else if(contrasena != contrasena2){
+    }else if(contrasena !== contrasena2){
         alert("Las contraseñas no coinciden, por favor verifiquelas");
     }else{
       axios.post('/admin/creacion',{

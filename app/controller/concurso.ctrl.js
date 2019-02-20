@@ -94,20 +94,20 @@ routr.delete('/eliminar/:id',ensureToken, (req, res) => {
 })
 
 routr.post('/editar',ensureToken,(req, res) => {
-    concursoSrv.crear(
-        rea.body.idconcursos,
+    concursoSrv.editar(
+        req.body.idconcurso,
         req.body.nombre,
-        req.body.fecha_inicio,
-        req.body.fecha_fin,
+        new Date(req.body.fecha_inicio),
+        new Date(req.body.fecha_fin),
         req.body.valor,
         req.body.guion,
         req.body.recomendaciones,
         req.body.url,
         req.body.banner,
         function (concurso) {
-            res.status(200).send({'message':'Concurso actualizado exitosamente'})
+            res.status(200).send({'exito':true,'message':'Concurso actualizado exitosamente'})
         },function(error){
-            res.status(500).send({'message':'Error en la actualizacion del concurso'});
+            res.status(500).send({'exito':false,'message':'Error al actualizar concurso'});
             
         }
     )

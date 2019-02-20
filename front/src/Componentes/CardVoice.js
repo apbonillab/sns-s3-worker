@@ -19,10 +19,12 @@ class CardVoice extends Component {
           } </Card.Header>
           <Card.Meta>
             <span className='date'>Fecha {this.props.fecha}</span>
-            <span className='string'>Estado {this.props.estado}</span>
-            <span className='string'>Observaciones {this.props.observaciones}</span>
           </Card.Meta>
-          <Card.Description>Voz: {this.props.voz_inicial}</Card.Description>
+          <Card.Description>
+            <strong> Voz: </strong> {this.props.voz_inicial} <br/>
+            <strong> Estado: </strong> {this.props.estado} <br/>
+            <strong> Observaciones: </strong> {this.props.observaciones} <br/>
+          </Card.Description>
         </Card.Content>
         <Card.Content extra>          
           <Player

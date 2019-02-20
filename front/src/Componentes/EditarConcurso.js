@@ -18,10 +18,8 @@ class EditarConcurso extends Component {
       recomendaciones: '',
       url: '',
       banner: [],
-      idconcursos:'',
+      idconcurso:'',
     };
-
-
   }
 
   getConcursoData = () => {
@@ -38,13 +36,26 @@ class EditarConcurso extends Component {
         recomendaciones:res.data[0].recomendaciones,
         url:res.data[0].url,
         banner:res.data[0].banner,
+        info:{},
       });
     }).catch(err => console.log(err));
     
   }
 
-  componentDidMount() {
-    this.getConcursoData();
+  componentWillReceiveProps(nextProps) {
+    if (this.props.infoConcurso !== nextProps.infoConcurso) {
+      this.setState({
+        nombre: nextProps.infoConcurso.nombre,
+        fecha_inicio: nextProps.infoConcurso.fecha_inicio,
+        fecha_fin: nextProps.infoConcurso.fecha_fin,
+        valor: nextProps.infoConcurso.valor,
+        guion: nextProps.infoConcurso.guion,
+        recomendaciones: nextProps.infoConcurso.recomendaciones,
+        url: nextProps.infoConcurso.url,
+        banner: nextProps.infoConcurso.banner,
+        idconcurso:nextProps.infoConcurso.idconcurso,
+      });
+    }
   }
 
   onDrop = (picture) => {
@@ -55,7 +66,7 @@ class EditarConcurso extends Component {
 
   handleSave = () => {
     const {
-      idconcursos,
+      idconcurso,
       nombre,
       fecha_inicio,
       fecha_fin,
@@ -68,7 +79,7 @@ class EditarConcurso extends Component {
     let token = localStorage.getItem('JWToken');
     localStorage.setItem('url',this.state.url);
     axios.post('/concurso/editar', {
-      idconcursos,
+      idconcurso,
       nombre,
       fecha_inicio,
       fecha_fin,
@@ -85,6 +96,8 @@ class EditarConcurso extends Component {
         console.log('no exito');
       }
       else {
+        this.props.onClose();
+        this.props.refrescar();
         console.log(exito);
       }
     }).catch(err => console.log(err));
@@ -109,7 +122,6 @@ class EditarConcurso extends Component {
   }
 
   render() {
-
     const campos = [
       { name: 'nombre', label: 'Nombre', type: 'text', value:this.state.nombre},
       { name: 'fecha_inicio', label: 'Fecha de Inicio', type: 'date', value: this.state.fecha_inicio },
@@ -121,6 +133,8 @@ class EditarConcurso extends Component {
       { name: 'banner', label: 'Banner/Imagen', type: 'text' },
 
     ];
+
+
     return (
       <Modal
         open={this.props.open}

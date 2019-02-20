@@ -24,31 +24,40 @@ class Register extends Component {
       apellido,
       segundo_apellido,
       correo,
-      contrasena}=this.state;
-
-    axios.post('/admin/creacion',{
-      nombre,
-      segundo_nombre,
-      apellido,
-      segundo_apellido,
-      correo,
-      contrasena
-    }).then(res => {
-      console.log(res.data);
-      let exito = res.data.exito;
-      if(!exito){
-        console.log(res.data.mensaje);
-      }
-      else{
-        //queda logueado
-        let data = res.data;
-        localStorage.setItem('JWToken',data.JWToken);
-        localStorage.setItem('usuario',data.usuario);
-        localStorage.setItem('iduser',data.iduser);
-        this.props.verificar();
-        this.props.onClose();
-      }
-    }).catch(err => console.log(err));
+      contrasena,
+      contrasena2}=this.state;
+    
+    if(nombre===''||apellido==='' || correo===''||contrasena===''){
+        alert("Por favor llene los campos obligatorios");
+    }else if(contrasena != contrasena2){
+        alert("Las contraseñas no coinciden, por favor verifiquelas");
+    }else{
+      axios.post('/admin/creacion',{
+        nombre,
+        segundo_nombre,
+        apellido,
+        segundo_apellido,
+        correo,
+        contrasena
+      }).then(res => {
+        console.log(res.data);
+        let exito = res.data.exito;
+        if(!exito){
+          console.log(res.data.mensaje);
+        }
+        else{
+          //queda logueado
+          let data = res.data;
+          localStorage.setItem('JWToken',data.JWToken);
+          localStorage.setItem('usuario',data.correo);
+          localStorage.setItem('iduser',data.iduser);
+          console.log("usuario: ",res.data.correo);
+          this.props.verificar();
+          this.props.onClose();
+        }
+      }).catch(err => console.log(err));
+    }
+    
   }
 
   handleInput = (e) => {
@@ -60,13 +69,13 @@ class Register extends Component {
   render() {
 
     const campos = [
-      {name:'nombre', label:'Primer Nombre', type:'text'},
+      {name:'nombre', label:'Primer Nombre *', type:'text'},
       {name:'segundo_nombre', label:'Segundo nombre', type:'text'},
-      {name:'apellido', label:'Primer Apellido', type:'text'},
+      {name:'apellido', label:'Primer Apellido *', type:'text'},
       {name:'segundo_apellido', label:'Segundo apellido', type:'text'},
-      {name:'correo', label:'Correo Electronico', type:'text'},
-      {name:'contrasena', label:'Contraseña', type:'password'},
-      {name:'contrasena2', label:'Repetir contraseña', type:'password'},
+      {name:'correo', label:'Correo Electronico *', type:'text'},
+      {name:'contrasena', label:'Contraseña *', type:'password'},
+      {name:'contrasena2', label:'Repetir contraseña *', type:'password'},
     ];
 
     return (
@@ -78,6 +87,7 @@ class Register extends Component {
         <Modal.Content image>
           <Modal.Description>
             {/* <Header>{this.props.id}</Header> */}
+            <Modal.Header>Los campos marcados con * son obligatorios!!</Modal.Header>
             <Form>
               {campos.map(c => {
                 return(

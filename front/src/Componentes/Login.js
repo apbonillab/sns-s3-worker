@@ -26,12 +26,12 @@ class Login extends Component {
 
     axios.post('/admin/login', {
       correo, contrasena
-    })
-      .then(res => {
-        console.log(res.data);
+    }).then(res => {
+        console.log("valor exito: ",res.data.exito);
         let exito = res.data.exito;
         if(!exito){
-          console.log(res.data.mensaje);
+          alert(res.data.message);
+          console.log(res.data.message);
         }
         else{
           let data = res.data;

@@ -18,13 +18,33 @@ class EditarConcurso extends Component {
       recomendaciones: '',
       url: '',
       banner: [],
+      idconcursos:'',
     };
 
 
   }
 
+  getConcursoData = () => {
+    axios.get(`/concurso/obtener/url/${this.props.urlConcurso}`)
+    .then(res => {
+      console.log('Concurso',res.data);
+      this.setState({
+        idconcursos:res.data[0].idconcursos,
+        nombre:res.data[0].nombre,
+        fecha_inicio:res.data[0].fecha_inicio,
+        fecha_fin:res.data[0].fecha_fin,
+        valor:res.data[0].valor,
+        guion:res.data[0].guion,
+        recomendaciones:res.data[0].recomendaciones,
+        url:res.data[0].url,
+        banner:res.data[0].banner,
+      });
+    }).catch(err => console.log(err));
+    
+  }
+
   componentDidMount() {
-    this.setState({ url: `${localStorage.getItem('iduser')}con_${this.state.nombre}` });
+    this.getConcursoData();
   }
 
   onDrop = (picture) => {
@@ -35,6 +55,7 @@ class EditarConcurso extends Component {
 
   handleSave = () => {
     const {
+      idconcursos,
       nombre,
       fecha_inicio,
       fecha_fin,
@@ -42,11 +63,12 @@ class EditarConcurso extends Component {
       guion,
       recomendaciones,
       url,
-      banner } = this.state;
-    let idusuario = localStorage.getItem('iduser');
+      banner 
+    } = this.state;
     let token = localStorage.getItem('JWToken');
     localStorage.setItem('url',this.state.url);
-    axios.post('/concurso/creacion', {
+    axios.post('/concurso/editar', {
+      idconcursos,
       nombre,
       fecha_inicio,
       fecha_fin,
@@ -54,9 +76,8 @@ class EditarConcurso extends Component {
       guion,
       recomendaciones,
       url,
-      banner: '',
-      idusuario
-    }, { headers: { 'Authorization': `Bearer ${token}` }, }).then(res => {
+      banner,
+    },{ headers: { 'Authorization': `Bearer ${token}`}, }).then(res => {
       console.log(res.data);
       let exito = res.data.exito;
       if (!exito) {
@@ -90,23 +111,22 @@ class EditarConcurso extends Component {
   render() {
 
     const campos = [
-      { name: 'nombre', label: 'Nombre', type: 'text' },
+      { name: 'nombre', label: 'Nombre', type: 'text', value:this.state.nombre},
       { name: 'fecha_inicio', label: 'Fecha de Inicio', type: 'date', value: this.state.fecha_inicio },
       { name: 'fecha_fin', label: 'Fecha fin', type: 'date', value: this.state.fecha_fin },
-      { name: 'valor', label: 'Valor a pagar', type: 'text' },
-      { name: 'guion', label: 'Guion', type: 'text' },
-      { name: 'recomendaciones', label: 'Recomendaciones', type: 'text' },
+      { name: 'valor', label: 'Valor a pagar', type: 'text', value:this.state.valor},
+      { name: 'guion', label: 'Guion', type: 'text' , value:this.state.guion},
+      { name: 'recomendaciones', label: 'Recomendaciones', type: 'text' , value:this.state.recomendaciones },
       { name: 'url', label: 'Url/Direccion Web', type: 'text' },
       { name: 'banner', label: 'Banner/Imagen', type: 'text' },
 
     ];
-
     return (
       <Modal
         open={this.props.open}
         onClose={this.props.onClose}
       >
-        <Modal.Header>Crear un Concurso</Modal.Header>
+        <Modal.Header>Editar Concurso {this.state.nombre}</Modal.Header>
         <Modal.Content image>
           <Modal.Description>
             {/* <Header>{this.props.id}</Header> */}
@@ -154,7 +174,7 @@ class EditarConcurso extends Component {
                   return (
                     <Form.Input
                       key={c.name}
-                      value={this.state.c}
+                      value={c.value}
                       onChange={this.handleInput}
                       name={c.name}
                       label={c.label}

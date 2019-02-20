@@ -14,6 +14,8 @@ class DetalleConcurso extends Component {
       listaVoces:[],
       borrarVoz:false,
       openCrearVoz:false,
+      openEditarConcurso:false,
+      idConcurso:'',
     };
   }
 
@@ -35,10 +37,11 @@ class DetalleConcurso extends Component {
   }
 
   getVocesxUrl = () => {
-    Axios.get(`/archivo/obtener/concurso/url/${this.props.id}`)
+    Axios.get(`/archivo/obtener/concurso/url/${this.props.url}`)
       .then(res => {
-        console.log(res.data);
-        this.setState({ listaVoces: res.data });
+        console.log('voces',res.data);
+        this.setState({ listaVoces: res.data});
+        this.setState({ idConcurso:res.data[0].concurso });
       }).catch(err => console.log(err));
   }
 
@@ -48,15 +51,20 @@ class DetalleConcurso extends Component {
     });
   }
 
+  onCloseEditarConcurso = () => {
+    this.setState({
+      openEditarConcurso: false
+    });
+  }
+
   crearNuevaVoz =() =>{
       this.setState({openCrearVoz:true});
       console.log("va a entrar: ", this.state.openCrearVoz);
   }
 
   editarConcurso = () => {
-      return(
-        <EditarConcurso />
-      );
+    console.log("url en detalle concurso: ", this.state.url_concurso);
+    this.setState({openEditarConcurso:true});
   }
 
 
@@ -66,15 +74,15 @@ class DetalleConcurso extends Component {
         return (
           <Container>
             <h1>Detalle del concurso {this.props.id}</h1>
-            <Button onClick={this.editarConcurso()}>Editar concurso</Button>
+            <Button onClick={this.editarConcurso}>Editar concurso</Button>
             <br></br>
             <h2>Locutores Participantes</h2>
             <CardGroup>
               {this.state.listaVoces.map(card => {
                   return(
                     <TarjetaVoz
-                        key={card.id}
-                        voz_id={card.id}
+                        key={card.idarchivos}
+                        voz_id={card.idarchivos}
                         nombreLocutor={card.nombre}
                         apellidoLocutor={card.apellido}
                         fecha={card.fecha}
@@ -82,11 +90,17 @@ class DetalleConcurso extends Component {
                         voz_inicial={card.voz_inicial}
                         observaciones={card.observaciones}
                         borrar={this.state.borrar}
+                        file={`http://localhost:3000/Voces/concurso_${card.concurso}/convertida/${card.idarchivos}.mp3`}
                     >
                     </TarjetaVoz>
                   );
               })}
             </CardGroup>
+            <EditarConcurso
+                    open={this.state.openEditarConcurso}
+                    onClose={this.onCloseEditarConcurso}
+                    urlConcurso={this.props.url}  
+            />
             
           </Container>
           );
@@ -95,7 +109,7 @@ class DetalleConcurso extends Component {
           return (
             
             <Container>
-                <h1>Detalle del concurso {this.props.id}</h1>
+                <h1>Detalle del concurso {this.props.url}</h1>
                   <Container>
                     <Button
                       //primary
@@ -110,8 +124,8 @@ class DetalleConcurso extends Component {
                     {this.state.listaVoces.map(card => {
                         return(
                           <TarjetaVoz
-                              key={card.id}
-                              voz_id={card.id}
+                              key={card.idarchivos}
+                              voz_id={card.idarchivos}
                               nombreLocutor={card.nombre}
                               apellidoLocutor={card.apellido}
                               fecha={card.fecha}
@@ -119,15 +133,17 @@ class DetalleConcurso extends Component {
                               voz_inicial={card.voz_inicial}
                               observaciones={card.observaciones}
                               borrar={this.state.borrar}
+                              file={`http://localhost:3000/Voces/concurso_${card.concurso}/convertida/${card.idarchivos}.mp3`}
                           >
                           </TarjetaVoz>
                         );
                     })}
                   </CardGroup>
                   <NuevaVoz
-              open={this.state.openCrearVoz}
-              onClose={this.state.onCloseCrearVoz}  
-        />
+                    open={this.state.openCrearVoz}
+                    onClose={this.onCloseCrearVoz}
+                    id_concurso={this.state.idConcurso}  
+                  />
               </Container>
           );
         }

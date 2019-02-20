@@ -4,6 +4,7 @@ const mysql = require('mysql');
 const connection = require('../../db');
 const moment = require('moment');
 var nodemailer = require('nodemailer');
+var concursoSrv = require('../services/concurso.srv.js');
 
 
 var conf = require('../../config.js');
@@ -13,7 +14,7 @@ module.exports.crearArchivo = (observaciones,idlocutor,concurso,file,success,err
     var archivo =  file;
     var nombreCompleto =  archivo.name.split('.'); 
     var  extension = nombreCompleto[ nombreCompleto.length - 1];
-    archivo.mv(RUTA_GESTOR_ARCHIVOS+concurso+'/inicial/' + archivo.name, function(err) {
+    archivo.mv(RUTA_GESTOR_ARCHIVOS+concurso+'/inicial/' + archivo.name+"_"+concurso+"."+extension, function(err) {
                 if (err)
                     error(err)
                 });
@@ -22,14 +23,14 @@ module.exports.crearArchivo = (observaciones,idlocutor,concurso,file,success,err
     let voz_convertida= null;
     let estado = 1;
     if(extension.toLowerCase() ==='mp3'){
-        archivo.mv(RUTA_GESTOR_ARCHIVOS+concurso+'/convertida/' + archivo.name, function(err) {
+        archivo.mv(RUTA_GESTOR_ARCHIVOS+concurso+'/convertida/' + archivo.name+"_"+concurso+"."+extension, function(err) {
                 if (err)
                     error(err)
                 });
-        voz_convertida= archivo.name+concurso;
+        voz_convertida= archivo.name+"_"+concurso;
         estado = 2;
     }
-    let userData = [[observaciones,idlocutor,estado,archivo.name+concurso,concurso,dateAudit,extension,voz_convertida]];
+    let userData = [[observaciones,idlocutor,estado,archivo.name+"_"+concurso+"."+extension,concurso,dateAudit,extension,voz_convertida]];
     connection.query(`insert into archivos (observaciones,usuario,estado,voz_inicial,concurso,fecha,ext_voz_inicial,voz_convertida) values ? `,
     [userData],function(err,result,fields){
         if(err){
@@ -97,13 +98,13 @@ module.exports.obtenerArchxConcurso = (idconcurso,success,error)=>{
     })
 }
 
-module.exports.actualizarEstado = (idarchivos,voz_convertida,correo,success,error)=>{
+module.exports.actualizarEstado = (idarchivos,voz_convertida,correo,idconcurso,success,error)=>{
     connection.query(`update archivos set estado = 2,voz_convertida="${voz_convertida}"
      where idarchivos = ${idarchivos}`,function(err,result,fields){
          if(err){
              error(err);
          }else{            
-            envioCorreo(correo);
+            envioCorreo(correo,idconcurso);
             success("ok");
          }
         
@@ -119,21 +120,21 @@ module.exports.actualizarEstado = (idarchivos,voz_convertida,correo,success,erro
     }
 });
 
-function envioCorreo (correo){
-    console.log("correo "+ correo);
-    var mailOptions = {
-        from: 'TheVoice',
-        to: correo,
-        subject: 'Voz Procesada',
-        text: 'Tú voz ha sido procesada, lista para concursar!!'
-     };
-
-     transporter.sendMail(mailOptions, function(error, info){
-        if (error){
-            console.log(error);
-        } else {
-            console.log("Email sent");
-            return;
-        }
-    });
+function envioCorreo (correo,url){
+        var mailOptions = {
+            from: 'TheVoice',
+            to: correo,
+            subject: 'Voz Procesada',
+            text: `Tú voz ha sido procesada, en el concurso: ${url} ..lista para concursar!!`
+         };
+    
+         transporter.sendMail(mailOptions, function(error, info){
+            if (error){
+                console.log(error);
+            } else {
+                console.log("Email sent");
+                return;
+            }
+        });
+    
  }

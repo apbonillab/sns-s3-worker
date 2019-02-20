@@ -51,7 +51,10 @@ module.exports.mostrarTodos = (success,error)=>{
 }
 
 module.exports.mostrarTodosVigentes = (success,error)=>{
-    connection.query(`select * from concursos where archivo_ganador is null and fecha_fin > curdate() and fecha_inicio<fecha_fin;`,function(err,result,fields){
+    connection.query(`select c.* from concursos c
+     inner join gestion_concurso as gc on gc.concursos = c.idconcursos
+     where gc.archivo_ganador is null and
+     fecha_fin > curdate() and fecha_inicio<fecha_fin;`,function(err,result,fields){
         if(err){
             error(err);
         }else{
@@ -62,7 +65,7 @@ module.exports.mostrarTodosVigentes = (success,error)=>{
 }
 
 module.exports.seleccionganador = (idarchivo,idconcurso,success,error)=>{
-    connection.query(`update concursos set archivo_ganador = ${idarchivo} where idconcursos = ${idconcurso}`
+    connection.query(`update gestion_concurso set archivo_ganador = ${idarchivo} where concursos = ${idconcurso}`
     ,function(err,result,fields){
         if(err){
             error(err);
@@ -87,7 +90,7 @@ module.exports.mostrarConcursoXURL = (urlconcurso,success,error)=>{
 }
 
 module.exports.mostrarConcursoXid = (idconcurso,success,error)=>{
-    connection.query(`select * from concursos where id = '${idconcurso}'`,function(err,result,fields){
+    connection.query(`select * from concursos where idconcursos = '${idconcurso}'`,function(err,result,fields){
         if(err){
             error(err);
             console.log(err);

@@ -5,6 +5,7 @@ var logger = require('morgan');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const jwt  = require('jsonwebtoken');
+var serveIndex = require('serve-index');
 
 
 const usersController = require('./app/controller/users.ctrl.js');
@@ -28,6 +29,9 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//app.use('/Voces',express.directory(path.join(__dirname, './Voces')));
+app.use('/Voces', serveIndex(path.join(__dirname, 'Voces')));
+app.use('/Voces', express.static(path.join(__dirname, 'Voces')));
 
 app.use('/admin', [usersController]);
 app.use('/concurso', [concursosController]);

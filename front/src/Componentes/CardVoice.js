@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, Icon, Image, Button } from 'semantic-ui-react';
-
+import Player from './Player';
 class CardVoice extends Component {
   constructor(props) {
     super(props);
@@ -24,13 +24,17 @@ class CardVoice extends Component {
           </Card.Meta>
           <Card.Description>Voz: {this.props.voz_inicial}</Card.Description>
         </Card.Content>
-        <Card.Content extra>
-          <Button
+        <Card.Content extra>          
+          <Player
+            idplayer={this.props.voz_id}
+            archivo={this.props.file}
+          ></Player>
+         {/*  <Button
             content='Reproducir Voz'
             color='teal'
             as='a'
             onClick={() => {this.props.onClick(this.props.voz_id);}}
-          />
+          /> */}
         </Card.Content>
       </Card>
     );

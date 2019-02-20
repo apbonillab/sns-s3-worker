@@ -9,7 +9,9 @@ const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos')
 const RUTA_GESTOR_ARCHIVOS_RAIZ = conf.get('ruta_gestion_archivos_raiz')
 
 module.exports.crear = (nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner,idcuentaadmin,success,error)=>{
-    let userData = [[nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner.name]];
+    let nameBanner
+    banner===null?nameBanner='no-image':nameBanner=banner.name;
+    let userData = [[nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,nameBanner]];
     connection.query(`insert into concursos (nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner) values ? `,
     [userData],function(err,result,fields){
         if(err){
@@ -29,12 +31,17 @@ module.exports.crear = (nombre,fecha_inicio,fecha_fin,valor,guion,recomendacione
                 fs.mkdirSync(RUTA_GESTOR_ARCHIVOS+idconcurso);
                 fs.mkdirSync(RUTA_GESTOR_ARCHIVOS+idconcurso+'//inicial');
                 fs.mkdirSync(RUTA_GESTOR_ARCHIVOS+idconcurso+'//convertida');
-                banner.mv(RUTA_GESTOR_ARCHIVOS+idconcurso+`//${banner.name}`,function(err){
-                if(err){
-                    return res.status(500).send(err);
+                if(banner!==null){
+                    banner.mv(RUTA_GESTOR_ARCHIVOS+idconcurso+`//${banner.name}`,function(err){
+                        if(err){
+                            return res.status(500).send(err);
+                        }
+                        success(result);
+                    });
                 }
+                else{
                     success(result);
-                });
+                }
             }
          
             

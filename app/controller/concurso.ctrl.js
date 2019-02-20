@@ -9,9 +9,14 @@ routr.use(fileUpload());
 
 routr.post('/creacion',ensureToken,(req, res) => {
 
-    if (Object.keys(req.files).length == 0) {
-        return res.status(400).send('No files were uploaded.');
-      }
+    let banner
+    if (!req.files) {
+        banner = null;
+        //return res.status(400).send('No files were uploaded.');
+    }
+    else{
+        banner=req.files.banner
+    }
     concursoSrv.crear(
         req.body.nombre,
         req.body.fecha_inicio,
@@ -20,7 +25,7 @@ routr.post('/creacion',ensureToken,(req, res) => {
         req.body.guion,
         req.body.recomendaciones,
         req.body.url,
-        req.files.banner,
+        banner,
         req.body.idusuario,
         function (concurso) {
                 res.status(201).send({'exito':true,'message':'Concurso creado exitosamente'})

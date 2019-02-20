@@ -9,6 +9,7 @@ module.exports.crearAdmin = (nombre,segundonombre,apellido,segundoapellido,corre
     connection.query(`insert into administrador (nombre,segundo_nombre,apellido,segundo_apellido,correo,contrasena) values ? `,
     [userData],function(err,result,fields){
         if(err){
+            console.log(err);
             error(err);
         }else{
             success(result);

@@ -101,7 +101,7 @@ class DetalleConcurso extends Component {
         <Container>
           <h1>{this.state.info.nombre}</h1>
           <Button onClick={this.editarConcurso}>Editar concurso</Button>
-          <Image size='medium' centered src={this.state.info.banner ? `http://localhost:3000/Voces/concurso_${this.props.id}/${this.state.info.banner}` : 'images/default.jpg'}></Image>
+          <Image size='medium' centered src={this.state.info.banner!=='no-image' && this.state.info.banner!==null ? `http://localhost:3000/Voces/concurso_${this.props.id}/${this.state.info.banner}` : 'images/default.jpg'}></Image>
           <Divider />
           <Accordion fluid styled>
             <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
@@ -252,7 +252,7 @@ class DetalleConcurso extends Component {
           <NuevaVoz
             open={this.state.openCrearVoz}
             onClose={this.onCloseCrearVoz}
-            id_concurso={this.state.idConcurso}
+            id_concurso={this.state.info.idconcursos}
           />
         </Container>
       );

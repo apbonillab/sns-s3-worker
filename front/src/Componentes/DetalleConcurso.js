@@ -175,7 +175,7 @@ class DetalleConcurso extends Component {
                   observaciones={card.observaciones}
                   borrar={this.state.borrar}
                   mostarOriginal
-                  file={`http://localhost:3000/Voces/concurso_${card.concurso}/convertida/${card.idarchivos}.mp3`}
+                  file={`http://localhost:3000/Voces/concurso_${card.concurso}/convertida/${card.voz_convertida}.mp3`}
                 >
                 </TarjetaVoz>
               );
@@ -264,7 +264,7 @@ class DetalleConcurso extends Component {
                   voz_inicial={card.voz_inicial}
                   observaciones={card.observaciones}
                   borrar={this.state.borrar}
-                  file={`http://localhost:3000/Voces/concurso_${card.concurso}/convertida/${card.idarchivos}.mp3`}
+                  file={`http://localhost:3000/Voces/concurso_${card.concurso}/convertida/${card.voz_convertida}.mp3`}
                 >
                 </TarjetaVoz>
               );

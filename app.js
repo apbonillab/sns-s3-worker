@@ -34,8 +34,8 @@ app.use(express.static(path.join(__dirname, 'front/build')));
 app.use('/Voces', serveIndex(path.join(__dirname, 'Voces')));
 app.use('/Voces', express.static(path.join(__dirname, 'Voces')));
 
-app.use('/admin', [usersController]);
-app.use('/concurso', [concursosController]);
-app.use('/locutor', [locutorController]);
-app.use('/archivo', [archivosController]);
+app.use('/api/admin', [usersController]);
+app.use('/api/concurso', [concursosController]);
+app.use('/api/locutor', [locutorController]);
+app.use('/api/archivo', [archivosController]);
 module.exports = app;

@@ -31,7 +31,7 @@ app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/Voces', serveIndex(path.join(__dirname, 'Voces')));
 app.use('/api/Voces', express.static(path.join(__dirname, 'Voces')));
-
+app.use('/api/images', express.static(path.join(__dirname, 'public/images')));
 app.use('/api/admin', [usersController]);
 app.use('/api/concurso', [concursosController]);
 app.use('/api/locutor', [locutorController]);

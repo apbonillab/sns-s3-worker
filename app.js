@@ -29,8 +29,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'public')));
-app.use('/Voces', serveIndex(path.join(__dirname, 'Voces')));
-app.use('/Voces', express.static(path.join(__dirname, 'Voces')));
+app.use('/api/Voces', serveIndex(path.join(__dirname, 'Voces')));
+app.use('/api/Voces', express.static(path.join(__dirname, 'Voces')));
 
 app.use('/api/admin', [usersController]);
 app.use('/api/concurso', [concursosController]);

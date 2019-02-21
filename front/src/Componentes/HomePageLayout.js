@@ -11,6 +11,7 @@ import {
   Segment,
 } from 'semantic-ui-react';
 import ResponsiveContainer from './ResponsiveContainer';
+var conf = require('../conf');
 
 class HomePageLayout extends Component {
 

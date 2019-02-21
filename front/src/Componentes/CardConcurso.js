@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Card, Icon, Image, Button } from 'semantic-ui-react';
+import { Card, Image, Button } from 'semantic-ui-react';
+var conf = require('../conf');
 
 class CardConcurso extends Component {
 
@@ -9,7 +10,7 @@ class CardConcurso extends Component {
   render() {
     return (
       <Card>
-        <Image size='small' centered src={this.props.urlImagen!=='no-image' && this.props.urlImagen!==null ?`http://localhost:3000/Voces/concurso_${this.props.id}/${this.props.urlImagen}`:'http://localhost:3000/images/default.jpg'} />
+        <Image size='small' centered src={this.props.urlImagen!=='no-image' && this.props.urlImagen!==null ?`${conf.baseURL}/Voces/concurso_${this.props.id}/${this.props.urlImagen}`:'${conf.baseURL}/images/default.jpg'} />
         <Card.Content>
           <Card.Header>{this.props.nombreConcurso}</Card.Header>
           <Card.Meta>

@@ -4,6 +4,7 @@ import { DateInput } from 'semantic-ui-calendar-react';
 import axios from 'axios';
 import ImageUploader from 'react-images-upload';
 import { toast } from 'react-toastify';
+var conf = require('../conf');
 
 class NuevoConcurso extends Component {
 
@@ -57,7 +58,7 @@ class NuevoConcurso extends Component {
     formData.append('recomendaciones', recomendaciones);
     formData.append('url', url);
     formData.append('idusuario', idusuario);
-    axios.post('http://localhost:3000/concurso/creacion', formData, { headers: { 'Authorization': `Bearer ${token}` }, }).then(res => {
+    axios.post('${conf.baseURL}/concurso/creacion', formData, { headers: { 'Authorization': `Bearer ${token}` }, }).then(res => {
       console.log(res.data);
       let exito = res.data.exito;
       if (!exito) {

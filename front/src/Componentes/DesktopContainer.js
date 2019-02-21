@@ -12,6 +12,7 @@ import HomepageHeading from './HomepageHeading';
 import Register from './Register';
 import Login from './Login';
 import Concurso from './NuevoConcurso';
+var conf = require('../conf');
 
 class DesktopContainer extends Component {
   constructor(props) {

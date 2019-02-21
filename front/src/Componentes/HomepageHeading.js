@@ -6,6 +6,7 @@ import {
   Header,
   Icon
 } from 'semantic-ui-react';
+var conf = require('../conf');
 
 const HomepageHeading = ({ mobile }) => (
   <Container

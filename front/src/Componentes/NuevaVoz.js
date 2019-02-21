@@ -4,6 +4,7 @@ import axios from 'axios';
 import ImageUploader from 'react-images-upload';
 import { toast } from 'react-toastify';
 import 'filepond/dist/filepond.min.css';
+var conf = require('../conf');
 
 
 class NuevaVoz extends Component {
@@ -51,7 +52,7 @@ class NuevaVoz extends Component {
     formData.append('correo', correo);
     formData.append('concurso', this.props.id_concurso);
     formData.append('observaciones', observaciones);
-    axios.post('http://localhost:3000/locutor/creacion', formData)
+    axios.post('${conf.baseURL}/locutor/creacion', formData)
       .then(res => {
         let exito = res.data.exito;
         if (!exito) {

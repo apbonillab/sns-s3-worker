@@ -4,6 +4,7 @@ import { DateInput } from 'semantic-ui-calendar-react';
 import axios from 'axios';
 import ImageUploader from 'react-images-upload';
 import { toast } from 'react-toastify';
+var conf = require('../conf');
 
 class EditarConcurso extends Component {
 
@@ -24,7 +25,7 @@ class EditarConcurso extends Component {
   }
 
   getConcursoData = () => {
-    axios.get(`http://localhost:3000/concurso/obtener/url/${this.props.urlConcurso}`)
+    axios.get(`${conf.baseURL}/concurso/obtener/url/${this.props.urlConcurso}`)
       .then(res => {
         console.log('Concurso', res.data);
         this.setState({
@@ -79,7 +80,7 @@ class EditarConcurso extends Component {
     } = this.state;
     let token = localStorage.getItem('JWToken');
     localStorage.setItem('url', this.state.url);
-    axios.post('http://localhost:3000/concurso/editar', {
+    axios.post('${conf.baseURL}/concurso/editar', {
       idconcurso,
       nombre,
       fecha_inicio,

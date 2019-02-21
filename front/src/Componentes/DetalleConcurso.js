@@ -4,6 +4,7 @@ import Axios from 'axios';
 import TarjetaVoz from './CardVoice';
 import NuevaVoz from './NuevaVoz';
 import EditarConcurso from './EditarConcurso';
+var conf = require('../conf');
 
 class DetalleConcurso extends Component {
 
@@ -52,7 +53,7 @@ class DetalleConcurso extends Component {
   }
 
   getInfoConcurso = () => {
-    Axios.get(`http://localhost:3000/concurso/obtener/url/${this.state.url_concurso}`)
+    Axios.get(`${conf.baseURL}/concurso/obtener/url/${this.state.url_concurso}`)
       .then(res => {
         let datos = res.data[0];
         console.log(datos);
@@ -61,7 +62,7 @@ class DetalleConcurso extends Component {
   }
 
   getVoces = () => {
-    Axios.get(`http://localhost:3000/archivo/obtener/concurso/${this.props.id}/${(this.state.activePage-1)*50}/50`)
+    Axios.get(`${conf.baseURL}/archivo/obtener/concurso/${this.props.id}/${(this.state.activePage-1)*50}/50`)
       .then(res => {
         console.log(res.data);
         this.setState({ listaVoces: res.data });
@@ -69,7 +70,7 @@ class DetalleConcurso extends Component {
   }
 
   getVocesxUrl = () => {
-    Axios.get(`http://localhost:3000/archivo/obtener/concurso/url/${this.props.url}/${(this.state.activePage-1)*20}/20`)
+    Axios.get(`${conf.baseURL}/archivo/obtener/concurso/url/${this.props.url}/${(this.state.activePage-1)*20}/20`)
       .then(res => {
         console.log('voces', res.data);
         this.setState({ listaVoces: res.data });
@@ -145,7 +146,7 @@ class DetalleConcurso extends Component {
           <Divider />
           <Button onClick={this.editarConcurso} >Editar concurso  <Icon name='edit' /></Button>
           <Button onClick={this.show}>Borrar concurso  <Icon name='delete' /></Button>
-          <Image size='medium' centered src={this.state.info.banner!=null && this.state.info.banner!=='no-image' ? `http://localhost:3000/Voces/concurso_${this.props.id}/${this.state.info.banner}` : 'http://localhost:3000/images/default.jpg'}></Image>
+          <Image size='medium' centered src={this.state.info.banner!=null && this.state.info.banner!=='no-image' ? `${conf.baseURL}/Voces/concurso_${this.props.id}/${this.state.info.banner}` : '${conf.baseURL}/images/default.jpg'}></Image>
           <Divider />
           <Accordion fluid styled>
             <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
@@ -210,7 +211,7 @@ class DetalleConcurso extends Component {
                   observaciones={card.observaciones}
                   borrar={this.state.borrar}
                   mostarOriginal
-                  file={`http://localhost:3000/Voces/concurso_${card.concurso}/convertida/${card.voz_convertida}.mp3`}
+                  file={`${conf.baseURL}/Voces/concurso_${card.concurso}/convertida/${card.voz_convertida}.mp3`}
 
                 >
                 </TarjetaVoz>
@@ -247,7 +248,7 @@ class DetalleConcurso extends Component {
               Subir voz
             </Button>
           </Container>
-          <Image size='medium' centered src={this.state.info.banner ? `http://localhost:3000/Voces/concurso_${this.state.info.idconcursos}/${this.state.info.banner}` : 'http://localhost:3000/images/default.jpg'}></Image>
+          <Image size='medium' centered src={this.state.info.banner ? `${conf.baseURL}/Voces/concurso_${this.state.info.idconcursos}/${this.state.info.banner}` : '${conf.baseURL}/images/default.jpg'}></Image>
           <Accordion fluid styled>
             <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
               <Icon name='dropdown' />
@@ -307,7 +308,7 @@ class DetalleConcurso extends Component {
                     voz_inicial={card.voz_inicial}
                     observaciones={card.observaciones}
                     borrar={this.state.borrar}
-                    file={`http://localhost:3000/Voces/concurso_${card.concurso}/convertida/${card.voz_convertida}.mp3`}
+                    file={`${conf.baseURL}/Voces/concurso_${card.concurso}/convertida/${card.voz_convertida}.mp3`}
                   >
                   </TarjetaVoz>
                 );

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Form, Modal, Grid, Segment, Header } from 'semantic-ui-react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+var conf = require('../conf');
 
 class Login extends Component {
 
@@ -25,7 +26,7 @@ class Login extends Component {
     const { correo, contrasena } = this.state;
     //Verificar y notificar errores en la información
 
-    axios.post('http://localhost:3000/admin/login', {
+    axios.post('${conf.baseURL}/admin/login', {
       correo, contrasena
     }).then(res => {
       console.log("valor exito: ", res.data.exito);

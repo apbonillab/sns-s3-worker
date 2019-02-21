@@ -10,6 +10,7 @@ import {
   Segment
 } from 'semantic-ui-react';
 import HomepageHeading from './HomepageHeading';
+var conf = require('../conf');
 
 class MobileContainer extends Component {
   state = {}

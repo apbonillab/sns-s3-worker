@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Form, Modal } from 'semantic-ui-react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+var conf = require('../conf');
 
 class Register extends Component {
 
@@ -51,7 +52,7 @@ class Register extends Component {
         });
       //alert("Las contraseñas no coinciden, por favor verifiquelas");
     } else {
-      axios.post('http://localhost:3000/admin/creacion', {
+      axios.post('${conf.baseURL}/admin/creacion', {
         nombre,
         segundo_nombre,
         apellido,

@@ -20,6 +20,7 @@ import Axios from 'axios';
 import CardConcurso from './Componentes/CardConcurso';
 import DetalleConcurso from './Componentes/DetalleConcurso';
 import HomepageHeading from './Componentes/HomepageHeading';
+var conf = require('./conf');
 
 
 class App extends Component {
@@ -77,7 +78,7 @@ class App extends Component {
 
   getConcursos = () => {
     let token = localStorage.getItem('JWToken');
-    Axios.get(`http://localhost:3000/concurso/obtener/admin/${localStorage.getItem('iduser')}`, { headers: { 'Authorization': `Bearer ${token}` }, })
+    Axios.get(`${conf.baseURL}/concurso/obtener/admin/${localStorage.getItem('iduser')}`, { headers: { 'Authorization': `Bearer ${token}` }, })
       .then(res => {
         console.log(res.data);
         this.setState({ listaConcursos: res.data });

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactJWPlayer from 'react-jw-player';
-
+var conf = require('../conf');
 
 class Player extends Component {
   constructor(props) {

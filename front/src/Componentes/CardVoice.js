@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Card, Icon, Image, Button } from 'semantic-ui-react';
+import { Card, Button } from 'semantic-ui-react';
 import Player from './Player';
 import Axios from 'axios';
-import FileDownload from 'js-file-download';
+var conf = require('../conf');
 class CardVoice extends Component {
   constructor(props) {
     super(props);
@@ -50,7 +50,7 @@ class CardVoice extends Component {
                 download
                 onClick={() => {
                   Axios({
-                    url: `http://localhost:3000/Voces/concurso_${this.props.idconcurso}/inicial/${this.props.voz_inicial}`,
+                    url: `${conf.baseURL}/Voces/concurso_${this.props.idconcurso}/inicial/${this.props.voz_inicial}`,
                     method: 'GET',
                     responseType: 'blob', // important
                   }).then((response) => {
@@ -103,7 +103,7 @@ class CardVoice extends Component {
                 download
                 onClick={() => {
                   Axios({
-                    url: `http://localhost:3000/Voces/concurso_${this.props.idconcurso}/inicial/${this.props.voz_inicial}.${this.props.ext}`,
+                    url: `${conf.baseURL}/Voces/concurso_${this.props.idconcurso}/inicial/${this.props.voz_inicial}.${this.props.ext}`,
                     method: 'GET',
                     responseType: 'blob', // important
                   }).then((response) => {

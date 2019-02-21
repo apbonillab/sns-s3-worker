@@ -148,12 +148,27 @@ module.exports.eliminarArchivosXconcurso = (idconcursos,success,error)=>{
                 if(err){
                     error(err);
                 }else{
+                    deleteFolderRecursive(RUTA_GESTOR_ARCHIVOS+idconcursos);
                     success(result);
                 }
             })
         })
     })
 }
+
+  var deleteFolderRecursive = function(path) {
+    if( fs.existsSync(path) ) {
+    fs.readdirSync(path).forEach(function(file,index){
+    var curPath = path + "/" + file;
+    if(fs.lstatSync(curPath).isDirectory()) { // recurse
+    deleteFolderRecursive(curPath);
+          } else { // delete file
+    fs.unlinkSync(curPath);
+          }
+        });
+    fs.rmdirSync(path);
+      }
+    };
 
 module.exports.editar = (idconcursos,nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner,success,error)=>{
     let data = [nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner,idconcursos];

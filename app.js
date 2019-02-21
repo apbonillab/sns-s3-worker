@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 var http = require('http');
 var server = http.createServer(app);
-server.listen(8081, '0.0.0.0');
+server.listen(8080, '0.0.0.0');
 server.on('listening', function() {
     console.log('Express server started on port %s at %s', server.address().port, server.address().address);
 });
@@ -28,7 +28,8 @@ server.on('listening', function() {
 app.use(logger('dev'));
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'front/build')));
 //app.use('/Voces',express.directory(path.join(__dirname, './Voces')));
 app.use('/Voces', serveIndex(path.join(__dirname, 'Voces')));
 app.use('/Voces', express.static(path.join(__dirname, 'Voces')));

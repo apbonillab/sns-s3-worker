@@ -23,6 +23,7 @@ import HomepageHeading from './Componentes/HomepageHeading';
 var conf = require('./conf');
 
 
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -111,85 +112,98 @@ class App extends Component {
                   La mejor herramienta para encontrar la voz que necesitas!
                 </Header>
                 <p style={{ fontSize: '1.33em' }}>
-                  Concentrate en tu negocio y encuentra a los mejores locutores para tu publicidad sin esfuerzo.
+                SuperVoices es una herrramienta que te permitira interactuar desde dos roles, como administrador crear y gestionar 
+                concursos para que encuentres la voz adecuada a tu necesidad comercial, como concursante podras sin necesidad de registro 
+                conocer el detalle de diferentes concursos y si decides participar no necesitas registrarte y tampoco tendras restricciones 
+                de tipos de archivos lo que te facilita ser parte de uno o varios concursos!!
+                
                 </p>
+                <Header as='h4' style={{ fontSize: '2em' }}>
+                  Concentrate en tu negocio y encuentra a los mejores locutores para tu publicidad sin mayor esfuerzo!!!
+                </Header>
               </Grid.Column>
               <Grid.Column floated='right' width={6}>
-                <Image bordered rounded size='large' src='/images/wireframe/white-image.png' />
+                <Image  rounded size='large' src='/api/images/locutor2.jpg' />
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row>
+            {/*<Grid.Row>
               <Grid.Column textAlign='center'>
                 <Button size='huge'>Check Them Out</Button>
               </Grid.Column>
-            </Grid.Row>
+            </Grid.Row>*/}
           </Grid>
         </Segment>
-
+        
         <Segment style={{ padding: '0em' }} vertical>
           <Grid celled='internally' columns='equal' stackable>
             <Grid.Row textAlign='center'>
               <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
                 <Header as='h3' style={{ fontSize: '2em' }}>
-                  "What a Company"
+                  "Comparte tu concurso"
                 </Header>
-                <p style={{ fontSize: '1.33em' }}>That is what they all say about us</p>
+                <p style={{ fontSize: '1.33em' }}>Con Super Voices puedes compartir tus concursos de una forma
+                facil y rapida, para que todas las personas interesadas participen y los tiempos de busqueda de voces
+                sean muy bajos, dandote tiempo para tomarte unos coctelitos <Icon name='glass martini' /><Icon name='glass martini' /></p>
+                <Image  rounded verticalAlign='middle' size='medium' src='/api/images/sharing.jpg' />
               </Grid.Column>
               <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
                 <Header as='h3' style={{ fontSize: '2em' }}>
-                  "I shouldn't have gone with their competitor."
+                  "Gestiona tus concursos"
                 </Header>
-                <p style={{ fontSize: '1.33em' }}>
-                  <Image avatar src='/images/avatar/large/nan.jpg' />
-                  <b>Nan</b> Chief Fun Officer Acme Toys
-                </p>
+                <p style={{ fontSize: '1.33em' }}>Con Super Voices puedes crear nuevos concursos, modificar concursos existentes 
+                  o si lo quieres, Borrar los concursos, aunque perderias las voces participantes <Icon name='trash' />, Todo esto de una forma muy facil y rapida.</p>
+                <Image rounded verticalAlign='middle' size='large' src='/api/images/gestion.jpg' />
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row textAlign='center'>
+              <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
+                <Header as='h3' style={{ fontSize: '2em' }}>
+                    "Sube tus voces"
+                  </Header>
+                  <p style={{ fontSize: '1.33em' }}>Puedes subir tus voces a cada concurso sin registrarte, 
+                    y lo mejor, es que puedes subir cuantas voces desees!! </p>
+                    <Image rounded verticalAlign='middle' size='medium' src='/api/images/subirVoz2.jpg' />
+                </Grid.Column>
+              <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
+              <Header as='h3' style={{ fontSize: '2em' }}>
+                  "Sin programas adicionales"
+                </Header>
+                <p style={{ fontSize: '1.33em' }}>Con Super Voices no necesitas instalar otros softwares en tu pc, 
+                  lo que te brinda mayor seguridad y optimiza tu almacenamiento en disco y no sobrecarga tu procesador  
+                <Icon name='line graph' />.</p>
+                <Image rounded verticalAlign='middle' size='medium' src='/api/images/nosoftware.jpg' />
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row textAlign='center'>
+              <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
+                  <Header as='h3' style={{ fontSize: '2em' }}>
+                  "Multiples formatos soportados"
+                </Header>
+                <p style={{ fontSize: '1.33em' }}>Sabemos lo tedioso que puede ser tener que convertir un archivo a otro formato, por eso,
+                  Super Voices soporta una gran cantidad de formatos de audio, evitando que uses herramientas online poco seguras y con muchos virus
+                  <Icon name='bug' />.  </p>
+                  <Image rounded verticalAlign='middle' size='large' src='/api/images/multiformato.jpg' />
+              </Grid.Column>
+              <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
+              <Header as='h3' style={{ fontSize: '2em' }}>
+                  "Reproductor integrado"
+                </Header>
+                <p style={{ fontSize: '1.33em' }}>Con Super Voices no necesitas descargar los arhivos de audio a tu PC para escucharlos
+                ya que tenemos Reproductor integrado, esto optimiza tu almacenamiento en disco y no sobrecarga tu procesador!!
+                <Icon name='line graph' />.</p>
+                <Image rounded verticalAlign='middle' size='medium' src='/api/images/player.jpg' />
               </Grid.Column>
             </Grid.Row>
           </Grid>
         </Segment>
 
-        <Segment style={{ padding: '8em 0em' }} vertical>
-          <Container text>
-            <Header as='h3' style={{ fontSize: '2em' }}>
-              Breaking The Grid, Grabs Your Attention
-            </Header>
-            <p style={{ fontSize: '1.33em' }}>
-              Instead of focusing on content creation and hard work, we have learned how to master the
-              art of doing nothing by providing massive amounts of whitespace and generic content that
-              can seem massive, monolithic and worth your attention.
-            </p>
-            <Button as='a' size='large'>
-              Read More
-            </Button>
-
-            <Divider
-              as='h4'
-              className='header'
-              horizontal
-              style={{ margin: '3em 0em', textTransform: 'uppercase' }}
-            >
-              <a href='#'>Case Studies</a>
-            </Divider>
-
-            <Header as='h3' style={{ fontSize: '2em' }}>
-              Did We Tell You About Our Bananas?
-            </Header>
-            <p style={{ fontSize: '1.33em' }}>
-              Yes I know you probably disregarded the earlier boasts as non-sequitur filler content, but
-              it's really true. It took years of gene splicing and combinatory DNA research, but our
-              bananas can really dance.
-            </p>
-            <Button as='a' size='large'>
-              I'm Still Quite Interested
-            </Button>
-          </Container>
-        </Segment>
+        
 
         <Segment inverted vertical style={{ padding: '5em 0em' }}>
           <Container>
             <Grid divided inverted stackable>
               <Grid.Row>
-                <Grid.Column width={3}>
+                {/*<Grid.Column width={3}>
                   <Header inverted as='h4' content='About' />
                   <List link inverted>
                     <List.Item as='a'>Sitemap</List.Item>
@@ -206,14 +220,12 @@ class App extends Component {
                     <List.Item as='a'>How To Access</List.Item>
                     <List.Item as='a'>Favorite X-Men</List.Item>
                   </List>
-                </Grid.Column>
+                </Grid.Column>*/}
                 <Grid.Column width={7}>
                   <Header as='h4' inverted>
-                    Footer Header
-                  </Header>
-                  <p>
                     Desarrollado por Adriana, Alejandro y Orlando de 🇨🇴 para el 🌎.
-                  </p>
+                  </Header>
+                  
                 </Grid.Column>
               </Grid.Row>
             </Grid>

@@ -135,12 +135,12 @@ class DesktopContainer extends Component {
                     <Button
                       onClick={this.handleLogin}
                       as='a' inverted={!fixed}>
-                      Log in
+                      Iniciar sesión
                     </Button>
                     <Button as='a'
                       onClick={this.handleRegistro}
                       inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
-                      Sign Up
+                      Registrarse
                     </Button>
                   </Menu.Item>}
               </Container>

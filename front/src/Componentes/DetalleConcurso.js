@@ -303,6 +303,7 @@ class DetalleConcurso extends Component {
                     voz_id={card.idarchivos}
                     nombreLocutor={card.nombre}
                     apellidoLocutor={card.apellido}
+                    correo={card.correo}
                     fecha={card.fecha}
                     estado={card.estado_nombre}
                     voz_inicial={card.voz_inicial}

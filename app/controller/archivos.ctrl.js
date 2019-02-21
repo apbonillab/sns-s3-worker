@@ -87,7 +87,7 @@ app.get('/obtener/concurso/url/:url/:start/:limit', (req, res) => {
 })
 
 var cron = require('node-cron');
-/* 
+
 cron.schedule('* * * * *', () => {
   console.log('corriendo cron');
   convertirServices.convertirAudio(function (success) {
@@ -103,7 +103,5 @@ cron.schedule('* * * * *', () => {
 
   })
 });
-*/
-
 
 module.exports = app;

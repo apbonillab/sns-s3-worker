@@ -37,6 +37,7 @@ class DesktopContainer extends Component {
           sesionIniciada: true
         },
         () => {
+          window.location = window.location.origin;
           this.handleCloseLogin();
           this.props.setAdmin(localStorage.getItem('usuario'));
           //window.location.reload()

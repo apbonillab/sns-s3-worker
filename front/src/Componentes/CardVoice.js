@@ -12,13 +12,13 @@ class CardVoice extends Component {
   }
 
   render() {
-    if(this.props.estado === "Convertida"){
+    if (this.props.estado === "Convertida") {
       return (
 
         <Card>
           <Card.Content>
             <Card.Header>{this.state.nombrecompleto} {
-  
+
             } </Card.Header>
             <Card.Meta>
               <span className='date'>Fecha {this.props.fecha}</span>
@@ -31,11 +31,11 @@ class CardVoice extends Component {
             </Card.Description>
           </Card.Content>
           <Card.Content extra>
-          <Player
-            idplayer={this.props.voz_id}
-            archivo={this.props.file}
-          ></Player>
-            
+            <Player
+              idplayer={this.props.voz_id}
+              archivo={this.props.file}
+            ></Player>
+
             {/*  <Button
               content='Reproducir Voz'
               color='teal'
@@ -50,14 +50,14 @@ class CardVoice extends Component {
                 download
                 onClick={() => {
                   Axios({
-                    url: `http://localhost:3000/Voces/concurso_${this.props.idconcurso}/inicial/${this.props.voz_inicial}.${this.props.ext}`,
+                    url: `http://localhost:3000/Voces/concurso_${this.props.idconcurso}/inicial/${this.props.voz_inicial}`,
                     method: 'GET',
                     responseType: 'blob', // important
                   }).then((response) => {
                     const url = window.URL.createObjectURL(new Blob([response.data]));
                     const link = document.createElement('a');
                     link.href = url;
-                    link.setAttribute('download', 'file.mp3'); //or any other extension
+                    link.setAttribute('download', this.props.voz_inicial); //or any other extension
                     document.body.appendChild(link);
                     link.click();
                   });
@@ -67,16 +67,16 @@ class CardVoice extends Component {
               <div></div>
             }
           </Card.Content>
-  
+
         </Card>
       );
-    }else{
+    } else {
       return (
 
         <Card>
           <Card.Content>
             <Card.Header>{this.state.nombrecompleto} {
-  
+
             } </Card.Header>
             <Card.Meta>
               <span className='date'>Fecha {this.props.fecha}</span>
@@ -88,7 +88,7 @@ class CardVoice extends Component {
               <strong> Observaciones: </strong> {this.props.observaciones} <br />
             </Card.Description>
           </Card.Content>
-          <Card.Content extra>            
+          <Card.Content extra>
             {/*  <Button
               content='Reproducir Voz'
               color='teal'
@@ -120,11 +120,11 @@ class CardVoice extends Component {
               <div></div>
             }
           </Card.Content>
-  
+
         </Card>
       );
     }
-    
+
   }
 }
 

@@ -56,9 +56,11 @@ app.post('/creacion',(req, res) => {
 })
 
 
-app.get('/obtener/concurso/:concurso', (req, res) => {
+app.get('/obtener/concurso/:concurso/:start/:limit', (req, res) => {
     archivosServices.obtenerArchxConcurso(
         req.params.concurso,
+        req.params.start,
+        req.params.limit,
         function (archivos) {
             res.status(200).send(archivos)
         },function(error){
@@ -69,9 +71,11 @@ app.get('/obtener/concurso/:concurso', (req, res) => {
 
 })
 
-app.get('/obtener/concurso/url/:url', (req, res) => {
+app.get('/obtener/concurso/url/:url/:start/:limit', (req, res) => {
     archivosServices.obtenerArchxConcursoURL(
         req.params.url,
+        req.params.start,
+        req.params.limit,
         function (archivos) {
             res.status(200).send(archivos)
         },function(error){

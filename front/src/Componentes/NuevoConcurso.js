@@ -46,56 +46,56 @@ class NuevoConcurso extends Component {
       banner } = this.state;
     let idusuario = localStorage.getItem('iduser');
     let token = localStorage.getItem('JWToken');
-    localStorage.setItem('url',this.state.url);
+    localStorage.setItem('url', this.state.url);
     let formData = new FormData();
-    formData.append('banner',banner[0]);
-    formData.append('nombre',nombre);
-    formData.append('fecha_inicio',fecha_inicio);
-    formData.append('fecha_fin',fecha_fin);
-    formData.append('valor',valor);
-    formData.append('guion',guion);
-    formData.append('recomendaciones',recomendaciones);
-    formData.append('url',url);
-    formData.append('idusuario',idusuario);
-    axios.post('/concurso/creacion',formData , { headers: { 'Authorization': `Bearer ${token}` }, }).then(res => {
+    formData.append('banner', banner[0]);
+    formData.append('nombre', nombre);
+    formData.append('fecha_inicio', fecha_inicio);
+    formData.append('fecha_fin', fecha_fin);
+    formData.append('valor', valor);
+    formData.append('guion', guion);
+    formData.append('recomendaciones', recomendaciones);
+    formData.append('url', url);
+    formData.append('idusuario', idusuario);
+    axios.post('/concurso/creacion', formData, { headers: { 'Authorization': `Bearer ${token}` }, }).then(res => {
       console.log(res.data);
       let exito = res.data.exito;
       if (!exito) {
         //alert('Intentelo nuevamente');
         toast.error('No se pudo crear el concurso, intentelo nuevamente',
-            {
-              position: 'top-center',
-              autoClose: 5000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true
-            });
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true
+          });
         console.log('no exito');
       }
       else {
         console.log(exito);
         this.props.onClose();
       }
-    }).catch(function (error){
-      if(error.response.status===500){
+    }).catch(function (error) {
+      if (error.response.status === 500) {
         toast.error('No se pudo crear el concurso, intentelo nuevamente',
-            {
-              position: 'top-center',
-              autoClose: 5000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true
-            });
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true
+          });
         //alert("No se pudo crear el concurso, intentelo nuevamente");
         console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);
-      }else if(error.request){
+      } else if (error.request) {
         console.log(error.request);
-      }else{
-        console.log('Error: ',error.message);
+      } else {
+        console.log('Error: ', error.message);
       }
       console.log(error.config);
     });

@@ -47,7 +47,7 @@ class App extends Component {
   }
 
   setAdmin = (user) => {
-    this.setState({ admin: user },() =>{
+    this.setState({ admin: user }, () => {
       this.getConcursos();
     });
   }
@@ -87,6 +87,17 @@ class App extends Component {
     console.log('entra');
     return (
       <ResponsiveContainer setAdmin={this.setAdmin}>
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnVisibilityChange
+          draggable
+          pauseOnHover
+        />
         <Segment style={{ padding: '8em 0em' }} vertical>
           <Grid container stackable verticalAlign='middle'>
             <Grid.Row>
@@ -228,7 +239,7 @@ class App extends Component {
             openConcurso={this.state.openConcurso}
             onCloseConcurso={this.onCloseConcurso}
           >
-            <ToastContainer 
+            <ToastContainer
               position="top-center"
               autoClose={5000}
               hideProgressBar
@@ -268,7 +279,7 @@ class App extends Component {
             openConcurso={this.state.openConcurso}
             onCloseConcurso={this.onCloseConcurso}
           >
-            <ToastContainer 
+            <ToastContainer
               position="top-center"
               autoClose={5000}
               hideProgressBar
@@ -316,7 +327,7 @@ class App extends Component {
             openConcurso={this.state.openConcurso}
             onCloseConcurso={this.onCloseConcurso}
           >
-            <ToastContainer 
+            <ToastContainer
               position="top-center"
               autoClose={5000}
               hideProgressBar

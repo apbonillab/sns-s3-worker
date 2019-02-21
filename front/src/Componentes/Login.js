@@ -31,7 +31,7 @@ class Login extends Component {
       console.log("valor exito: ", res.data.exito);
       let exito = res.data.exito;
       if (!exito) {
-        alert(res.data.message);
+        //alert(res.data.message);
         toast.error(`Algo salio mal. Intentalo nuevamente\n ${res.data.message}`,
           {
             position: 'top-center',
@@ -50,7 +50,23 @@ class Login extends Component {
         localStorage.setItem('iduser', data.iduser);
         this.props.verificar();
       }
-    }).catch(err => console.log(err));
+    }).catch(
+      function (error) {
+        toast.error(`No se pudo loguear, intentelo nuevamente\n ${error.response.data.message}`,
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true
+          });
+        //alert("No se pudo crear el concurso, intentelo nuevamente");
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      }
+    );
   };
 
   render() {

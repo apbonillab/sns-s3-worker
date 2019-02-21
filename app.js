@@ -30,6 +30,9 @@ app.use(express.json());
 app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'front/build')));
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  });
 //app.use('/Voces',express.directory(path.join(__dirname, './Voces')));
 app.use('/Voces', serveIndex(path.join(__dirname, 'Voces')));
 app.use('/Voces', express.static(path.join(__dirname, 'Voces')));

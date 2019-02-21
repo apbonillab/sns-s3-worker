@@ -141,7 +141,7 @@ module.exports.obtenerArchxConcurso = (idconcurso,start,limit, success, error) =
             from: 'TheVoice',
             to: correo,
             subject: 'Voz Procesada',
-            text: `Tú voz ha sido procesada, en el concurso: ${url} ..lista para concursar!!`
+            text: `Tú voz ha sido procesada, en el concurso: 172.24.42.30:8080/concurso/url/${url} ..lista para concursar!!`
         };
 
         transporter.sendMail(mailOptions, function (error, info) {

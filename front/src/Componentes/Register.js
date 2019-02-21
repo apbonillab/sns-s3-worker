@@ -51,7 +51,7 @@ class Register extends Component {
         });
       //alert("Las contraseñas no coinciden, por favor verifiquelas");
     } else {
-      axios.post('/admin/creacion', {
+      axios.post('http://localhost:3000/admin/creacion', {
         nombre,
         segundo_nombre,
         apellido,

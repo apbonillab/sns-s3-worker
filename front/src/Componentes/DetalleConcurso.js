@@ -61,7 +61,7 @@ class DetalleConcurso extends Component {
   }
 
   getVoces = () => {
-    Axios.get(`/archivo/obtener/concurso/${this.props.id}/${(this.state.activePage-1)*50}/50`)
+    Axios.get(`http://localhost:3000/archivo/obtener/concurso/${this.props.id}/${(this.state.activePage-1)*50}/50`)
       .then(res => {
         console.log(res.data);
         this.setState({ listaVoces: res.data });
@@ -69,7 +69,7 @@ class DetalleConcurso extends Component {
   }
 
   getVocesxUrl = () => {
-    Axios.get(`/archivo/obtener/concurso/url/${this.props.url}/${(this.state.activePage-1)*20}/20`)
+    Axios.get(`http://localhost:3000/archivo/obtener/concurso/url/${this.props.url}/${(this.state.activePage-1)*20}/20`)
       .then(res => {
         console.log('voces', res.data);
         this.setState({ listaVoces: res.data });

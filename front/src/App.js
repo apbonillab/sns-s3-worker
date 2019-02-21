@@ -77,7 +77,7 @@ class App extends Component {
 
   getConcursos = () => {
     let token = localStorage.getItem('JWToken');
-    Axios.get(`/concurso/obtener/admin/${localStorage.getItem('iduser')}`, { headers: { 'Authorization': `Bearer ${token}` }, })
+    Axios.get(`http://localhost:3000/concurso/obtener/admin/${localStorage.getItem('iduser')}`, { headers: { 'Authorization': `Bearer ${token}` }, })
       .then(res => {
         console.log(res.data);
         this.setState({ listaConcursos: res.data });

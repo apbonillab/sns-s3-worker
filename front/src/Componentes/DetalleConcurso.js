@@ -131,7 +131,6 @@ class DetalleConcurso extends Component {
   render() {
     const { activeIndex, activePage } = this.state;
     if (this.props.admin) {
-      this.setState.borrarVoz = true;
       return (
         <Container>
           <h1>{this.state.info.nombre}</h1>

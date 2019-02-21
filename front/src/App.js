@@ -19,6 +19,7 @@ import ResponsiveContainer from './Componentes/ResponsiveContainer';
 import Axios from 'axios';
 import CardConcurso from './Componentes/CardConcurso';
 import DetalleConcurso from './Componentes/DetalleConcurso';
+import HomepageHeading from './Componentes/HomepageHeading';
 
 
 class App extends Component {
@@ -86,7 +87,10 @@ class App extends Component {
   renderHome = () => {
     console.log('entra');
     return (
-      <ResponsiveContainer setAdmin={this.setAdmin}>
+      <ResponsiveContainer 
+        setAdmin={this.setAdmin}
+        showHome={true}
+      >
         <ToastContainer
           position="top-center"
           autoClose={5000}
@@ -102,20 +106,11 @@ class App extends Component {
           <Grid container stackable verticalAlign='middle'>
             <Grid.Row>
               <Grid.Column width={8}>
-                {/*<Player></Player>*/}
                 <Header as='h3' style={{ fontSize: '2em' }}>
-                  La mejor herramienta para encontrar la voz que necesitas!!
+                  La mejor herramienta para encontrar la voz que necesitas!
                 </Header>
                 <p style={{ fontSize: '1.33em' }}>
-                  We can give your company superpowers to do things that they never thought possible.
-                  Let us delight your customers and empower your needs... through pure data analytics.
-                </p>
-                <Header as='h3' style={{ fontSize: '2em' }}>
-                  We Make Bananas That Can Dance
-                </Header>
-                <p style={{ fontSize: '1.33em' }}>
-                  Yes that's right, you thought it was the stuff of dreams, but even bananas can be
-                  bioengineered.
+                  Concentrate en tu negocio y encuentra a los mejores locutores para tu publicidad sin esfuerzo.
                 </p>
               </Grid.Column>
               <Grid.Column floated='right' width={6}>
@@ -216,7 +211,7 @@ class App extends Component {
                     Footer Header
                   </Header>
                   <p>
-                    Extra space for a call to action inside the footer that could help re-engage users.
+                    Desarrollado por Adriana, Alejandro y Orlando de 🇨🇴 para el 🌎.
                   </p>
                 </Grid.Column>
               </Grid.Row>

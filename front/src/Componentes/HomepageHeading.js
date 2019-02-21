@@ -8,7 +8,9 @@ import {
 } from 'semantic-ui-react';
 
 const HomepageHeading = ({ mobile }) => (
-  <Container text>
+  <Container
+    fluid
+    text>
     <Header
       as='h1'
       content='Super Voices'

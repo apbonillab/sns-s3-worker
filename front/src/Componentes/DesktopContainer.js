@@ -87,7 +87,7 @@ class DesktopContainer extends Component {
   render() {
     const { children } = this.props;
     const { fixed } = this.state;
-    const h = 100;
+    const h = this.props.showHome?700:100;
     //console.log('usuarioContainer', this.state.usuario);
     return (
       <Responsive getWidth={this.getWidth} minWidth={Responsive.onlyTablet.minWidth}>
@@ -115,9 +115,9 @@ class DesktopContainer extends Component {
                   as='a' active>
                   Home
                 </Menu.Item>
-                <Menu.Item as='a'>Work</Menu.Item>
+                {/* <Menu.Item as='a'>Work</Menu.Item>
                 <Menu.Item as='a'>Company</Menu.Item>
-                <Menu.Item as='a'>Careers</Menu.Item>
+                <Menu.Item as='a'>Careers</Menu.Item> */}
                 {this.state.usuario ?
                   <Menu.Item position='right'>
                     <Button
@@ -144,7 +144,7 @@ class DesktopContainer extends Component {
                   </Menu.Item>}
               </Container>
             </Menu>
-            {/* this.state.usuario !== null ? <HomepageHeading /> : <div></div> */}
+            {this.props.showHome ? <HomepageHeading /> : <div></div>}
           </Segment>
         </Visibility>
         <Register

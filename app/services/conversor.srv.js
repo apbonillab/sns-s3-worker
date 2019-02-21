@@ -16,7 +16,9 @@ module.exports.convertirAudio = (success,error)=>{
         }else{
             result.forEach(archivo => {
                 var proc = new ffmpeg({ source: RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//inicial//'+archivo.voz_inicial, nolog: true })
-                proc.setFfmpegPath("C:\\ffmpeg\\bin\\ffmpeg.exe")
+                var isWin = process.platform === "win32";
+                var path = isWin?"C:\\ffmpeg\\bin\\ffmpeg.exe":'/usr/bin/ffmpeg';
+                proc.setFfmpegPath(path)
                 .toFormat('mp3')
                  .on('error', (err) => {
                      return error(err.message);

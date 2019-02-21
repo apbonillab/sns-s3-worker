@@ -146,7 +146,7 @@ class DetalleConcurso extends Component {
           <Divider />
           <Button onClick={this.editarConcurso} >Editar concurso  <Icon name='edit' /></Button>
           <Button onClick={this.show}>Borrar concurso  <Icon name='delete' /></Button>
-          <Image size='medium' centered src={this.state.info.banner!=null && this.state.info.banner!=='no-image' ? `${conf.baseURL}/Voces/concurso_${this.props.id}/${this.state.info.banner}` : '${conf.baseURL}/images/default.jpg'}></Image>
+          <Image size='medium' centered src={this.state.info.banner!=null && this.state.info.banner!=='no-image' ? `${conf.baseURL}/Voces/concurso_${this.props.id}/${this.state.info.banner}` : `${conf.baseURL}/images/default.jpg`}></Image>
           <Divider />
           <Accordion fluid styled>
             <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
@@ -248,7 +248,7 @@ class DetalleConcurso extends Component {
               Subir voz
             </Button>
           </Container>
-          <Image size='medium' centered src={this.state.info.banner ? `${conf.baseURL}/Voces/concurso_${this.state.info.idconcursos}/${this.state.info.banner}` : '${conf.baseURL}/images/default.jpg'}></Image>
+          <Image size='medium' centered src={this.state.info.banner ? `${conf.baseURL}/Voces/concurso_${this.state.info.idconcursos}/${this.state.info.banner}` : `${conf.baseURL}/images/default.jpg`}></Image>
           <Accordion fluid styled>
             <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
               <Icon name='dropdown' />

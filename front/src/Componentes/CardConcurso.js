@@ -10,7 +10,7 @@ class CardConcurso extends Component {
   render() {
     return (
       <Card>
-        <Image size='small' centered src={this.props.urlImagen!=='no-image' && this.props.urlImagen!==null ?`${conf.baseURL}/Voces/concurso_${this.props.id}/${this.props.urlImagen}`:'${conf.baseURL}/images/default.jpg'} />
+        <Image size='small' centered src={this.props.urlImagen!=='no-image' && this.props.urlImagen!==null ?`${conf.baseURL}/Voces/concurso_${this.props.id}/${this.props.urlImagen}`:`${conf.baseURL}/images/default.jpg`} />
         <Card.Content>
           <Card.Header>{this.props.nombreConcurso}</Card.Header>
           <Card.Meta>

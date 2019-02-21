@@ -58,7 +58,7 @@ class NuevoConcurso extends Component {
     formData.append('recomendaciones', recomendaciones);
     formData.append('url', url);
     formData.append('idusuario', idusuario);
-    axios.post('${conf.baseURL}/concurso/creacion', formData, { headers: { 'Authorization': `Bearer ${token}` }, }).then(res => {
+    axios.post(`${conf.baseURL}/concurso/creacion`, formData, { headers: { 'Authorization': `Bearer ${token}` }, }).then(res => {
       console.log(res.data);
       let exito = res.data.exito;
       if (!exito) {

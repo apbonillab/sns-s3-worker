@@ -80,7 +80,7 @@ class EditarConcurso extends Component {
     } = this.state;
     let token = localStorage.getItem('JWToken');
     localStorage.setItem('url', this.state.url);
-    axios.post('${conf.baseURL}/concurso/editar', {
+    axios.post(`${conf.baseURL}/concurso/editar`, {
       idconcurso,
       nombre,
       fecha_inicio,

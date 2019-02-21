@@ -26,7 +26,7 @@ class Login extends Component {
     const { correo, contrasena } = this.state;
     //Verificar y notificar errores en la información
 
-    axios.post('${conf.baseURL}/admin/login', {
+    axios.post(`${conf.baseURL}/admin/login`, {
       correo, contrasena
     }).then(res => {
       console.log("valor exito: ", res.data.exito);

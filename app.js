@@ -29,11 +29,6 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'front/build')));
-app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-  });
-//app.use('/Voces',express.directory(path.join(__dirname, './Voces')));
 app.use('/Voces', serveIndex(path.join(__dirname, 'Voces')));
 app.use('/Voces', express.static(path.join(__dirname, 'Voces')));
 
@@ -41,4 +36,10 @@ app.use('/api/admin', [usersController]);
 app.use('/api/concurso', [concursosController]);
 app.use('/api/locutor', [locutorController]);
 app.use('/api/archivo', [archivosController]);
+app.use(express.static(path.join(__dirname, 'front/build')));
+app.get('/*', function(req, res) {
+    console.log('estatico')
+    res.sendFile(path.join(__dirname, 'front/build', 'index.html'));
+  });
+//app.use('/Voces',express.directory(path.join(__dirname, './Voces')));
 module.exports = app;

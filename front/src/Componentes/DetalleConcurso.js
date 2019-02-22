@@ -103,7 +103,7 @@ class DetalleConcurso extends Component {
   borrarConcurso = () => {
     let token = localStorage.getItem('JWToken');
     console.log('Concurso a borrar props: ', this.props.id);
-    Axios.delete(`/concurso/eliminar/${this.props.id}`, { headers: { 'Authorization': `Bearer ${token}` }, })
+    Axios.delete(`${conf.baseURL}/concurso/eliminar/${this.props.id}`, { headers: { 'Authorization': `Bearer ${token}` }, })
       .then(res => {
         console.log(res.data);
       }).catch(err => console.log(err));

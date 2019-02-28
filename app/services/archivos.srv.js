@@ -6,15 +6,17 @@ const moment = require('moment');
 var nodemailer = require('nodemailer');
 var concursoSrv = require('../services/concurso.srv.js');
 
-
 var conf = require('../../config.js');
 const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos')
+const uuidv4 = require('uuid/v4');
+
 
 module.exports.crearArchivo = (observaciones, idlocutor, concurso, file, success, error) => {
     var archivo = file;
     var nombreCompleto = archivo.name.split('.');
     var extension = nombreCompleto[nombreCompleto.length - 1];
-    archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/inicial/' + archivo.name + "_" + concurso + "." + extension, function (err) {
+    let idarchivo=uuidv4();
+    archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/inicial/' + archivo.name + "_" + concurso +"_"+idarchivo + "." + extension, function (err) {
         if (err)
             error(err)
     });
@@ -23,7 +25,7 @@ module.exports.crearArchivo = (observaciones, idlocutor, concurso, file, success
     let voz_convertida = null;
     let estado = 1;
     if (extension.toLowerCase() === 'mp3') {
-        archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/convertida/' + archivo.name + "_" + concurso + "." + extension, function (err) {
+        archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/convertida/'+ concurso + "_" + idlocutor + "_" + idarchivo + "." + extension, function (err) {
             if (err) {
                 console.log(err)
                 error(err)

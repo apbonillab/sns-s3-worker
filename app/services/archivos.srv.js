@@ -31,7 +31,7 @@ module.exports.crearArchivo = (observaciones, idlocutor, concurso, file, success
                 error(err)
             }
         });
-        voz_convertida = archivo.name + "_" + concurso;
+        voz_convertida = concurso + "_" + idlocutor + "_" + idarchivo;
         estado = 2;
     }
     let userData = [[observaciones, idlocutor, estado, archivo.name + "_" + concurso + "." + extension, concurso, dateAudit, extension, voz_convertida]];

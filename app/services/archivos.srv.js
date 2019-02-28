@@ -34,7 +34,7 @@ module.exports.crearArchivo = (observaciones, idlocutor, concurso, file, success
         voz_convertida = concurso + "_" + idlocutor + "_" + idarchivo;
         estado = 2;
     }
-    let userData = [[observaciones, idlocutor, estado, archivo.name + "_" + concurso + "." + extension, concurso, dateAudit, extension, voz_convertida]];
+    let userData = [[observaciones, idlocutor, estado, archivo.name + "_" + concurso +"_"+idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida]];
     connection.query(`insert into archivos (observaciones,usuario,estado,voz_inicial,concurso,fecha,ext_voz_inicial,voz_convertida) values ? `,
         [userData], function (err, result, fields) {
             if (err) {

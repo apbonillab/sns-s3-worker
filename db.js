@@ -9,20 +9,22 @@ dbParams = conf.get('db');
 
 
 function connectDB(){
+    console.log( process.env.HOST)
     if(!connection){
+        
         connection = mysql.createConnection({
-            host: dbParams.host,
-            user: dbParams.user,
-            port: dbParams.port,
-            password: dbParams.password,
-            database: dbParams.database,
-            timeoutBeforeReconnection: dbParams.timeoutBeforeReconnection
+            host: process.env.HOST,
+            user: process.env.USER,
+            port: process.env.PORT,
+            password: process.env.PASSWORD_DB,
+            database: process.env.DATABASE,
+            timeoutBeforeReconnection: process.env.timeoutBeforeReconnection
           });
         connection.connect((err)=>{
             if(!err)
-                console.log(`Conexion BD ${dbParams.database} OK`);
+                console.log(`Conexion BD ${process.env.DATABASE} OK`);
             else
-                console.log(`Conexion errada BD ${dbParams.database}: ` + err);
+                console.log(`Conexion errada BD ${process.env.DATABASE}: ` + err);
         })
     }
     return connection;

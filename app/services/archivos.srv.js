@@ -1,14 +1,23 @@
 'use strict'
-
 const mysql = require('mysql');
 const connection = require('../../db');
 const moment = require('moment');
 var nodemailer = require('nodemailer');
 var concursoSrv = require('../services/concurso.srv.js');
-
 var conf = require('../../config.js');
 const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos')
 const uuidv4 = require('uuid/v4');
+var AWS = require('aws-sdk');
+var uuid = require('uuid');
+
+
+AWS.config.update({
+    region: 'us-east-1',
+    accessKeyId:process.env.ACCES_KEY_ID,
+    secretAccessKey:process.env.SECRET_ACCESS_KEY
+});
+
+const ses = new AWS.SES({ apiVersion: "2010-12-01" });
 
 
 module.exports.crearArchivo = (observaciones, idlocutor, concurso, file, success, error) => {
@@ -129,30 +138,46 @@ module.exports.obtenerArchxConcurso = (idconcurso,start,limit, success, error) =
             });
     }
 
+    module.exports.prueba=(success,error)=>{
+        envioCorreo("correo", "idconcurso");
+        success("ok");
+    }
 
-    var transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-            user: 'grupo8.cloud@gmail.com',
-            pass: 'grupo8.cloud123'
-        }
-    });
 
     function envioCorreo(correo, url) {
-        var mailOptions = {
-            from: 'TheVoice',
-            to: correo,
-            subject: 'Voz Procesada',
-            text: `Tú voz ha sido procesada, en el concurso: 172.24.42.30:8080/concurso/url/${url} ..lista para concursar!!`
+        var params = {
+            Destination: { 
+            ToAddresses: [
+                'apbonillab@gmail.com <grupo8.cloud@gmail.com>',
+            ]
+            },
+            Source: 'grupo8.cloud@gmail.com',
+            Message: {
+                Body: {
+                  Html: {
+                    Charset: "UTF-8",
+                    Data:
+                      "<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en el concurso: 172.24.42.30:8080/concurso/url/"+url+" ..lista para concursar!!'</p></body></html>"
+                  },
+                  Text: {
+                    Charset: "UTF-8",
+                    Data: "Hello Charith Sample description time 1517831318946"
+                  }
+                },
+                Subject: {
+                  Charset: "UTF-8",
+                  Data: "Voz procesada exitosamente"
+                }
+              }
         };
+        const sendEmail = ses.sendEmail(params).promise();
 
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log("Email sent");
-                return;
-            }
+        sendEmail
+        .then(data => {
+            console.log("email enviado SES", data);
+        })
+        .catch(error => {
+            console.log(error);
         });
 
     }

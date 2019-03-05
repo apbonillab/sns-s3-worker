@@ -6,7 +6,12 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const jwt  = require('jsonwebtoken');
 var serveIndex = require('serve-index');
-
+const dotenv = require('dotenv');
+if(process.env.NODE_ENV === 'mv'){
+  dotenv.config( {path: "./environments/mv.env"});
+}else{
+  dotenv.config( {path: "./environments/aws.env"});
+}
 
 const usersController = require('./app/controller/users.ctrl.js');
 const concursosController = require('./app/controller/concurso.ctrl.js');
@@ -22,7 +27,7 @@ var http = require('http');
 var server = http.createServer(app);
 server.listen(8080, '0.0.0.0');
 server.on('listening', function() {
-    console.log('Express server started on port %s at %s', server.address().port, server.address().address);
+    console.log('Express server started on port %s at %s at %s', server.address().port, server.address().address,process.env.HOST);
 });
 
 app.use(logger('dev'));

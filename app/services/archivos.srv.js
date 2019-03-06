@@ -148,7 +148,7 @@ module.exports.obtenerArchxConcurso = (idconcurso,start,limit, success, error) =
         var params = {
             Destination: { 
             ToAddresses: [
-                'apbonillab@gmail.com <grupo8.cloud@gmail.com>',
+                correo,
             ]
             },
             Source: 'grupo8.cloud@gmail.com',

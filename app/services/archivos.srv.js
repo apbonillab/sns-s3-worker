@@ -25,7 +25,8 @@ module.exports.crearArchivo = (observaciones, idlocutor, concurso, file, success
     var nombreCompleto = archivo.name.split('.');
     var extension = nombreCompleto[nombreCompleto.length - 1];
     let idarchivo=uuidv4();
-    archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/inicial/' + archivo.name + "_" + concurso +"_"+idarchivo + "." + extension, function (err) {
+    //archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/inicial/' + archivo.name + "_" + concurso +"_"+idarchivo + "." + extension, function (err) {
+    archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/inicial/' + idarchivo + "." + extension, function (err) {
         if (err)
             error(err)
         else{
@@ -34,19 +35,19 @@ module.exports.crearArchivo = (observaciones, idlocutor, concurso, file, success
             let voz_convertida = null;
             let estado = 1;
             if (extension.toLowerCase() === 'mp3') {
-                archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/convertida/'+ concurso + "_" + idlocutor + "_" + idarchivo + "." + extension, function (err) {
+                archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/convertida/'+ idarchivo + "." + extension, function (err) {
                     if (err) {
                         console.log(err)
                         error(err)
                     }else{
-                        let userData = [[observaciones, idlocutor, estado, archivo.name + "_" + concurso +"_"+idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida]];
+                        let userData = [[observaciones, idlocutor, estado, idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida]];
                         this.save(userData,error,success);
                     }
                 });
                 voz_convertida = concurso + "_" + idlocutor + "_" + idarchivo;
                 estado = 2;
             }
-            let userData = [[observaciones, idlocutor, estado, archivo.name + "_" + concurso +"_"+idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida]];
+            let userData = [[observaciones, idlocutor, estado, idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida]];
             save(userData,error,success);
            
         }

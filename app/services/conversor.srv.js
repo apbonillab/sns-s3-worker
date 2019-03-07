@@ -4,6 +4,7 @@ const mysql = require('mysql');
 const connection = require('../../db');
 var conf = require('../../config.js');
 const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos')
+let date = require('date-and-time');
 
 module.exports.convertirAudio = (success,error)=>{
     connection.query(`select a.*,l.*,c.* from archivos a
@@ -16,9 +17,11 @@ module.exports.convertirAudio = (success,error)=>{
         }else{
             result.forEach(archivo => {
                 var proc = new ffmpeg({ source: RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//inicial//'+archivo.voz_inicial, nolog: true })
-                console.log(proc);
                 var isWin = process.platform === "win32";
                 var path = isWin?"C:\\ffmpeg\\bin\\ffmpeg.exe":'/usr/bin/ffmpeg';
+                let start= new Date();
+                date.format(start,'s');
+                console.log("Start: ",start);
                 proc.setFfmpegPath(path)
                 .toFormat('mp3')
                  .on('error', (err) => {
@@ -28,6 +31,11 @@ module.exports.convertirAudio = (success,error)=>{
                      console.log('Processing: ' + progress.targetSize + ' KB converted' + archivo.concurso);
                     })
                  .on('end', () => {
+                     let finish= new Date();
+                     date.format(finish,'s');
+                     console.log("finish: ",finish);
+                     let time=date.subtract(finish,start).toSeconds();
+                     console.log("Tiempo para conversion: ", time, " s");
                      console.log('Processing finished !');
                     success(archivo);                     
                  })

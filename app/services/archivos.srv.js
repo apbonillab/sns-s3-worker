@@ -28,22 +28,33 @@ module.exports.crearArchivo = (observaciones, idlocutor, concurso, file, success
     archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/inicial/' + archivo.name + "_" + concurso +"_"+idarchivo + "." + extension, function (err) {
         if (err)
             error(err)
-    });
-    let d = new Date();
-    let dateAudit = moment(d).format("YYYY-MM-DD HH:mm:ss");
-    let voz_convertida = null;
-    let estado = 1;
-    if (extension.toLowerCase() === 'mp3') {
-        archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/convertida/'+ concurso + "_" + idlocutor + "_" + idarchivo + "." + extension, function (err) {
-            if (err) {
-                console.log(err)
-                error(err)
+        else{
+            let d = new Date();
+            let dateAudit = moment(d).format("YYYY-MM-DD HH:mm:ss");
+            let voz_convertida = null;
+            let estado = 1;
+            if (extension.toLowerCase() === 'mp3') {
+                archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/convertida/'+ concurso + "_" + idlocutor + "_" + idarchivo + "." + extension, function (err) {
+                    if (err) {
+                        console.log(err)
+                        error(err)
+                    }else{
+                        let userData = [[observaciones, idlocutor, estado, archivo.name + "_" + concurso +"_"+idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida]];
+                        this.save(userData,error,success);
+                    }
+                });
+                voz_convertida = concurso + "_" + idlocutor + "_" + idarchivo;
+                estado = 2;
             }
-        });
-        voz_convertida = concurso + "_" + idlocutor + "_" + idarchivo;
-        estado = 2;
-    }
-    let userData = [[observaciones, idlocutor, estado, archivo.name + "_" + concurso +"_"+idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida]];
+            let userData = [[observaciones, idlocutor, estado, archivo.name + "_" + concurso +"_"+idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida]];
+            save(userData,error,success);
+           
+        }
+    });
+    
+}
+
+function save( userData,error,success ){
     connection.query(`insert into archivos (observaciones,usuario,estado,voz_inicial,concurso,fecha,ext_voz_inicial,voz_convertida) values ? `,
         [userData], function (err, result, fields) {
             if (err) {

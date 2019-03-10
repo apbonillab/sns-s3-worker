@@ -114,7 +114,7 @@ class DesktopContainer extends Component {
                 <Menu.Item
                   onClick={() => { window.location = window.location.origin; }}
                   as='a' active>
-                  Home
+                  Inicio
                 </Menu.Item>
                 {/* <Menu.Item as='a'>Work</Menu.Item>
                 <Menu.Item as='a'>Company</Menu.Item>

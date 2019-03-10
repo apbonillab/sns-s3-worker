@@ -1,7 +1,7 @@
 
 var ffmpeg = require('fluent-ffmpeg');
 const mysql = require('mysql');
-const connection = require('../db');
+const connection = require('./db');
 var conf = require('../config.js');
 const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos');
 let date = require('date-and-time');

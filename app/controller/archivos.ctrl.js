@@ -86,29 +86,4 @@ app.get('/obtener/concurso/url/:url/:start/:limit', (req, res) => {
 
 })
 
-var cron = require('node-cron');
-
-cron.schedule('* * * * *', () => {
-  console.log('corriendo cron');
-  //Esto es solo para pruebas de envio email
-  archivosServices.prueba(function(){
-      console.log("ok prueba email")
-  }, function(){
-      console.log("error ses")
-  })
-  /*
-  convertirServices.convertirAudio(function (success) {
-            archivosServices.actualizarEstado(success.idarchivos,success.voz_inicial+'_final',success.correo,
-            success.url,
-            function(archivo){
-                console.log("OK envio correo y actualizacion estado de archivo "+success.idarchivos);
-            },function(error){
-                console.log('error actualizacion y envio correo '+error);
-            })
-    },function (error){
-        console.log('error '+error);
-
-  })*/
-});
-
 module.exports = app;

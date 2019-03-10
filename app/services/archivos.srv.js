@@ -47,9 +47,11 @@ module.exports.crearArchivo = (observaciones, idlocutor, concurso, file,correo, 
                 voz_convertida = concurso + "_" + idlocutor + "_" + idarchivo;
                 estado = 2;
                 envioCorreo(correo, concurso);
+            }else{
+                let userData = [[observaciones, idlocutor, estado, idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida]];
+                save(userData,error,success);
             }
-            let userData = [[observaciones, idlocutor, estado, idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida]];
-            save(userData,error,success);
+            
            
         }
     });

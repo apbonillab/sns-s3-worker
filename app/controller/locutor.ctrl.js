@@ -23,6 +23,7 @@ routr.post('/creacion',(req, res) => {
                 locutor,
                 req.body.concurso,
                 req.files.audio,
+                req,file.correo,
                 function(archivo){
                     //console.log(res)
                     res.status(201).send({'exito':true,'message':'locutor OK','locutorId':locutor});

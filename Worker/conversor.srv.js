@@ -48,3 +48,56 @@ module.exports.convertirAudio = (success,error)=>{
    })
 }
 
+module.exports.actualizarEstado = (idarchivos, voz_convertida, correo, idconcurso, success, error) => {
+    connection.query(`update archivos set estado = 2,voz_convertida="${voz_convertida}"
+ where idarchivos = ${idarchivos}`, function (err, result, fields) {
+            if (err) {
+                error(err);
+            } else {
+                envioCorreo(correo, idconcurso);
+                success("ok");
+            }
+
+        });
+}
+
+function envioCorreo(correo, url) {
+    var params = {
+        Destination: { 
+        ToAddresses: [
+            correo,
+        ]
+        },
+        Source: 'grupo8.cloud@gmail.com',
+        Message: {
+            Body: {
+              Html: {
+                Charset: "UTF-8",
+                Data:
+                  "<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en el concurso: 172.24.42.30:8080/concurso/url/"+url+" ..lista para concursar!!'</p></body></html>"
+              },
+              Text: {
+                Charset: "UTF-8",
+                Data: "Hello Charith Sample description time 1517831318946"
+              }
+            },
+            Subject: {
+              Charset: "UTF-8",
+              Data: "Voz procesada exitosamente"
+            }
+          }
+    };
+    const sendEmail = ses.sendEmail(params).promise();
+
+    sendEmail
+    .then(data => {
+        console.log("email enviado SES", data);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+
+}
+
+
+

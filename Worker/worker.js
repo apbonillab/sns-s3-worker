@@ -21,8 +21,13 @@ var taskTest = cron.schedule('*/5 * * * * *',() => {
 
 const convertir = () => {
   console.log('corriendo cron');
-  convertirServices.convertirAudio(function (success) {
-            archivosServices.actualizarEstado(success.idarchivos,success.voz_inicial+'_final',success.correo,
+  convertirServices.prueba(function(){
+    console.log("ok prueba email")
+}, function(){
+    console.log("error ses")
+})
+ /* convertirServices.convertirAudio(function (success) {
+    convertirServices.actualizarEstado(success.idarchivos,success.voz_inicial+'_final',success.correo,
             success.url,
             function(archivo){
                 console.log("OK envio correo y actualizacion estado de archivo "+success.idarchivos);
@@ -32,7 +37,7 @@ const convertir = () => {
     },function (error){
         console.log('error '+error);
 
-  })
+  })*/
 }
 
 

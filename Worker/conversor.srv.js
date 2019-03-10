@@ -85,7 +85,7 @@ function envioCorreo(correo, url) {
               Html: {
                 Charset: "UTF-8",
                 Data:
-                  "<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en el concurso: 172.24.42.30:8080/concurso/url/"+url+" ..lista para concursar!!'</p></body></html>"
+                  "<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en el concurso: http://3.18.70.221:8080/concurso/url/"+url+" ..lista para concursar!!'</p></body></html>"
               },
               Text: {
                 Charset: "UTF-8",

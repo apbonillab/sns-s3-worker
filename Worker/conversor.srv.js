@@ -5,6 +5,17 @@ const connection = require('./db');
 var conf = require('./config.js');
 const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos');
 let date = require('date-and-time');
+var AWS = require('aws-sdk');
+var uuid = require('uuid');
+
+
+AWS.config.update({
+    region: 'us-east-1',
+    accessKeyId:process.env.ACCES_KEY_ID,
+    secretAccessKey:process.env.SECRET_ACCESS_KEY
+});
+
+const ses = new AWS.SES({ apiVersion: "2010-12-01" });
 
 
 module.exports.convertirAudio = (success,error)=>{

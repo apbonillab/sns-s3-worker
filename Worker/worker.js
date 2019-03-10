@@ -47,7 +47,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 var http = require('http');
 var server = http.createServer(app);
-server.listen(3000, '0.0.0.0');
+server.listen(8080, '0.0.0.0');
 server.on('listening', function() {
   console.log('Express server started on port %s at %s at %s', server.address().port, server.address().address,process.env.HOST);
 });

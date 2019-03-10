@@ -14,7 +14,7 @@ function connectDB(){
         
         connection = mysql.createConnection({
             host: process.env.HOST,
-            user: process.env.USER,
+            user: process.env.USER_DB,
             port: process.env.PORT,
             password: process.env.PASSWORD_DB,
             database: process.env.DATABASE,

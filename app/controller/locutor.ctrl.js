@@ -39,3 +39,37 @@ routr.post('/creacion',(req, res) => {
 
 })
 module.exports = routr;
+
+routr.post('/creacion-pruebas',(req, res) => {
+    if (!req.files) {
+        return res.status(400).send('no se adjunto ningun audio');
+      }
+    locutorServices.crearLocutor(
+        req.body.nombre,
+        req.body.segundo_nombre,
+        req.body.apellido,
+        req.body.segundo_apellido,
+        req.body.correo,
+        function (locutor) {
+            console.log(locutor);
+            for(var i=0;i<req.body.cantidad;i++){
+                archivosServices.crearArchivo(
+                    req.body.observaciones,
+                    locutor,
+                    req.body.concurso,
+                    req.files.audio,
+                    req.body.correo,
+                    function(archivo){
+                    },function(error){
+                        res.status(500).send({'message':'Error en la creacion del archivo'+error});
+                    }
+                )
+            }
+            res.status(201).send({'exito':true,'message':'locutor OK','locutorId':locutor});            
+        },function(error){
+            res.status(500).send({'message':'Error en la creacion del locutor'+error});
+            
+        }
+    )
+
+})

@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Button, Form, Modal, Grid, Segment, Header } from 'semantic-ui-react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Register from './Register';
+
+
 var conf = require('../conf');
 
 class Login extends Component {
@@ -11,11 +14,17 @@ class Login extends Component {
 
     this.state = {
       correo: '',
-      contrasena: ''
+      contrasena: '',
+      modalRegistro: false
     };
   }
+  
+  handleRegistro = () => {
+    this.setState({ modalRegistro: true });
+  }
 
-
+  handleCloseRegistro = () => this.setState({ modalRegistro: false })
+  
   handleInput = (e) => {
     let name = e.target.name;
     let value = e.target.value;
@@ -108,10 +117,27 @@ class Login extends Component {
                   Iniciar Sesión
                 </Button>
               </Grid.Row>
+              <Grid.Row style={{ margin: '20px' }}>
+                <Header 
+                  as='a' 
+                  onClick={this.handleRegistro} 
+                  color='blue'
+                  
+                  >
+                  Registrese
+                </Header>
+              </Grid.Row>
             </Modal.Content>
           </Grid.Column>
         </Grid>
+        <Register
+          open={this.state.modalRegistro}
+          onClose={this.handleCloseRegistro}
+          verificar={this.props.verificar}
+        />
       </Modal>
+       
+      
     );
   }
 }

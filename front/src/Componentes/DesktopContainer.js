@@ -63,7 +63,7 @@ class DesktopContainer extends Component {
   handleRegistro = () => {
     this.setState({ modalRegistro: true });
   }
-  handleCloseRegistro = () => this.setState({ modalRegistro: false })
+  
   handleLogin = () => {
     this.setState({ modalLogin: true });
   }
@@ -112,7 +112,7 @@ class DesktopContainer extends Component {
             >
               <Container>
                 <Menu.Item
-                  onClick={() => { window.location = window.location.origin; }}
+                  onClick={this.handleLogin}
                   as='a' active>
                   Inicio
                 </Menu.Item>

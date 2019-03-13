@@ -141,7 +141,9 @@ module.exports.obtenerArchxConcurso = (idconcurso,start,limit, success, error) =
 }
 
     module.exports.actualizarEstado = (idarchivos, voz_convertida, correo, idconcurso, success, error) => {
-        connection.query(`update archivos set estado = 2,voz_convertida="${voz_convertida}"
+        var nombreCompleto = voz_convertida.split('.');
+        console.log("--- "+nombreCompleto[0]);
+        connection.query(`update archivos set estado = 2,voz_convertida="${nombreCompleto[0]}.mp3"
      where idarchivos = ${idarchivos}`, function (err, result, fields) {
                 if (err) {
                     error(err);

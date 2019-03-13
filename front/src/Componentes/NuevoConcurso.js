@@ -126,13 +126,9 @@ class NuevoConcurso extends Component {
       this.setState({ [name]: value },()=>{
         if(name === 'fecha_inicio'){
           localStorage.setItem('datoFecha',value);
-          //this.setState({fecha_fin:value});
         }else if(name === 'fecha_fin'){
-          console.log("Value: ", value);
-          console.log("datoFecha: ", localStorage.getItem('datoFecha'));
           if(value<localStorage.getItem('datoFecha')){
             this.setState({fecha_fin:localStorage.getItem('datoFecha')});
-            console.log("entra al if ", value );
           }
         }
       });

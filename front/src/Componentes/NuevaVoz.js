@@ -20,7 +20,7 @@ class NuevaVoz extends Component {
       correo: '',
       audio: [],
       concursoId: '',
-      observaciones: ''
+      observaciones: '',
     };
 
   }
@@ -51,6 +51,7 @@ class NuevaVoz extends Component {
     formData.append('segundo_apellido', segundo_apellido);
     formData.append('correo', correo);
     formData.append('concurso', this.props.id_concurso);
+    formData.append('url', window.location.href);
     formData.append('observaciones', observaciones);
     axios.post(`${conf.baseURL}/locutor/creacion`, formData)
       .then(res => {

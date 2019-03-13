@@ -211,6 +211,7 @@ class DetalleConcurso extends Component {
                   observaciones={card.observaciones}
                   borrar={this.state.borrar}
                   mostarOriginal
+                  url={this.state.url_concurso}
                   file={`${conf.baseURL}/Voces/concurso_${card.concurso}/convertida/${card.voz_convertida}.mp3`}
 
                 >

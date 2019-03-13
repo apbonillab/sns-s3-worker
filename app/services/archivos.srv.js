@@ -20,7 +20,7 @@ AWS.config.update({
 const ses = new AWS.SES({ apiVersion: "2010-12-01" });
 
 
-module.exports.crearArchivo = (observaciones, idlocutor, concurso, file,correo, success, error) => {
+module.exports.crearArchivo = (observaciones, idlocutor, concurso,url, file,correo, success, error) => {
     var archivo = file;
     var nombreCompleto = archivo.name.split('.');
     var extension = nombreCompleto[nombreCompleto.length - 1];
@@ -46,7 +46,7 @@ module.exports.crearArchivo = (observaciones, idlocutor, concurso, file,correo, 
                 });
                 voz_convertida = concurso + "_" + idlocutor + "_" + idarchivo;
                 estado = 2;
-                envioCorreo(correo, concurso);
+                envioCorreo(correo, url);
             }else{
                 let userData = [[observaciones, idlocutor, estado, idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida]];
                 save(userData,error,success);
@@ -159,7 +159,7 @@ module.exports.obtenerArchxConcurso = (idconcurso,start,limit, success, error) =
     }
 
 
-    function envioCorreo(correo, url) {
+    function envioCorreo(correo, urlConcurso) {
         var params = {
             Destination: { 
             ToAddresses: [
@@ -172,7 +172,7 @@ module.exports.obtenerArchxConcurso = (idconcurso,start,limit, success, error) =
                   Html: {
                     Charset: "UTF-8",
                     Data:
-                      "<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en el concurso: http://3.18.70.221:8080/concurso/url/"+url+" ..lista para concursar!!'</p></body></html>"
+                      `<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en este <a href ="http://34.201.182.142:8080/concurso/url/${urlConcurso}"> Concurso</a> ..Está lista para concursar!!'</p></body></html>`
                   },
                   Text: {
                     Charset: "UTF-8",

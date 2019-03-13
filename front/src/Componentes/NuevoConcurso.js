@@ -111,9 +111,6 @@ class NuevoConcurso extends Component {
       if (name === 'nombre') {
         let val = `${localStorage.getItem('iduser')}con_${this.state.nombre}`.replace(/\s/g, '');
         this.setState({ url: val });
-      }else if(name === 'fecha_fin'){
-        var difDate=moment(localStorage.getItem('fechadDato'),"YYYY-MM-DD");
-        console.log("DifDate: ",difDate);  
       }
     });
   }

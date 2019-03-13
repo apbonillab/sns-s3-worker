@@ -1,0 +1,5 @@
+{
+    "JWT_SECRET":"access987654",
+    "ruta_gestion_archivos_raiz":".//Voces",
+    "ruta_gestion_archivos":".//Voces//concurso_"
+}

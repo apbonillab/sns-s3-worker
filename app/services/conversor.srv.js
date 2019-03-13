@@ -39,7 +39,7 @@ module.exports.convertirAudio = (success,error)=>{
                      console.log('Processing finished !');
                     success(archivo);                     
                  })
-                 .saveToFile(RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//convertida//'+archivo.voz_inicial+'_final.mp3');//path where you want to save your file
+                 .saveToFile(RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//convertida//'+archivo.voz_inicial+'.mp3');//path where you want to save your file
                        
             });
         }

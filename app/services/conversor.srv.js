@@ -16,7 +16,7 @@ module.exports.convertirAudio = (success,error)=>{
 
         }else{
             result.forEach(archivo => {
-                var nombreCompleto = archivo.name.split('.');
+                var nombreCompleto = archivo.voz_inicial.split('.');
                 var voz = nombreCompleto[0];
                 var proc = new ffmpeg({ source: RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//inicial//'+archivo.voz_inicial, nolog: true })
                 var isWin = process.platform === "win32";

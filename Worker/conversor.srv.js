@@ -28,6 +28,8 @@ module.exports.convertirAudio = (success,error)=>{
 
         }else{
             result.forEach(archivo => {
+                var nombreCompleto = archivo.voz_inicial.split('.');
+                var voz = nombreCompleto[0];
                 var proc = new ffmpeg({ source: RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//inicial//'+archivo.voz_inicial, nolog: true })
                 var isWin = process.platform === "win32";
                 var path = isWin?"C:\\ffmpeg\\bin\\ffmpeg.exe":'/usr/bin/ffmpeg';
@@ -51,7 +53,7 @@ module.exports.convertirAudio = (success,error)=>{
                      console.log('Processing finished !');
                     success(archivo);                     
                  })
-                 .saveToFile(RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//convertida//'+archivo.voz_inicial+'_final.mp3');//path where you want to save your file
+                 .saveToFile(RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//convertida//'+voz+'.mp3');//path where you want to save your file
                        
             });
         }
@@ -60,7 +62,9 @@ module.exports.convertirAudio = (success,error)=>{
 }
 
 module.exports.actualizarEstado = (idarchivos, voz_convertida, correo, idconcurso, success, error) => {
-    connection.query(`update archivos set estado = 2,voz_convertida="${voz_convertida}"
+    var nombreCompleto = voz_convertida.split('.');
+    console.log("--- "+nombreCompleto[0]);
+    connection.query(`update archivos set estado = 2,voz_convertida="${nombreCompleto[0]}.mp3"
  where idarchivos = ${idarchivos}`, function (err, result, fields) {
             if (err) {
                 error(err);
@@ -72,7 +76,7 @@ module.exports.actualizarEstado = (idarchivos, voz_convertida, correo, idconcurs
         });
 }
 
-function envioCorreo(correo, url) {
+function envioCorreo(correo, urlConcurso) {
     var params = {
         Destination: { 
         ToAddresses: [
@@ -85,7 +89,7 @@ function envioCorreo(correo, url) {
               Html: {
                 Charset: "UTF-8",
                 Data:
-                  "<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en el concurso: http://3.18.70.221:8080/concurso/url/"+url+" ..lista para concursar!!'</p></body></html>"
+                  `<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en este <a href ="http://3.18.70.221:8080/concurso/url/${urlConcurso}"> Concurso</a> ..Está lista para concursar!!'</p></body></html>`
               },
               Text: {
                 Charset: "UTF-8",

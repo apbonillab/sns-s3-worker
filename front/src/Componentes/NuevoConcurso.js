@@ -178,7 +178,7 @@ class NuevoConcurso extends Component {
                       withIcon={true}
                       buttonText='Choose images'
                       onChange={this.onDrop}
-                      imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                      imgExtension={['.jpg','jpeg','bmp','.gif','.png', '.gif']}
                       maxFileSize={5242880}
                     />
                   );

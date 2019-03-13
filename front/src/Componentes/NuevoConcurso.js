@@ -4,6 +4,7 @@ import { DateInput } from 'semantic-ui-calendar-react';
 import axios from 'axios';
 import ImageUploader from 'react-images-upload';
 import { toast } from 'react-toastify';
+import moment from 'moment';
 var conf = require('../conf');
 
 class NuevoConcurso extends Component {
@@ -20,6 +21,7 @@ class NuevoConcurso extends Component {
       recomendaciones: '',
       url: '',
       banner: [],
+      datoFecha:'',
     };
 
 
@@ -109,14 +111,31 @@ class NuevoConcurso extends Component {
       if (name === 'nombre') {
         let val = `${localStorage.getItem('iduser')}con_${this.state.nombre}`.replace(/\s/g, '');
         this.setState({ url: val });
+      }else if(name === 'fecha_fin'){
+        var difDate=moment(localStorage.getItem('fechadDato'),"YYYY-MM-DD");
+        console.log("DifDate: ",difDate);  
       }
     });
   }
 
-
+  setDatoFecha=(e)=>{
+    this.setState({datoFecha:e});
+  }
   handleChange = (event, { name, value }) => {
     if (this.state.hasOwnProperty(name)) {
-      this.setState({ [name]: value });
+      this.setState({ [name]: value },()=>{
+        if(name === 'fecha_inicio'){
+          localStorage.setItem('datoFecha',value);
+          //this.setState({fecha_fin:value});
+        }else if(name === 'fecha_fin'){
+          console.log("Value: ", value);
+          console.log("datoFecha: ", localStorage.getItem('datoFecha'));
+          if(value<localStorage.getItem('datoFecha')){
+            this.setState({fecha_fin:localStorage.getItem('datoFecha')});
+            console.log("entra al if ", value );
+          }
+        }
+      });
     }
   }
 
@@ -145,7 +164,6 @@ class NuevoConcurso extends Component {
             {/* <Header>{this.props.id}</Header> */}
             <Form>
               {campos.map(c => {
-
                 if (c.type === 'date') {
                   return (
                     <DateInput

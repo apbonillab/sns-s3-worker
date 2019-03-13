@@ -6,6 +6,7 @@ import {
   Header,
   Icon
 } from 'semantic-ui-react';
+
 var conf = require('../conf');
 
 const HomepageHeading = ({ mobile }) => (
@@ -33,10 +34,6 @@ const HomepageHeading = ({ mobile }) => (
         marginTop: mobile ? '0.5em' : '1.5em',
       }}
     />
-    <Button primary size='huge'>
-      Iniciar
-      <Icon name='right arrow' />
-    </Button>
   </Container>
 );
 

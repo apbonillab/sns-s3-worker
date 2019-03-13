@@ -4,6 +4,7 @@ import { DateInput } from 'semantic-ui-calendar-react';
 import axios from 'axios';
 import ImageUploader from 'react-images-upload';
 import { toast } from 'react-toastify';
+import moment from 'moment';
 var conf = require('../conf');
 
 class NuevoConcurso extends Component {
@@ -20,6 +21,7 @@ class NuevoConcurso extends Component {
       recomendaciones: '',
       url: '',
       banner: [],
+      datoFecha:'',
     };
 
 
@@ -113,10 +115,20 @@ class NuevoConcurso extends Component {
     });
   }
 
-
+  setDatoFecha=(e)=>{
+    this.setState({datoFecha:e});
+  }
   handleChange = (event, { name, value }) => {
     if (this.state.hasOwnProperty(name)) {
-      this.setState({ [name]: value });
+      this.setState({ [name]: value },()=>{
+        if(name === 'fecha_inicio'){
+          localStorage.setItem('datoFecha',value);
+        }else if(name === 'fecha_fin'){
+          if(value<localStorage.getItem('datoFecha')){
+            this.setState({fecha_fin:localStorage.getItem('datoFecha')});
+          }
+        }
+      });
     }
   }
 
@@ -145,7 +157,6 @@ class NuevoConcurso extends Component {
             {/* <Header>{this.props.id}</Header> */}
             <Form>
               {campos.map(c => {
-
                 if (c.type === 'date') {
                   return (
                     <DateInput

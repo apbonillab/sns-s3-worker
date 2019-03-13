@@ -20,7 +20,7 @@ AWS.config.update({
 const ses = new AWS.SES({ apiVersion: "2010-12-01" });
 
 
-module.exports.crearArchivo = (observaciones, idlocutor, concurso,url, file,correo, success, error) => {
+module.exports.crearArchivo = (observaciones, idlocutor, concurso,url,file,correo, success, error) => {
     var archivo = file;
     var nombreCompleto = archivo.name.split('.');
     var extension = nombreCompleto[nombreCompleto.length - 1];

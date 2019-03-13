@@ -58,6 +58,7 @@ routr.post('/creacion-pruebas',(req, res) => {
                     req.body.observaciones,
                     locutor,
                     req.body.concurso,
+                    req.body.url,
                     req.files.audio,
                     req.body.correo,
                     function(archivo){

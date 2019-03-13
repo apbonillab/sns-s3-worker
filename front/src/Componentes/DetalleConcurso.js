@@ -310,7 +310,7 @@ class DetalleConcurso extends Component {
                     voz_inicial={card.voz_inicial}
                     observaciones={card.observaciones}
                     borrar={this.state.borrar}
-                    file={`${conf.baseURL}/Voces/concurso_${card.concurso}/convertida/${card.voz_convertida}.mp3`}
+                    file={`${conf.baseURL}/Voces/concurso_${card.concurso}/convertida/${card.voz_convertida}`}
                   >
                   </TarjetaVoz>
                 );

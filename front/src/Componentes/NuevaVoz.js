@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, Modal, Container } from 'semantic-ui-react';
+import { Button, Form, Modal, Container, Progress } from 'semantic-ui-react';
 import axios from 'axios';
 import ImageUploader from 'react-images-upload';
 import { toast } from 'react-toastify';
@@ -21,6 +21,7 @@ class NuevaVoz extends Component {
       audio: [],
       concursoId: '',
       observaciones: '',
+      progress: 0
     };
 
   }
@@ -53,7 +54,15 @@ class NuevaVoz extends Component {
     formData.append('concurso', this.props.id_concurso);
     formData.append('url', window.location.href);
     formData.append('observaciones', observaciones);
-    axios.post(`${conf.baseURL}/locutor/creacion`, formData)
+    const config = {
+      onUploadProgress: progressEvent => {
+        console.log(progressEvent.loaded);
+        const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
+        let percent = Math.round((progressEvent.loaded * 100) / totalLength);
+        this.setState({ progress: percent });
+      }
+    };
+    axios.post(`${conf.baseURL}/locutor/creacion`, formData, config)
       .then(res => {
         let exito = res.data.exito;
         if (!exito) {
@@ -175,6 +184,12 @@ class NuevaVoz extends Component {
                   }
                 })}
               </Form>
+              {this.state.progress !== 0 ?
+                <Progress percent={this.state.progress}
+                  progress
+                  active
+                  color='teal'
+                >Subiendo Voz... Espera</Progress> : <div></div>}
             </Container>
           </Modal.Content>
           <Modal.Actions>

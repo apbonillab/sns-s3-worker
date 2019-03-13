@@ -16,6 +16,8 @@ module.exports.convertirAudio = (success,error)=>{
 
         }else{
             result.forEach(archivo => {
+                var nombreCompleto = archivo.name.split('.');
+                var voz = nombreCompleto[0];
                 var proc = new ffmpeg({ source: RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//inicial//'+archivo.voz_inicial, nolog: true })
                 var isWin = process.platform === "win32";
                 var path = isWin?"C:\\ffmpeg\\bin\\ffmpeg.exe":'/usr/bin/ffmpeg';
@@ -39,7 +41,7 @@ module.exports.convertirAudio = (success,error)=>{
                      console.log('Processing finished !');
                     success(archivo);                     
                  })
-                 .saveToFile(RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//convertida//'+archivo.voz_inicial+'.mp3');//path where you want to save your file
+                 .saveToFile(RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//convertida//'+voz+'.mp3');//path where you want to save your file
                        
             });
         }

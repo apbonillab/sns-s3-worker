@@ -88,7 +88,7 @@ app.get('/obtener/concurso/url/:url/:start/:limit', (req, res) => {
 
 var cron = require('node-cron');
 
-cron.schedule('* * * * *', () => {
+var task = cron.schedule('* * * * *', () => {
   console.log('corriendo cron');
   //Esto es solo para pruebas de envio email
   /*archivosServices.prueba(function(){
@@ -109,6 +109,18 @@ cron.schedule('* * * * *', () => {
         console.log('error '+error);
 
   })
-});
+},{
+    scheduled: false
+  });
+
+app.get('/stop', (req,res) => {
+    task.stop();
+    res.send('cron detenido');
+})
+
+app.get('/start', (req,res) => {
+    task.start();
+    res.send('cron detenido');
+})
 
 module.exports = app;

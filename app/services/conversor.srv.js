@@ -5,7 +5,16 @@ const connection = require('../../db');
 var conf = require('../../config.js');
 const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos')
 let date = require('date-and-time');
+const winston = require('winston');
 
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.File({ filename: 'info.log', level: 'info' }),
+    new winston.transports.File({ filename: 'combined.log' })
+  ]
+});
 module.exports.convertirAudio = (success,error)=>{
     connection.query(`select a.*,l.*,c.* from archivos a
                      inner join locutor as l on l.idlocutor = a.usuario
@@ -23,7 +32,7 @@ module.exports.convertirAudio = (success,error)=>{
                 var path = isWin?"C:\\ffmpeg\\bin\\ffmpeg.exe":'/usr/bin/ffmpeg';
                 let start= new Date();
                 date.format(start,'s');
-                console.log("Start: ",start);
+                logger.info("concurso: "+archivo.concurso+" ,start: "+start);
                 proc.setFfmpegPath(path)
                 .toFormat('mp3')
                  .on('error', (err) => {
@@ -35,10 +44,9 @@ module.exports.convertirAudio = (success,error)=>{
                  .on('end', () => {
                      let finish= new Date();
                      date.format(finish,'s');
-                     console.log("finish: ",finish);
+                     logger.info("concurso: "+archivo.concurso+" ,finish: "+finish);
                      let time=date.subtract(finish,start).toSeconds();
-                     console.log("Tiempo para conversion: ", time, " s");
-                     console.log('Processing finished !');
+                     logger.info("concurso: "+archivo.concurso+" ,Tiempo: "+time);
                     success(archivo);                     
                  })
                  .saveToFile(RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//convertida//'+voz+'.mp3');//path where you want to save your file

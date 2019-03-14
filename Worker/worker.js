@@ -37,7 +37,7 @@ const convertir = () => {
 }
 
 
-var task = cron.schedule('* * * * *', convertir, {scheduled:false});
+var task = cron.schedule('* * * * *', convertir, {scheduled:true});
 
 
 var app = express();
@@ -57,6 +57,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.get('/start', (req,res) => {
+  convertir();
   task.start();
   res.send('Cron iniciado')
 })

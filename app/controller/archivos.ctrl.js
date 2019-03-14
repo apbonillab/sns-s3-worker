@@ -120,7 +120,7 @@ app.get('/stop', (req,res) => {
 
 app.get('/start', (req,res) => {
     task.start();
-    res.send('cron detenido');
+    res.send('cron iniciado');
 })
 
 module.exports = app;

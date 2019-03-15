@@ -32,7 +32,7 @@ module.exports.convertirAudio = (success,error)=>{
                 var path = isWin?"C:\\ffmpeg\\bin\\ffmpeg.exe":'/usr/bin/ffmpeg';
                 let start= new Date();
                 date.format(start,'s');
-                logger.info("concurso: "+archivo.concurso+" ,start: "+start);
+                //logger.info("concurso: "+archivo.concurso+" ,start: "+start);
                 proc.setFfmpegPath(path)
                 .toFormat('mp3')
                  .on('error', (err) => {

@@ -44,9 +44,9 @@ module.exports.convertirAudio = (success,error)=>{
                  .on('end', () => {
                      let finish= new Date();
                      date.format(finish,'s');
-                     logger.info("concurso: "+archivo.concurso+" ,finish: "+finish);
+                     //logger.info("concurso: "+voz+" ,finish: "+finish);
                      let time=date.subtract(finish,start).toSeconds();
-                     logger.info("concurso: "+archivo.concurso+" ,Tiempo: "+time);
+                     logger.info("concurso: "+voz+" ,Tiempo conversion:  "+time + "s \n");
                     success(archivo);                     
                  })
                  .saveToFile(RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//convertida//'+voz+'.mp3');//path where you want to save your file

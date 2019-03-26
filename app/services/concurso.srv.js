@@ -7,11 +7,51 @@ var fs = require('fs');
 var conf = require('../../config.js');
 const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos')
 const RUTA_GESTOR_ARCHIVOS_RAIZ = conf.get('ruta_gestion_archivos_raiz')
+const uuidv4 = require('uuid/v4');
+var AWS = require('aws-sdk');
+// Set the region 
+AWS.config.update({
+    region: 'us-east-1',
+    accessKeyId:process.env.ACCES_KEY_ID,
+    secretAccessKey:process.env.SECRET_ACCESS_KEY
+});
+var ddb = new AWS.DynamoDB({apiVersion: '2018-03-24'});
 
 module.exports.crear = (nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner,idcuentaadmin,success,error)=>{
+    console.log("---->")
     let nameBanner
     banner===null?nameBanner='no-image':nameBanner=banner.name;
     let userData = [[nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,nameBanner]];
+    
+   
+var params = {
+    TableName: 'concursos',
+    Item: {
+        idconcursos:{S:uuidv4()},
+        fecha_inicio : {S: fecha_inicio},
+        fecha_fin : {S: fecha_fin},
+        valor : {S: valor},
+        guion : {S: guion},
+        recomendaciones : {S: recomendaciones},
+        url : {S: url},
+        banner : {S: nameBanner},
+        nombre : {S: nombre},
+  
+      }
+  };
+
+  ddb.putItem(params,function(err,data){
+      console.log("entro");
+    if(err){
+        console.log(err)
+        error(err);
+    }else{
+        alert("se creo "+JSON.stringify(data));
+    }
+  })
+
+
+/*
     connection.query(`insert into concursos (nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner) values ? `,
     [userData],function(err,result,fields){
         if(err){
@@ -46,7 +86,7 @@ module.exports.crear = (nombre,fecha_inicio,fecha_fin,valor,guion,recomendacione
          
             
         })
-    })
+    })*/
 }
 
 

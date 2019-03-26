@@ -1,5 +1,7 @@
 'use strict';
 
+
+
 const mysql = require('mysql');
 var conf = require('./config.js');
 
@@ -31,4 +33,4 @@ function connectDB(){
 }
 
 
-  module.exports = connectDB();
+ module.exports = connectDB();

@@ -61,6 +61,10 @@ class DetalleConcurso extends Component {
       }).catch(err => console.log(err));
   }
 
+  updateUrlConcurso = (nuevaUrl) =>{
+    this.setState({url_concurso:nuevaUrl});
+  }
+
   getVoces = () => {
     Axios.get(`${conf.baseURL}/archivo/obtener/concurso/${this.props.id}/${(this.state.activePage-1)*50}/50`)
       .then(res => {
@@ -134,6 +138,7 @@ class DetalleConcurso extends Component {
     if (this.props.admin) {
       return (
         <Container>
+          {console.log(this.state)}
           <h1>{this.state.info.nombre}</h1>
           {this.state.info.url?
             <Input
@@ -222,8 +227,9 @@ class DetalleConcurso extends Component {
           <EditarConcurso
             open={this.state.openEditarConcurso}
             onClose={this.onCloseEditarConcurso}
-            urlConcurso={this.props.url}
+            urlConcurso={this.state.url_concurso}
             infoConcurso={this.state.info}
+            updateUrl={this.updateUrlConcurso}
             refrescar={this.getInfoConcurso}
           />
           <Confirm

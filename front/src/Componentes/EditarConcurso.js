@@ -117,6 +117,7 @@ class EditarConcurso extends Component {
               pauseOnHover: true,
               draggable: true
             });
+          this.props.updateUrl(url);
           this.props.onClose();
           this.props.refrescar();
           console.log(exito);

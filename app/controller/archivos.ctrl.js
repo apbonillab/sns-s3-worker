@@ -98,8 +98,9 @@ var task = cron.schedule('* * * * *', () => {
   })*/
 
   convertirServices.convertirAudio(function (success) {
+      console.log("ok conversion "+ success);
             archivosServices.actualizarEstado(success.idarchivos,success.voz_inicial,success.correo,
-            success.url,
+            success.ruta,success.idconcurso,
             function(archivo){
                 console.log("OK envio correo y actualizacion estado de archivo "+success.idarchivos);
             },function(error){

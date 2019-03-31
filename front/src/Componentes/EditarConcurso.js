@@ -25,26 +25,33 @@ class EditarConcurso extends Component {
   }
 
   getConcursoData = () => {
+    debugger;
     axios.get(`${conf.baseURL}/concurso/obtener/url/${this.props.urlConcurso}`)
       .then(res => {
-        console.log('Concurso', res.data);
-        this.setState({
-          idconcursos: res.data[0].idconcursos,
-          nombre: res.data[0].nombre,
-          fecha_inicio: res.data[0].fecha_inicio,
-          fecha_fin: res.data[0].fecha_fin,
-          valor: res.data[0].valor,
-          guion: res.data[0].guion,
-          recomendaciones: res.data[0].recomendaciones,
-          url: res.data[0].url,
-          banner: res.data[0].banner,
+        console.log('Concurso', res.data.Items);
+        let datos = res.data.Items[0];
+        console.log(datos);
+        this.setState({ info: datos });
+        /*this.setState({
+          idconcursos: res.data.Items[0].idconcursos,
+          nombre: res.data.Items[0].nombre,
+          fecha_inicio: res.data.Items[0].fecha_inicio,
+          fecha_fin: res.data.Items[0].fecha_fin,
+          valor: res.data.Items[0].valor,
+          guion: res.data.Items[0].guion,
+          recomendaciones: res.data.Items[0].recomendaciones,
+          url: res.data.Items[0].url,
+          banner: res.data.Items[0].banner,
           info: {},
-        });
+        });*/
       }).catch(err => console.log(err));
 
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log("---1--- "+JSON.stringify(nextProps.infoConcurso))
+    console.log("---2--- "+JSON.stringify(this.props.infoConcurso))
+    console.log("---3--- "+JSON.stringify(this.state))
     if (this.props.infoConcurso !== nextProps.infoConcurso) {
       this.setState({
         nombre: nextProps.infoConcurso.nombre,
@@ -67,6 +74,7 @@ class EditarConcurso extends Component {
   }
 
   handleSave = () => {
+    debugger;
     const {
       idconcurso,
       nombre,
@@ -80,6 +88,7 @@ class EditarConcurso extends Component {
     } = this.state;
     let token = localStorage.getItem('JWToken');
     localStorage.setItem('url', this.state.url);
+    let idadmin = localStorage.getItem('iduser');
     axios.post(`${conf.baseURL}/concurso/editar`, {
       idconcurso,
       nombre,
@@ -89,7 +98,7 @@ class EditarConcurso extends Component {
       guion,
       recomendaciones,
       url,
-      banner,
+      banner
     }, { headers: { 'Authorization': `Bearer ${token}` }, })
 
       .then(res => {

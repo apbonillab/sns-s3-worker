@@ -10,7 +10,7 @@ class DetalleConcurso extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
+   this.state = {
       url_concurso: this.props.url,
       listaVoces: [],
       borrarVoz: false,
@@ -53,9 +53,11 @@ class DetalleConcurso extends Component {
   }
 
   getInfoConcurso = () => {
-    Axios.get(`${conf.baseURL}/concurso/obtener/url/${this.state.url_concurso}`)
+    debugger;
+    localStorage.getItem("url");
+    Axios.get(`${conf.baseURL}/concurso/obtener/url/${localStorage.getItem("url")}`)
       .then(res => {
-        let datos = res.data[0];
+        let datos = res.data.Items[0];
         console.log(datos);
         this.setState({ info: datos });
       }).catch(err => console.log(err));
@@ -64,17 +66,17 @@ class DetalleConcurso extends Component {
   getVoces = () => {
     Axios.get(`${conf.baseURL}/archivo/obtener/concurso/${this.props.id}/${(this.state.activePage-1)*50}/50`)
       .then(res => {
-        console.log(res.data);
-        this.setState({ listaVoces: res.data });
+        console.log(res.data.Items);
+        this.setState({ listaVoces: res.data.Items });
       }).catch(err => console.log(err));
   }
 
   getVocesxUrl = () => {
     Axios.get(`${conf.baseURL}/archivo/obtener/concurso/url/${this.props.url}/${(this.state.activePage-1)*20}/20`)
       .then(res => {
-        console.log('voces', res.data);
-        this.setState({ listaVoces: res.data });
-        this.setState({ idConcurso: res.data[0].concurso });
+        console.log('voces', res.data.Items);
+        this.setState({ listaVoces: res.data.Items });
+        this.setState({ idConcurso: res.data.Items[0].idconcurso });
       }).catch(err => console.log(err));
   }
 
@@ -105,7 +107,7 @@ class DetalleConcurso extends Component {
     console.log('Concurso a borrar props: ', this.props.id);
     Axios.delete(`${conf.baseURL}/concurso/eliminar/${this.props.id}`, { headers: { 'Authorization': `Bearer ${token}` }, })
       .then(res => {
-        console.log(res.data);
+        console.log(res);
       }).catch(err => console.log(err));
     this.handleCancel();
     window.location = window.location.origin;

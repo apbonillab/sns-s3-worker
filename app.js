@@ -42,9 +42,9 @@ app.use('/api/concurso', [concursosController]);
 app.use('/api/locutor', [locutorController]);
 app.use('/api/archivo', [archivosController]);
 app.use(express.static(path.join(__dirname, 'front/build')));
-app.get('/*', function(req, res) {
+/*app.get('/*', function(req, res) {
     console.log('estatico')
     res.sendFile(path.join(__dirname, 'front/build', 'index.html'));
-  });
+  });*/
 //app.use('/Voces',express.directory(path.join(__dirname, './Voces')));
 module.exports = app;

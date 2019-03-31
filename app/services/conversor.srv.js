@@ -1,12 +1,16 @@
 
 var ffmpeg = require('fluent-ffmpeg');
-const mysql = require('mysql');
-const connection = require('../../db');
 var conf = require('../../config.js');
 const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos')
 let date = require('date-and-time');
 const winston = require('winston');
-
+var AWS = require('aws-sdk');
+AWS.config.update({
+    region: 'us-east-1',
+    accessKeyId:process.env.ACCES_KEY_ID,
+    secretAccessKey:process.env.SECRET_ACCESS_KEY
+});
+var ddb = new AWS.DynamoDB.DocumentClient({apiVersion: '2018-03-24'});
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
@@ -16,18 +20,20 @@ const logger = winston.createLogger({
   ]
 });
 module.exports.convertirAudio = (success,error)=>{
-    connection.query(`select a.*,l.*,c.* from archivos a
-                     inner join locutor as l on l.idlocutor = a.usuario
-                     inner join concursos as c on c.idconcursos = a.concurso
-                     where estado = 1`,function(err,result,fields){
+    var params = {
+        TableName: 'archivos',
+        FilterExpression : "estado = :estado",
+        ExpressionAttributeValues : {":estado": "Sin convertir"} 
+      };
+      ddb.scan(params,function(err,result){
         if(err){
             error(err);
-
         }else{
-            result.forEach(archivo => {
+            
+            result.Items.forEach(archivo => {
                 var nombreCompleto = archivo.voz_inicial.split('.');
                 var voz = nombreCompleto[0];
-                var proc = new ffmpeg({ source: RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//inicial//'+archivo.voz_inicial, nolog: true })
+                var proc = new ffmpeg({ source: RUTA_GESTOR_ARCHIVOS+archivo.idconcurso+'//inicial//'+archivo.voz_inicial, nolog: true })
                 var isWin = process.platform === "win32";
                 var path = isWin?"C:\\ffmpeg\\bin\\ffmpeg.exe":'/usr/bin/ffmpeg';
                 let start= new Date();
@@ -39,7 +45,7 @@ module.exports.convertirAudio = (success,error)=>{
                      return error(err.message);
                  })
                  .on('progress', (progress) => {
-                     console.log('Processing: ' + progress.targetSize + ' KB converted' + archivo.concurso);
+                     console.log('Processing: ' + progress.targetSize + ' KB converted' + archivo.idconcurso);
                     })
                  .on('end', () => {
                      let finish= new Date();
@@ -49,7 +55,7 @@ module.exports.convertirAudio = (success,error)=>{
                      logger.info("concurso: "+voz+" ,Tiempo conversion:  "+time + "s \n");
                     success(archivo);                     
                  })
-                 .saveToFile(RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//convertida//'+voz+'.mp3');//path where you want to save your file
+                 .saveToFile(RUTA_GESTOR_ARCHIVOS+archivo.idconcurso+'//convertida//'+voz+'.mp3');//path where you want to save your file
                        
             });
         }

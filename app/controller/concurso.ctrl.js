@@ -12,7 +12,6 @@ routr.post('/creacion',ensureToken,(req, res) => {
     let banner
     if (!req.files) {
         banner = null;
-        //return res.status(400).send('No files were uploaded.');
     }
     else{
         banner=req.files.banner
@@ -38,28 +37,6 @@ routr.post('/creacion',ensureToken,(req, res) => {
 })
 
 
-routr.get('/obtener/todos', (req, res) => {
-    concursoSrv.mostrarTodos(
-        function (user) {
-            res.status(200).send(user)
-        },function(error){
-            res.status(500).send({'message':'Error al obtener todos los concursos'})
-        }
-    )
-
-})
-
-routr.get('/obtener/todosvigentes', (req, res) => {
-    concursoSrv.mostrarTodosVigentes(
-        function (user) {
-            res.status(200).send(user)
-        },function(error){
-            res.status(500).send({'message':'Error al obtener todos los concursos'})
-        }
-    )
-
-})
-
 
 routr.get('/obtener/admin/:idadmin', (req, res) => {
     concursoSrv.mostrarConcursosXUsuario(
@@ -79,6 +56,7 @@ routr.get('/obtener/url/:url',(req, res) => {
         function (concurso) {
             res.status(200).send(concurso)
         },function(error){
+            console.log(error)
             res.status(500).send({'message':'Error al obtener concurso por url'});
         }
     )
@@ -86,9 +64,10 @@ routr.get('/obtener/url/:url',(req, res) => {
 })
 
 
-routr.delete('/eliminar/:id',ensureToken, (req, res) => {
+routr.delete('/eliminar/:id/:idadmin',ensureToken, (req, res) => {
     concursoSrv.eliminarArchivosXconcurso(
         req.params.id,
+        req.params.idadmin,
         function (concurso) {
             res.status(200).send({'message':'Se elimino exitosamente el concurso'})
         },function(error){
@@ -102,16 +81,18 @@ routr.post('/editar',ensureToken,(req, res) => {
     concursoSrv.editar(
         req.body.idconcurso,
         req.body.nombre,
-        new Date(req.body.fecha_inicio),
-        new Date(req.body.fecha_fin),
+        new Date(req.body.fecha_inicio).toDateString(),
+        new Date(req.body.fecha_fin).toDateString(),
         req.body.valor,
         req.body.guion,
         req.body.recomendaciones,
         req.body.url,
         req.body.banner,
+        "1ecf4a8b-2c3a-4ead-92ca-007d980bff7d",
         function (concurso) {
             res.status(200).send({'exito':true,'message':'Concurso actualizado exitosamente'})
         },function(error){
+            console.log(error)
             res.status(500).send({'exito':false,'message':'Error al actualizar concurso'});
             
         }
@@ -137,20 +118,6 @@ function ensureToken(req,res,next){
     }
     
 }
-
-routr.put('/seleccion_ganador',ensureToken, (req, res) => {
-    concursoSrv.seleccionganador(
-        req.body.idarchivo,
-        req.body.idconcurso,
-        function (user) {
-            res.status(200).send({'message':'Actualizacion correcta'})
-        },function(error){
-            res.status(500).send({'message':'Error en la actualizacion: '+error.sqlMessage});
-            
-        }
-    )
-
-})
 
 
 module.exports = routr;

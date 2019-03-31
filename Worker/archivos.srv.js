@@ -1,9 +1,6 @@
 'use strict'
-const mysql = require('mysql');
 const connection = require('../../db');
 const moment = require('moment');
-var nodemailer = require('nodemailer');
-var concursoSrv = require('../services/concurso.srv.js');
 var conf = require('../../config.js');
 const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos')
 const uuidv4 = require('uuid/v4');

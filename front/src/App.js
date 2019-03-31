@@ -39,6 +39,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    debugger;
     if (this.state.admin) {
       this.getConcursos();
     }
@@ -67,6 +68,7 @@ class App extends Component {
     this.setState({
       concursoActual: idConcurso,
     });
+    debugger;
     this.state.listaConcursos.map(con => {
       if (con.idconcurso === idConcurso) {
         this.setState({
@@ -81,8 +83,9 @@ class App extends Component {
     let token = localStorage.getItem('JWToken');
     Axios.get(`${conf.baseURL}/concurso/obtener/admin/${localStorage.getItem('iduser')}`, { headers: { 'Authorization': `Bearer ${token}` }, })
       .then(res => {
-        console.log(res.data);
-        this.setState({ listaConcursos: res.data });
+        debugger;
+        console.log(res.data.Items);
+        this.setState({ listaConcursos: res.data.Items });
       }).catch(err => console.log(err));
   }
 

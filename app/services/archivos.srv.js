@@ -1,9 +1,5 @@
 'use strict'
-const mysql = require('mysql');
-const connection = require('../../db');
 const moment = require('moment');
-var nodemailer = require('nodemailer');
-var concursoSrv = require('../services/concurso.srv.js');
 var conf = require('../../config.js');
 const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos')
 const uuidv4 = require('uuid/v4');
@@ -16,11 +12,11 @@ AWS.config.update({
     accessKeyId:process.env.ACCES_KEY_ID,
     secretAccessKey:process.env.SECRET_ACCESS_KEY
 });
-
+var ddb = new AWS.DynamoDB.DocumentClient({apiVersion: '2018-03-24'});
 const ses = new AWS.SES({ apiVersion: "2010-12-01" });
 
 
-module.exports.crearArchivo = (observaciones, idlocutor, concurso,url,file,correo, success, error) => {
+module.exports.crearArchivo = (observaciones, nombre,segundonombre,apellido,segundoapellido, concurso,url,file,correo, success, error) => {
     var archivo = file;
     var nombreCompleto = archivo.name.split('.');
     var extension = nombreCompleto[nombreCompleto.length - 1];
@@ -33,23 +29,21 @@ module.exports.crearArchivo = (observaciones, idlocutor, concurso,url,file,corre
             let d = new Date();
             let dateAudit = moment(d).format("YYYY-MM-DD HH:mm:ss");
             let voz_convertida = null;
-            let estado = 1;
+            let estado = "Sin convertir";
             if (extension.toLowerCase() === 'mp3') {
                 archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/convertida/'+ idarchivo + "." + extension, function (err) {
                     if (err) {
                         console.log(err)
                         error(err)
                     }else{
-                        let userData = [[observaciones, idlocutor, estado, idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida]];
-                        save(userData,error,success);
+                        save(observaciones, nombre,segundonombre,apellido,segundoapellido, estado, idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida,correo,url,error,success);
                     }
                 });
-                voz_convertida = concurso + "_" + idlocutor + "_" + idarchivo;
-                estado = 2;
+                voz_convertida = concurso  + "_" + idarchivo+".mp3";
+                estado = "Convertida";
                 envioCorreo(correo, url);
             }else{
-                let userData = [[observaciones, idlocutor, estado, idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida]];
-                save(userData,error,success);
+               save(observaciones, nombre,segundonombre,apellido,segundoapellido, estado, idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida,correo,url,error,success);
             }
             
            
@@ -58,18 +52,36 @@ module.exports.crearArchivo = (observaciones, idlocutor, concurso,url,file,corre
     
 }
 
-function save( userData,error,success ){
-    connection.query(`insert into archivos (observaciones,usuario,estado,voz_inicial,concurso,fecha,ext_voz_inicial,voz_convertida) values ? `,
-        [userData], function (err, result, fields) {
-            if (err) {
-                console.log(err)
-                error(err);
-            } else {
-                console.log(result)
-                success(result);
-            }
+function save( observaciones, nombre,segundonombre,apellido,segundoapellido, estado, voz_inicial, concurso, dateAudit, extension, voz_convertida,correo,url,error,success ){
+    let idarchivo = uuidv4();
+    var params = {
+        TableName: 'archivos',
+        Item: {
+            idarchivos: idarchivo,
+            observaciones: observaciones,
+            nombre: nombre,
+            apellido: apellido,
+            segundonombre:segundonombre?segundonombre:null,
+            segundoapellido:segundoapellido?segundoapellido:null,
+            estado:estado,
+            voz_inicial: voz_inicial,
+            idconcurso: concurso,
+            fecha: dateAudit,
+            ext_voz_inicial:extension,
+            voz_convertida: voz_convertida,
+            correo,correo,
+            ruta: url
+          }
+      };
 
-        })
+      ddb.put(params,function(err,result){
+      if(err){
+          console.log(err)
+          error(err);
+      }else{
+        success(result);
+      }
+    });
 }
 
 module.exports.obtenerArchxConcursoURL = (urlConcurso,start,limit, success, error) => {
@@ -79,32 +91,22 @@ module.exports.obtenerArchxConcursoURL = (urlConcurso,start,limit, success, erro
         startNum = 0;
         LimitNum = 20;
     }
-    connection.query(`Select a.idarchivos 'idarchivos',
-    a.observaciones 'observaciones', l.correo 'correo',
-    a.estado 'estado',
-    e.nombre 'estado_nombre',
-    l.nombre 'nombre',
-    l.segundo_nombre 'segundo_nombre' ,
-    l.apellido 'apellido',
-    l.segundo_apellido 'segundo_apellido',
-    l.correo 'correo',
-    a.voz_inicial 'voz_inicial',
-    a.voz_convertida 'voz_convertida',
-    a.concurso 'concurso',
-    a.ext_voz_inicial 'extension',
-    a.fecha 'fecha'
-    from archivos as a
-    inner join concursos as c on c.idconcursos=a.concurso
-    inner join locutor as l on l.idlocutor = a.usuario
-    inner join estado as e on e.idestado = a.estado
-    where c.url = '${urlConcurso}' order by  a.fecha DESC limit ${LimitNum} OFFSET ${startNum}`, function (err, result, fields) {
-            if (err) {
-                error(err);
-            } else {
-                success(result);
-            }
 
-        })
+    var params = {
+        TableName: 'archivos',
+        FilterExpression : "ruta = :url",
+        ExpressionAttributeValues : {":url": urlConcurso} 
+      };
+      ddb.scan(params,function(err,result){
+        if(err){
+            error(err);
+        }else{
+            console.log("-- archivosXurl "+JSON.stringify(result));
+            success(result);
+        }
+    
+    })
+
 }
 
 
@@ -115,45 +117,104 @@ module.exports.obtenerArchxConcurso = (idconcurso,start,limit, success, error) =
         startNum = 0;
         LimitNum = 50;
     }
-    connection.query(`Select a.idarchivos 'idarchivos',
-    a.observaciones 'observaciones', l.correo 'correo',
-    a.estado 'estado',
-    e.nombre 'estado_nombre',
-    l.nombre 'nombre',
-    l.segundo_nombre 'segundo_nombre' ,
-    l.apellido 'apellido',
-    l.segundo_apellido 'segundo_apellido',
-    a.voz_inicial 'voz_inicial',
-    a.voz_convertida 'voz_convertida',
-    a.concurso 'concurso',
-    a.ext_voz_inicial 'extension',
-    a.fecha 'fecha'
-    from archivos as a
-    inner join locutor as l on l.idlocutor = a.usuario
-    inner join estado as e on e.idestado = a.estado
-    where a.concurso = ${idconcurso} order by  a.fecha DESC limit ${LimitNum} OFFSET ${startNum}`, function (err, result, fields) {
-            if (err) {
-                error(err);
-            } else {
-                success(result);
-            }
-        })
+
+    var params = {
+        TableName: 'archivos',
+        FilterExpression : "idconcurso = :idconcurso",
+        ExpressionAttributeValues : {":idconcurso": idconcurso} 
+      };
+      ddb.scan(params,function(err,result){
+        if(err){
+            error(err);
+        }else{
+            console.log("-- archivosXcONCURSO"+JSON.stringify(result));
+            result.url = result.ruta;
+            console.log("-- archivosXcONCURSO_____"+JSON.stringify(result));
+            success(result);
+        }
+    
+    })
 }
 
-    module.exports.actualizarEstado = (idarchivos, voz_convertida, correo, idconcurso, success, error) => {
+    module.exports.actualizarEstado = (idarchivos, voz_convertida, correo, ruta,idconcurso, success, error) => {
         var nombreCompleto = voz_convertida.split('.');
-        console.log("--- "+nombreCompleto[0]);
-        connection.query(`update archivos set estado = 2,voz_convertida="${nombreCompleto[0]}.mp3"
-     where idarchivos = ${idarchivos}`, function (err, result, fields) {
-                if (err) {
-                    error(err);
-                } else {
-                    envioCorreo(correo, idconcurso);
+        var params = {
+            TableName: 'archivos',
+            Key:{
+                idarchivos: idarchivos,
+                idconcurso: idconcurso
+            },
+            UpdateExpression : "set estado = :estado, voz_convertida = :convertida",
+            ExpressionAttributeValues : {
+                ":estado": "Convertida",
+                ":convertida":nombreCompleto[0]+'.mp3'
+            },
+            "ReturnValues" : "ALL_NEW"
+          };
+
+          ddb.update(params,function(err,result){
+            if(err){
+                console.log(err)
+                error(err);
+            }else{
+                console.log("--  ACTUALIZAR ESTADO:"+JSON.stringify(result));
+                envioCorreo(correo, ruta);
+                success("ok");
+            }
+        
+        })
+    }
+
+
+    module.exports.actualizarRuta = (ruta,idconcurso,success, error) => {
+        var params = {
+            TableName: 'archivos',
+            FilterExpression : "idconcurso = :idconcurso",
+            ExpressionAttributeValues : {":idconcurso": idconcurso} 
+          };
+        
+          ddb.scan(params,function(err,result){
+            if(err){
+                console.log(err)
+                error(err);
+            }else{
+                console.log("trajo datos --- "+JSON.stringify(result));
+                if(result.Items.length>0){
+                    for(var i=0;i<result.Items.length;i++){
+               
+                        var params = {
+                            TableName: 'archivos',
+                            Key:{
+                                idarchivos: result.Items[i].idarchivos,
+                                idconcurso: idconcurso
+                            },
+                            UpdateExpression : "set ruta = :ruta",
+                            ExpressionAttributeValues : {
+                                ":ruta": ruta
+                            },
+                            "ReturnValues" : "ALL_NEW"
+                          };
+                
+                          ddb.update(params,function(err,result){
+                            if(err){
+                                console.log(err)
+                                error(err);
+                            }else{
+                                console.log("--  ACTUALIZAR ESTADO:"+JSON.stringify(result));
+                                success("ok");
+                            }
+                        
+                        })
+                    }  
+                }else{
                     success("ok");
                 }
+                       
+            }
+        
+        })
+   }
 
-            });
-    }
 
     module.exports.prueba=(success,error)=>{
         envioCorreo("correo", "idconcurso");

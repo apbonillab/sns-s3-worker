@@ -103,7 +103,7 @@ class CardVoice extends Component {
                 download
                 onClick={() => {
                   Axios({
-                    url: `${conf.baseURL}/Voces/concurso_${this.props.idconcurso}/inicial/${this.props.voz_inicial}.${this.props.ext}`,
+                    url: `${conf.baseURL}/Voces/concurso_${this.props.idconcurso}/inicial/${this.props.voz_inicial}`,
                     method: 'GET',
                     responseType: 'blob', // important
                   }).then((response) => {

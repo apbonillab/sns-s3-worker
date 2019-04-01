@@ -39,12 +39,10 @@ class App extends Component {
   }
 
   componentDidMount() {
-    debugger;
     if (this.state.admin) {
       this.getConcursos();
     }
     let url_concurso = window.location.pathname.match(/\/concurso\/url\/([^/\n]*)/);
-    console.log("url concurso App.js: ", url_concurso);
     if (url_concurso !== null) {
       this.setState({ urlConcursoActual: url_concurso[1] });
     }
@@ -68,7 +66,6 @@ class App extends Component {
     this.setState({
       concursoActual: idConcurso,
     });
-    debugger;
     this.state.listaConcursos.map(con => {
       if (con.idconcurso === idConcurso) {
         this.setState({
@@ -83,7 +80,6 @@ class App extends Component {
     let token = localStorage.getItem('JWToken');
     Axios.get(`${conf.baseURL}/concurso/obtener/admin/${localStorage.getItem('iduser')}`, { headers: { 'Authorization': `Bearer ${token}` }, })
       .then(res => {
-        debugger;
         console.log(res.data.Items);
         this.setState({ listaConcursos: res.data.Items });
       }).catch(err => console.log(err));
@@ -241,8 +237,6 @@ class App extends Component {
   render() {
     if (!this.state.admin) {
       let path = window.location.pathname;
-      console.log("Path: ", path, "Admin: ", this.state.admin);
-      console.log("Concurso actual para locutor: ", this.state.urlConcursoActual);
       if (this.state.urlConcursoActual) {
         //Render Concurso para locutores
         return (

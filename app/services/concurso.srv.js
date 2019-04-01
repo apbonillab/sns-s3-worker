@@ -43,7 +43,6 @@ var params = {
         error(err);
     }else{
         //Si es correcto se crea la carpeta del concurso para la gestion de archivos
-                console.log(RUTA_GESTOR_ARCHIVOS+idconcurso);
                 if(!fs.existsSync(RUTA_GESTOR_ARCHIVOS_RAIZ))
                      fs.mkdirSync(RUTA_GESTOR_ARCHIVOS_RAIZ);
                 fs.mkdirSync(RUTA_GESTOR_ARCHIVOS+idconcurso);
@@ -75,7 +74,9 @@ module.exports.mostrarConcursoXURL = (urlconcurso,success,error)=>{
         if(err){
             error(err);
         }else{
-            console.log("-- CONCURSOXURL"+JSON.stringify(result));
+            if(result.Items.length>0){
+                result.Items[0]['url']=result.Items[0].ruta;
+            }            
             success(result);
         }
     
@@ -94,12 +95,9 @@ module.exports.mostrarConcursosXUsuario = (idcuentaadmin,success,error)=>{
         if(err){
             error(err);
         }else{
-            debugger;
-            console.log("CONCURSOXUSUARIO"+JSON.stringify(result.Items.length));
             for(var i=0;i<result.Items.length;i++){
                 result.Items[i]['url']=result.Items[i].ruta;
             }
-            console.log("-- "+JSON.stringify(result));
             success(result);
         }
     

@@ -53,9 +53,7 @@ class DetalleConcurso extends Component {
   }
 
   getInfoConcurso = () => {
-    debugger;
-    localStorage.getItem("url");
-    Axios.get(`${conf.baseURL}/concurso/obtener/url/${localStorage.getItem("url")}`)
+    Axios.get(`${conf.baseURL}/concurso/obtener/url/${this.state.url_concurso}`)
       .then(res => {
         let datos = res.data.Items[0];
         console.log(datos);
@@ -108,8 +106,9 @@ class DetalleConcurso extends Component {
 
   borrarConcurso = () => {
     let token = localStorage.getItem('JWToken');
+    let admin = localStorage.getItem('iduser');
     console.log('Concurso a borrar props: ', this.props.id);
-    Axios.delete(`${conf.baseURL}/concurso/eliminar/${this.props.id}`, { headers: { 'Authorization': `Bearer ${token}` }, })
+    Axios.delete(`${conf.baseURL}/concurso/eliminar/${this.props.id}/${admin}`, { headers: { 'Authorization': `Bearer ${token}` }, })
       .then(res => {
         console.log(res);
       }).catch(err => console.log(err));
@@ -140,7 +139,8 @@ class DetalleConcurso extends Component {
     if (this.props.admin) {
       return (
         <Container>
-          {console.log(this.state)}
+          {console.log("**"+ JSON.stringify(this.state))}
+          {console.log("**"+ JSON.stringify(this.props))}
           <h1>{this.state.info.nombre}</h1>
           {this.state.info.url?
             <Input
@@ -201,7 +201,6 @@ class DetalleConcurso extends Component {
           />
           <Divider />
           <CardGroup>
-
             {this.state.listaVoces.map(card => {
               return (
                 <TarjetaVoz
@@ -212,14 +211,14 @@ class DetalleConcurso extends Component {
                   apellidoLocutor={card.apellido}
                   idconcurso={this.state.idConcurso}
                   fecha={card.fecha}
-                  estado={card.estado_nombre}
+                  estado={card.estado}
                   voz_inicial={card.voz_inicial}
                   ext={card.extension}
                   observaciones={card.observaciones}
                   borrar={this.state.borrar}
                   mostarOriginal
                   url={this.state.url_concurso}
-                  file={`${conf.baseURL}/Voces/concurso_${card.concurso}/convertida/${card.voz_convertida}`}
+                  file={`${conf.baseURL}/Voces/concurso_${card.idconcurso}/convertida/${card.voz_convertida}`}
 
                 >
                 </TarjetaVoz>
@@ -257,7 +256,7 @@ class DetalleConcurso extends Component {
               Subir voz
             </Button>
           </Container>
-          <Image size='medium' centered src={this.state.info.banner ? `${conf.baseURL}/Voces/concurso_${this.state.info.idconcursos}/${this.state.info.banner}` : `${conf.baseURL}/images/default.jpg`}></Image>
+          <Image size='medium' centered src={this.state.info.banner ? `${conf.baseURL}/Voces/concurso_${this.state.info.idconcurso}/${this.state.info.banner}` : `${conf.baseURL}/images/default.jpg`}></Image>
           <Accordion fluid styled>
             <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
               <Icon name='dropdown' />
@@ -305,7 +304,7 @@ class DetalleConcurso extends Component {
           <Divider />
           <CardGroup>
             {this.state.listaVoces.map(card => {
-              if (card.estado_nombre === 'Convertida') {
+              if (card.estado === 'Convertida') {
                 return (
                   <TarjetaVoz
                     key={card.idarchivos}
@@ -314,11 +313,11 @@ class DetalleConcurso extends Component {
                     apellidoLocutor={card.apellido}
                     correo={card.correo}
                     fecha={card.fecha}
-                    estado={card.estado_nombre}
+                    estado={card.estado}
                     voz_inicial={card.voz_inicial}
                     observaciones={card.observaciones}
                     borrar={this.state.borrar}
-                    file={`${conf.baseURL}/Voces/concurso_${card.concurso}/convertida/${card.voz_convertida}`}
+                    file={`${conf.baseURL}/Voces/concurso_${card.idconcurso}/convertida/${card.voz_convertida}`}
                   >
                   </TarjetaVoz>
                 );
@@ -329,7 +328,7 @@ class DetalleConcurso extends Component {
           <NuevaVoz
             open={this.state.openCrearVoz}
             onClose={this.onCloseCrearVoz}
-            id_concurso={this.state.info.idconcursos}
+            id_concurso={this.state.info.idconcurso}
           />
         </Container>
       );

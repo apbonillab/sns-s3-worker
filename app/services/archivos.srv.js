@@ -21,6 +21,7 @@ module.exports.crearArchivo = (observaciones, nombre,segundonombre,apellido,segu
     var nombreCompleto = archivo.name.split('.');
     var extension = nombreCompleto[nombreCompleto.length - 1];
     let idarchivo=uuidv4();
+    let urlInicial = url.split("concurso/url/")[1];
     //archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/inicial/' + archivo.name + "_" + concurso +"_"+idarchivo + "." + extension, function (err) {
     archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/inicial/' + idarchivo + "." + extension, function (err) {
         if (err)
@@ -36,14 +37,15 @@ module.exports.crearArchivo = (observaciones, nombre,segundonombre,apellido,segu
                         console.log(err)
                         error(err)
                     }else{
-                        save(observaciones, nombre,segundonombre,apellido,segundoapellido, estado, idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida,correo,url,error,success);
+                        voz_convertida = idarchivo+".mp3";
+                        estado = "Convertida";
+                        save(observaciones, nombre,segundonombre,apellido,segundoapellido, estado, idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida,correo,urlInicial,error,success);
+                        envioCorreo(correo, url);
                     }
                 });
-                voz_convertida = concurso  + "_" + idarchivo+".mp3";
-                estado = "Convertida";
-                envioCorreo(correo, url);
+                
             }else{
-               save(observaciones, nombre,segundonombre,apellido,segundoapellido, estado, idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida,correo,url,error,success);
+               save(observaciones, nombre,segundonombre,apellido,segundoapellido, estado, idarchivo + "." + extension, concurso, dateAudit, extension, voz_convertida,correo,urlInicial,error,success);
             }
             
            
@@ -201,11 +203,11 @@ module.exports.obtenerArchxConcurso = (idconcurso,start,limit, success, error) =
                                 error(err);
                             }else{
                                 console.log("--  ACTUALIZAR ESTADO:"+JSON.stringify(result));
-                                success("ok");
                             }
                         
                         })
                     }  
+                    success("ok");
                 }else{
                     success("ok");
                 }

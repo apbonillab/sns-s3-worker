@@ -31,7 +31,6 @@ class NuevaVoz extends Component {
   }
 
   handleSave = () => {
-
     const {
       idLocutor,
       nombre,

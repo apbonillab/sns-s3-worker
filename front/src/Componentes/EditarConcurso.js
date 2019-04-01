@@ -25,7 +25,6 @@ class EditarConcurso extends Component {
   }
 
   getConcursoData = () => {
-    debugger;
     axios.get(`${conf.baseURL}/concurso/obtener/url/${this.props.urlConcurso}`)
       .then(res => {
         console.log('Concurso', res.data.Items);
@@ -74,7 +73,6 @@ class EditarConcurso extends Component {
   }
 
   handleSave = () => {
-    debugger;
     const {
       idconcurso,
       nombre,
@@ -98,7 +96,8 @@ class EditarConcurso extends Component {
       guion,
       recomendaciones,
       url,
-      banner
+      banner,
+      idadmin
     }, { headers: { 'Authorization': `Bearer ${token}` }, })
 
       .then(res => {

@@ -88,7 +88,7 @@ routr.post('/editar',ensureToken,(req, res) => {
         req.body.recomendaciones,
         req.body.url,
         req.body.banner,
-        "1ecf4a8b-2c3a-4ead-92ca-007d980bff7d",
+        req.body.idadmin,
         function (concurso) {
             res.status(200).send({'exito':true,'message':'Concurso actualizado exitosamente'})
         },function(error){

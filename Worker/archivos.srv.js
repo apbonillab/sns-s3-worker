@@ -1,10 +1,11 @@
 'use strict'
 const moment = require('moment');
-var conf = require('../config.js');
+var conf = require('../../config.js');
 const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos')
 const uuidv4 = require('uuid/v4');
 var AWS = require('aws-sdk');
 var uuid = require('uuid');
+var guardarEnS3= require('../../s3Storage');
 
 
 AWS.config.update({
@@ -16,7 +17,7 @@ var ddb = new AWS.DynamoDB.DocumentClient({apiVersion: '2018-03-24'});
 const ses = new AWS.SES({ apiVersion: "2010-12-01" });
 
 
-module.exports.crearArchivo = (observaciones, nombre,segundonombre,apellido,segundoapellido, concurso,url,file,correo, success, error) => {
+const crearArchivo = (observaciones, nombre,segundonombre,apellido,segundoapellido, concurso,url,file,correo, success, error) => {
     var archivo = file;
     var nombreCompleto = archivo.name.split('.');
     var extension = nombreCompleto[nombreCompleto.length - 1];
@@ -31,7 +32,12 @@ module.exports.crearArchivo = (observaciones, nombre,segundonombre,apellido,segu
             let dateAudit = moment(d).format("YYYY-MM-DD HH:mm:ss");
             let voz_convertida = null;
             let estado = "Sin convertir";
+            let ruta="concurso-" + concurso;
+            let filename="/inicial/"+idarchivo+"."+extension;
+            guardarEnS3.guardarArchivoEnS3(ruta,filename,archivo.data);
             if (extension.toLowerCase() === 'mp3') {
+                filename="/convertida/"+idarchivo+"."+extension;
+                guardarEnS3.guardarArchivoEnS3(ruta,filename,archivo.data);
                 archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/convertida/'+ idarchivo + "." + extension, function (err) {
                     if (err) {
                         console.log(err)
@@ -86,7 +92,7 @@ function save( observaciones, nombre,segundonombre,apellido,segundoapellido, est
     });
 }
 
-module.exports.obtenerArchxConcursoURL = (urlConcurso,start,limit, success, error) => {
+const obtenerArchxConcursoURL = (urlConcurso,start,limit, success, error) => {
     let startNum = start;
     let LimitNum = limit;
     if(start == '' || limit == ''){
@@ -112,7 +118,7 @@ module.exports.obtenerArchxConcursoURL = (urlConcurso,start,limit, success, erro
 }
 
 
-module.exports.obtenerArchxConcurso = (idconcurso,start,limit, success, error) => {
+const obtenerArchxConcurso = (idconcurso,start,limit, success, error) => {
     let startNum = start;
     let LimitNum = limit;
     if(start == '' || limit == ''){
@@ -138,7 +144,7 @@ module.exports.obtenerArchxConcurso = (idconcurso,start,limit, success, error) =
     })
 }
 
-    module.exports.actualizarEstado = (idarchivos, voz_convertida, correo, ruta,idconcurso, success, error) => {
+const actualizarEstado = (idarchivos, voz_convertida, correo, ruta,idconcurso, success, error) => {
         var nombreCompleto = voz_convertida.split('.');
         var params = {
             TableName: 'archivos',
@@ -168,7 +174,7 @@ module.exports.obtenerArchxConcurso = (idconcurso,start,limit, success, error) =
     }
 
 
-    module.exports.actualizarRuta = (ruta,idconcurso,success, error) => {
+    const actualizarRuta = (ruta,idconcurso,success, error) => {
         var params = {
             TableName: 'archivos',
             FilterExpression : "idconcurso = :idconcurso",
@@ -218,46 +224,48 @@ module.exports.obtenerArchxConcurso = (idconcurso,start,limit, success, error) =
    }
 
 
-    module.exports.prueba=(success,error)=>{
-        envioCorreo("correo", "idconcurso");
-        success("ok");
-    }
+const prueba=(success,error)=>{
+    envioCorreo("correo", "idconcurso");
+    success("ok");
+}
 
 
-    function envioCorreo(correo, urlConcurso) {
-        var params = {
-            Destination: { 
-            ToAddresses: [
-                correo,
-            ]
-            },
-            Source: 'grupo8.cloud@gmail.com',
-            Message: {
-                Body: {
-                  Html: {
-                    Charset: "UTF-8",
-                    Data:
-                      "<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en el concurso: http://3.18.70.221:8080/concurso/url/"+url+" ..lista para concursar!!'</p></body></html>"
-                  },
-                  Text: {
-                    Charset: "UTF-8",
-                    Data: "Hello Charith Sample description time 1517831318946"
-                  }
+function envioCorreo(correo, urlConcurso) {
+    var params = {
+        Destination: { 
+        ToAddresses: [
+            correo,
+        ]
+        },
+        Source: 'grupo8.cloud@gmail.com',
+        Message: {
+            Body: {
+                Html: {
+                Charset: "UTF-8",
+                Data:
+                    `<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en este <a href ="http://34.201.182.142:8080/concurso/url/${urlConcurso}"> Concurso</a> ..Está lista para concursar!!'</p></body></html>`
                 },
-                Subject: {
-                  Charset: "UTF-8",
-                  Data: "Voz procesada exitosamente"
+                Text: {
+                Charset: "UTF-8",
+                Data: "Hello Charith Sample description time 1517831318946"
                 }
-              }
-        };
-        const sendEmail = ses.sendEmail(params).promise();
+            },
+            Subject: {
+                Charset: "UTF-8",
+                Data: "Voz procesada exitosamente"
+            }
+            }
+    };
+    const sendEmail = ses.sendEmail(params).promise();
 
-        sendEmail
-        .then(data => {
-            console.log("email enviado SES", data);
-        })
-        .catch(error => {
-            console.log(error);
-        });
+    sendEmail
+    .then(data => {
+        console.log("email enviado SES", data);
+    })
+    .catch(error => {
+        console.log(error);
+    });
 
-    }
+}
+
+module.exports = {crearArchivo,actualizarEstado,obtenerArchxConcurso, obtenerArchxConcursoURL,actualizarRuta}

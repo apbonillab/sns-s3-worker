@@ -1,5 +1,6 @@
 {
     "JWT_SECRET":"access987654",
     "ruta_gestion_archivos_raiz":".//Voces",
-    "ruta_gestion_archivos":".//Voces//concurso_"
+    "ruta_gestion_archivos":".//Voces//concurso_",
+    "URLS3" : "https://s3.amazonaws.com"
 }

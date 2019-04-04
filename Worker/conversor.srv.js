@@ -10,7 +10,7 @@ AWS.config.update({
     secretAccessKey:process.env.SECRET_ACCESS_KEY
 });
 var ddb = new AWS.DynamoDB.DocumentClient({apiVersion: '2018-03-24'});
-const s3 = require('../../s3Storage');
+const s3 = require('../Worker/s3Storage');
 const URLS3 = conf.get('URLS3')
 var fs = require('fs');
 

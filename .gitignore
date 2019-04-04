@@ -64,3 +64,4 @@ typings/
 config/config.json
 front/package-lock.json
 package-lock.json
+Worker/config/config.json

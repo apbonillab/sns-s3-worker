@@ -200,7 +200,7 @@ class DetalleConcurso extends Component {
             totalPages={5}
           />
           <Divider />
-          <CardGroup>
+          <CardGroup> 
             {this.state.listaVoces.map(card => {
               return (
                 <TarjetaVoz

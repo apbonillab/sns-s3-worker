@@ -12,6 +12,7 @@ AWS.config.update({
 var ddb = new AWS.DynamoDB.DocumentClient({apiVersion: '2018-03-24'});
 
 module.exports.crearAdmin = (nombre,segundonombre,apellido,segundoapellido,correo,contrasena,success,error)=>{
+    
     let idadmin = uuidv4();
     var params = {
         TableName: 'administrador',

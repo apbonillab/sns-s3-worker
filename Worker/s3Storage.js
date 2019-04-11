@@ -1,12 +1,17 @@
 var AWS = require('aws-sdk');
-const s3empty = require('s3-bucket-empty');
+var aws_sqs = require ('./sqs')
+var conf= require('./config/config.json')
+const dotenv = require('dotenv');
 
+dotenv.config( {path: './environments/worker.env'});
 
 AWS.config.update({
   region: 'us-east-1',
   accessKeyId: process.env.ACCES_KEY_ID_S3,
   secretAccessKey: process.env.SECRET_ACCESS_KEY_S3
 });
+
+console.log('Variables de entorno',process.env);
 
 const s3 = new AWS.S3({
   apiVersion: '2006-03-01'
@@ -18,21 +23,23 @@ const s3Conf = {
   "S3_REGION": 'us-east-1'
 };
 
-module.exports.guardarArchivoEnS3 = (route, name, file) => {
-  console.log("bucket: ", route);
+module.exports.saveFileToS3 = (name, file, toSqs) => {
+  let bucketname= 'voces-thevoice'
   console.log("key: ", name);
+  console.log("Bucket name: ", bucketname);
   s3.createBucket({
-    Bucket: route
+    Bucket: bucketname
   }, function (err, data) {
     if (err) {
-      console.log(err);
+      console.log("error de bucket: ",err);
       return 0;
     }
-    if(!s3.getBucketCors){
-      configureCors(route);
+    console.log("CORS del bucket :",s3.getBucketCors.data);
+    if(!s3.getBucketCors.data){
+      configureCors(bucketname);
     }
     let params = {
-      Bucket: route,
+      Bucket: bucketname,
       Key: name,
       ACL: 'public-read',
       Body: file,
@@ -42,10 +49,15 @@ module.exports.guardarArchivoEnS3 = (route, name, file) => {
         console.log(err);
         return 0;
       }
-
-      const textResponse = 'Successfully uploaded data to ' + route + '/' + name;
+      const textResponse = 'Successfully uploaded data to ' + bucketname + '/' + name;
       console.log(textResponse);
     });
+    let urlSqs=`${conf.URLS3}/${bucketname}/${name}`;
+    if(toSqs){
+      console.log("url sqs: ",urlSqs);
+      aws_sqs.inQueue(urlSqs);
+    }
+    listBucketKeys(name);
 
   });
 }
@@ -95,76 +107,55 @@ const configureCors = (bucket)=>{
 
 }
 
-module.exports.borrarBucket = (route,callback) => {
-    /*console.log("Entra a borrar");
-    clearBucket(s3,route);
-    
-    s3.listObjects(route,function(err,data){
-      console.log("contenido del bucket a borrar: ",data);
-      if(data.Contents){
-        console.log("contenido del bucket a borrar: ",data.Contents);
-        clearBucket(s3,route);
-        borrarBucket(route);
-      }else{
-        s3.deleteBucket(params,function(err,data){
-          if (err) console.log(err, err.stack); // an error occurred
-          else     console.log("Bucket borrado: ",data);
-        });
-      }
-    });*/
-    let params ={
-      Bucket : route,
-    };
-    console.log("Bucket a borrar: ",params.Bucket);
-    s3empty.empty(s3Conf, route)
-       .then(() => {
-        console.log('s3empty done');
-        s3.deleteBucket(params,function(err,data){
-          if (err) console.log(err, err.stack); // an error occurred
-          else     console.log("Bucket borrado: ",data);
-        });
+module.exports.deleteBucketFolder = (raiz) => {
 
-    });
-    
+  let split = raiz.split('/');
+  let dir =split[0]+"/";
+  emptyBucket(dir);    
 }
 
-module.exports.listarBucket = (route) => {
-  let params = {
-    Bucket: route,
-  };
-
-  s3.listObjects(params, function (err, data) {
-      if (err) return callback(err);
-      console.log("Lista de objetos en bucket: ",data);
-      console.log("Numero de objetos: ",data.Contents.length);
-      if (data.Contents.length == 0) callback();
-      params.Delete = {
-        Objects: []
-      };
-      data.Contents.forEach(function (content) {
-        params.Delete.Objects.push({
-          Key: content.Key
-        });
-      });
+const listBucketKeys = (key)=>{
+  var split = key.split('/');
+  var raiz = split[0];
+  console.log("directorio raiz: ", raiz);
+  let params={
+    Bucket: 'voces-thevoice',
+    Prefix: raiz,
+  }
+  s3.listObjectsV2(params,function(err,data){
+    if (err) console.log(err, err.stack); // an error occurred
+    else     console.log(data);           // successful response
   });
 }
 
-const clearBucket =(client, bucket) => {
-  var self = this;
-  client.listObjects({Bucket: bucket}, function (err, data) {
-      if (err) {
-          console.log("error listing bucket objects "+err);
-          return;
+const emptyBucket = (dir) =>{
+  let currentData;
+  let bucketname ='voces-thevoice';
+  let params = {
+      Bucket: bucketname,
+      Prefix: dir
+  };
+
+  return s3.listObjects(params).promise().then(data => {
+      if (data.Contents.length === 0) {
+          throw new Error('List of objects empty.');
       }
-      var items = data.Contents;
-      console.log("items :", items);
-      for (var i = 0; i < items.length; i += 1) {
-          var deleteParams = {Bucket: bucket, Key: items[i].Key};
-          //self.deleteObject(client, deleteParams);
-          s3.deleteObject(deleteParams, function(err,data){
-            if (err) console.log(err, err.stack); // an error occurred
-            else     console.log(data);           // successful response
-          })
+
+      currentData = data;
+
+      params = {Bucket: bucketname};
+      params.Delete = {Objects:[]};
+
+      currentData.Contents.forEach(content => {
+          params.Delete.Objects.push({Key: content.Key});
+      });
+
+      return s3.deleteObjects(params).promise();
+  }).then(() => {
+      if (currentData.Contents.length === 1000) {
+          emptyBucket(dir, callback);
+      } else {
+          return true;
       }
   });
 }

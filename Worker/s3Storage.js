@@ -11,8 +11,6 @@ AWS.config.update({
   secretAccessKey: process.env.SECRET_ACCESS_KEY_S3
 });
 
-console.log('Variables de entorno',process.env);
-
 const s3 = new AWS.S3({
   apiVersion: '2006-03-01'
 });

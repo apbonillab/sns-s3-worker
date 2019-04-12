@@ -8,7 +8,6 @@ AWS.config.update({
   region: 'us-east-2',
   accessKeyId:process.env.ACCES_KEY_ID_SQS,
   secretAccessKey:process.env.SECRET_ACCESS_KEY_SQS,
-
 });
 
 var sqs = new AWS.SQS({apiVersion: '2012-11-05'});

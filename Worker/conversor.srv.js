@@ -41,6 +41,9 @@ module.exports.convertirAudio = (url, success, error) => {
     source: url,
     nolog: true
   });
+  //fs.mkdirSync(RUTA_GESTOR_ARCHIVOS)
+  fs.mkdirSync(RUTA_GESTOR_ARCHIVOS + concurso)
+  fs.mkdirSync(RUTA_GESTOR_ARCHIVOS + concurso + '//convertida')
   console.log('Ruta S3: ', url);
   //var proc = new ffmpeg({ source: RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//inicial//'+archivo.voz_inicial, nolog: true })
   var isWin = process.platform === 'win32';

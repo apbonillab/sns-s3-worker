@@ -15,12 +15,6 @@ const s3 = new AWS.S3({
   apiVersion: '2006-03-01'
 });
 
-const s3Conf = {
-  "S3_SECRET": process.env.SECRET_ACCESS_KEY_S3,
-  "S3_ACCESS_KEY": process.env.ACCES_KEY_ID_S3,
-  "S3_REGION": 'us-east-1'
-};
-
 module.exports.saveFileToS3 = (name, file, toSqs) => {
   let bucketname= 'voces-thevoice'
   console.log("key: ", name);

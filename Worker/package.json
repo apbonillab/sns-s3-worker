@@ -23,7 +23,8 @@
     "mysql": "^2.16.0",
     "nconf": "^0.10.0",
     "node-cron": "^2.0.3",
-    "nodemailer": "^5.1.1"
+    "nodemailer": "^5.1.1",
+    "sqs-consumer": "^5.2.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",

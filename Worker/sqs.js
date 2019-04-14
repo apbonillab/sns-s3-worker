@@ -14,7 +14,26 @@ var sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
 const queueURL = 'https://sqs.us-east-2.amazonaws.com/760376241675/WorkerSQS.fifo';
 
-module.exports.inQueue = (urlInicial) =>{
+const { Consumer } = require('sqs-consumer');
+
+const app = Consumer.create({
+  queueUrl: queueURL,
+  handleMessage: async (message) => {
+    console.log('Mensaje: ',message);
+    convertirVoz(message);
+  },
+  sqs: sqs
+});
+
+app.on('error', (err) => {
+  console.error(err.message);
+});
+
+app.on('processing_error', (err) => {
+  console.error(err.message);
+});
+
+inQueue = (urlInicial) =>{
   var params = {
     MessageGroupId: 'Voces',
     MessageBody: urlInicial,
@@ -80,4 +99,4 @@ const onVoiceProcessed = (handle) => {
   });
 };
 
-deQueue();
+module.exports = app

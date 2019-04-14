@@ -13,6 +13,7 @@ var ddb = new AWS.DynamoDB.DocumentClient({ apiVersion: '2018-03-24' });
 const s3 = require('./s3Storage');
 const URLS3 = conf.get('URLS3');
 var fs = require('fs');
+const archivos = require('./archivos.srv');
 
 
 const logger = winston.createLogger({
@@ -33,17 +34,23 @@ module.exports.convertirAudio = (url, success, error) => {
   //var voz = nombreCompleto[0];
   //var bucket = `voces-thevoice/concurso-${archivo.idconcurso}`;
   //var rutas3 = `${URLS3}/${bucket}/inicial/${archivo.voz_inicial}`;
-  let urlArchivo = url.split('/');
+  let trama = url.split(';')
+  let urlArchivo = trama[0].split('/');
   let bucket = urlArchivo[3];
   let concurso = urlArchivo[4];
   let fileName = urlArchivo[6].split('.')[0];
+  let extension_inicial = urlArchivo[6].split('.')[1];
   var proc = new ffmpeg({
-    source: url,
+    source: trama[0],
     nolog: true
   });
   //fs.mkdirSync(RUTA_GESTOR_ARCHIVOS)
-  fs.mkdirSync(RUTA_GESTOR_ARCHIVOS + concurso)
-  fs.mkdirSync(RUTA_GESTOR_ARCHIVOS + concurso + '//convertida')
+  if(!fs.existsSync(RUTA_GESTOR_ARCHIVOS + concurso)){
+    fs.mkdirSync(RUTA_GESTOR_ARCHIVOS + concurso)
+    if(!fs.existsSync(RUTA_GESTOR_ARCHIVOS + concurso + '//convertida')){
+      fs.mkdirSync(RUTA_GESTOR_ARCHIVOS + concurso + '//convertida')
+    }
+  }
   console.log('Ruta S3: ', url);
   //var proc = new ffmpeg({ source: RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//inicial//'+archivo.voz_inicial, nolog: true })
   var isWin = process.platform === 'win32';
@@ -73,13 +80,16 @@ module.exports.convertirAudio = (url, success, error) => {
           console.error(err);
         }
         let nameConvertido = `${concurso}/convertida/${fileName}.mp3`;
-        s3.saveFileToS3(nameConvertido, data,false);
+        s3.saveFileToS3(nameConvertido, data,false,() => {
+          archivos.actualizarEstado(trama[1],`${fileName}.mp3`,trama[3],concurso,trama[2],success,()=>{
+            console.log('ERROR: ',err)
+          })
+        });
       });
       /*fs.unlink(RUTA_GESTOR_ARCHIVOS + archivo.concurso + '//convertida//' + voz + '.mp3',function(err){
                 if(err) throw err;
                 console.log('File deleted!');
             });*/
-      success();
     })
     .saveToFile(RUTA_GESTOR_ARCHIVOS + concurso + '//convertida//' + fileName + '.mp3'); //path where you want to save your file   
 };

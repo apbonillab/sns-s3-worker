@@ -15,7 +15,7 @@ const s3 = new AWS.S3({
   apiVersion: '2006-03-01'
 });
 
-module.exports.saveFileToS3 = (name, file, toSqs) => {
+module.exports.saveFileToS3 = (name, file, toSqs, success) => {
   let bucketname= 'voces-thevoice'
   console.log("key: ", name);
   console.log("Bucket name: ", bucketname);
@@ -39,10 +39,12 @@ module.exports.saveFileToS3 = (name, file, toSqs) => {
     s3.putObject(params, function (err, data) {
       if (err) {
         console.log(err);
+        success(err);
         return 0;
       }
       const textResponse = 'Successfully uploaded data to ' + bucketname + '/' + name;
       console.log(textResponse);
+      success();
     });
     let urlSqs=`${conf.URLS3}/${bucketname}/${name}`;
     if(toSqs){

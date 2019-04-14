@@ -1,9 +1,9 @@
 'use strict';
-var conf = require('../../config.js');
+var conf = require('./config.js');
 const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos');
 const uuidv4 = require('uuid/v4');
 var AWS = require('aws-sdk');
-var guardarEnS3= require('../../s3Storage');
+var guardarEnS3= require('./s3Storage');
 
 
 AWS.config.update({

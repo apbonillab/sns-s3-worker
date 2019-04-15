@@ -54,7 +54,7 @@ module.exports.convertirAudio = (url, success, error) => {
   console.log('Ruta S3: ', url);
   //var proc = new ffmpeg({ source: RUTA_GESTOR_ARCHIVOS+archivo.concurso+'//inicial//'+archivo.voz_inicial, nolog: true })
   var isWin = process.platform === 'win32';
-  var path = isWin ? 'C:\\ffmpeg\\bin\\ffmpeg.exe' : '/usr/local/bin/ffmpeg';
+  var path = isWin ? 'C:\\ffmpeg\\bin\\ffmpeg.exe' : '/usr/bin/ffmpeg';
   let start = new Date();
   //let filename = `concurso-${archivo.idconcurso}/convertida/${voz}.mp3`;
   date.format(start, 's');

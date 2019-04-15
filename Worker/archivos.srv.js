@@ -154,7 +154,7 @@ const actualizarEstado = (idarchivos, voz_convertida, correo, ruta,idconcurso, s
       error(err);
     }else{
       console.log('--  ACTUALIZAR ESTADO:'+JSON.stringify(result));
-      envioCorreo(correo, ruta);
+      envioCorreo(result.correo, result.ruta);
       success('ok');
     }
         

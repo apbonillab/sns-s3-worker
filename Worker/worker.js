@@ -27,8 +27,15 @@ app.get('/start', (req,res) => {
   res.send('Worker iniciado')
 })
 
+app.get('/status', (req,res) => {
+  res.send('Worker isRunnnig? '+sqsConsumer.isRunning)
+})
+
 app.get('/stop', (req,res) => {
   sqsConsumer.stop()
   res.send('Worker detenido')
 })
+
+sqsConsumer.start()
+
 module.exports = app;

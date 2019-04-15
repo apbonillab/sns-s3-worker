@@ -227,7 +227,7 @@ function envioCorreo(correo, urlConcurso) {
         Html: {
           Charset: 'UTF-8',
           Data:
-                    `<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en este <a href ="http://34.201.182.142:8080/concurso/url/${urlConcurso}"> Concurso</a> ..Está lista para concursar!!'</p></body></html>`
+                    `<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en este <a href ="LoadBalancerWebServerD-480062229.us-east-1.elb.amazonaws.com/concurso/url/${urlConcurso}"> Concurso</a> ..Está lista para concursar!!'</p></body></html>`
         },
         Text: {
           Charset: 'UTF-8',

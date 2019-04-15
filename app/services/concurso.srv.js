@@ -7,6 +7,7 @@ const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos')
 const RUTA_GESTOR_ARCHIVOS_RAIZ = conf.get('ruta_gestion_archivos_raiz')
 const uuidv4 = require('uuid/v4');
 var AWS = require('aws-sdk');
+var memcach = require('../../memcached');
 // Set the region 
 AWS.config.update({
     region: 'us-east-1',
@@ -14,6 +15,8 @@ AWS.config.update({
     secretAccessKey:process.env.SECRET_ACCESS_KEY
 });
 var ddb = new AWS.DynamoDB.DocumentClient({apiVersion: '2018-03-24'});
+const s3 = require('../../s3Storage');
+const URLS3 = conf.get('URLS3')
 
 module.exports.crear = (nombre,fecha_inicio,fecha_fin,valor,guion,recomendaciones,url,banner,idcuentaadmin,success,error)=>{
     let nameBanner
@@ -42,23 +45,30 @@ var params = {
         console.log(err)
         error(err);
     }else{
-        //Si es correcto se crea la carpeta del concurso para la gestion de archivos
+       /* //Si es correcto se crea la carpeta del concurso para la gestion de archivos
                 if(!fs.existsSync(RUTA_GESTOR_ARCHIVOS_RAIZ))
                      fs.mkdirSync(RUTA_GESTOR_ARCHIVOS_RAIZ);
                 fs.mkdirSync(RUTA_GESTOR_ARCHIVOS+idconcurso);
                 fs.mkdirSync(RUTA_GESTOR_ARCHIVOS+idconcurso+'//inicial');
                 fs.mkdirSync(RUTA_GESTOR_ARCHIVOS+idconcurso+'//convertida');
                 if(banner!==null){
-                    banner.mv(RUTA_GESTOR_ARCHIVOS+idconcurso+`//${banner.name}`,function(err){
+                    let filename=`concurso-${idconcurso}/${banner.name}`;
+                    s3.saveFileToS3(filename,banner.data,false,);
+                    /*banner.mv(RUTA_GESTOR_ARCHIVOS+idconcurso+`//${banner.name}`,function(err){
                         if(err){
                             return res.status(500).send(err);
                         }
                         success(idconcurso);
                     });
+                    success(idconcurso);
                 }
                 else{
                     success(idconcurso);
-                }
+                }*/
+        if(banner!==null){
+            let filename=`concurso-${idconcurso}/${banner.name}`;
+            s3.saveFileToS3(filename,banner.data,false,"","","",success);        
+        }
     }       
     })
 }
@@ -69,7 +79,7 @@ module.exports.mostrarConcursoXURL = (urlconcurso,success,error)=>{
         TableName: 'concursos',
         FilterExpression : "ruta = :url",
         ExpressionAttributeValues : {":url": urlconcurso} 
-      };
+    };
     ddb.scan(params,function(err,result){
         if(err){
             error(err);
@@ -81,6 +91,7 @@ module.exports.mostrarConcursoXURL = (urlconcurso,success,error)=>{
         }
     
     })
+    
 }
 
 module.exports.mostrarConcursosXUsuario = (idcuentaadmin,success,error)=>{
@@ -88,7 +99,7 @@ module.exports.mostrarConcursosXUsuario = (idcuentaadmin,success,error)=>{
    var params = {
         TableName: 'concursos',
         FilterExpression : "admin = :creador",
-        ExpressionAttributeValues : {":creador": idcuentaadmin} 
+        ExpressionAttributeValues : {":creador": idcuentaadmin}
       };
     
       ddb.scan(params,function(err,result){
@@ -104,7 +115,28 @@ module.exports.mostrarConcursosXUsuario = (idcuentaadmin,success,error)=>{
     })
 }
 
-        
+module.exports.mostrarConcursos = (success,error)=>{
+    var params = {
+        TableName: 'concursos',
+    };
+    ddb.scan(params,async function(err,result){
+        if(err){
+            error(err);
+        }else{
+            for(var i=0;i<10;i++){
+                result.Items[i]['url']=result.Items[i].ruta;
+                let item={nombre:result.Items[i].nombre,
+                    url:result.Items[i].url}
+                console.log("resultado: ",item);
+                //memcach.putCache(i.toString(), JSON.stringify(item));
+                await memcach.putCache(result.Items[i].url, result.Items[i].nombre);
+            }
+
+            success(result);
+        }
+    })
+    
+}
 
 module.exports.eliminarArchivosXconcurso = (idconcursos,idadmin,success,error)=>{
     var params = {
@@ -120,12 +152,16 @@ module.exports.eliminarArchivosXconcurso = (idconcursos,idadmin,success,error)=>
             error(err);
         }else{
             deleteFolderRecursive(RUTA_GESTOR_ARCHIVOS+idconcursos);
+            let route=`concurso-${idconcursos}`;
+            console.log("concurso a borrar :", route);
+            s3.deleteBucketFolder(route);
             success(result);
         }
+
     })
 }
 
-  var deleteFolderRecursive = function(path) {
+const deleteFolderRecursive = function(path) {
     if( fs.existsSync(path) ) {
     fs.readdirSync(path).forEach(function(file,index){
     var curPath = path + "/" + file;

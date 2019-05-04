@@ -7,17 +7,6 @@ const bodyParser = require('body-parser');
 var path = require('path');
 const sqsConsumer = require('./sqs');
 
-// include and initialize the rollbar library with your access token
-var Rollbar = require("rollbar");
-var rollbar = new Rollbar({
-  accessToken: 'b3d77501caa34f65bb4b74f72a0b51b5',
-  captureUncaught: true,
-  captureUnhandledRejections: true
-});
-
-// record a generic message and send it to Rollbar
-rollbar.log("Hello world!");
-
 var app = express();
 app.options('*', cors());
 app.use(cors());

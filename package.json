@@ -24,7 +24,6 @@
     "nconf": "^0.10.0",
     "node-cron": "^2.0.3",
     "nodemailer": "^5.1.1",
-    "rollbar": "^2.6.1",
     "sendgrid": "^5.2.3",
     "sqs-consumer": "^5.2.0",
     "winston": "^3.2.1"

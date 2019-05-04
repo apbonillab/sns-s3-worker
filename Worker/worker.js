@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+var path = require('path');
 const sqsConsumer = require('./sqs');
 
 var app = express();
@@ -15,7 +16,7 @@ var http = require('http');
 var server = http.createServer(app);
 server.listen(8080, '0.0.0.0');
 server.on('listening', function() {
-  console.log('Express server started on port %s at %s at %s', server.address().port, server.address().address,process.env.HOST);
+  console.log('Worker server started on port %s at %s at %s', server.address().port, server.address().address,process.env.HOST);
 });
 
 app.use(logger('dev'));
@@ -27,8 +28,17 @@ app.get('/start', (req,res) => {
   res.send('Worker iniciado')
 })
 
+app.get('/status', (req,res) => {
+  res.send('Worker isRunnnig? '+sqsConsumer.isRunning)
+})
+
 app.get('/stop', (req,res) => {
   sqsConsumer.stop()
   res.send('Worker detenido')
 })
+
+app.use('/logs', express.static(path.join(__dirname, './info.log')));
+
+sqsConsumer.start()
+
 module.exports = app;

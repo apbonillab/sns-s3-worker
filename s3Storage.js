@@ -1,6 +1,5 @@
 var AWS = require('aws-sdk');
 var aws_sqs = require ('./sqs')
-var conf= require('config.json')
 const dotenv = require('dotenv');
 
 dotenv.config( {path: './environments/worker.env'});
@@ -46,7 +45,7 @@ module.exports.saveFileToS3 = (name, file, toSqs, success) => {
       console.log(textResponse);
       success();
     });
-    let urlSqs=`${conf.URLS3}/${bucketname}/${name}`;
+    let urlSqs=`https://s3.amazonaws.com/${bucketname}/${name}`;
     if(toSqs){
       console.log("url sqs: ",urlSqs);
       aws_sqs.inQueue(urlSqs);

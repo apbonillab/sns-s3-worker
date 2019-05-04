@@ -1,6 +1,5 @@
 'use strict';
 var conf = require('./config.js');
-const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos');
 const uuidv4 = require('uuid/v4');
 var AWS = require('aws-sdk');
 var guardarEnS3= require('./s3Storage');
@@ -13,124 +12,6 @@ AWS.config.update({
 });
 var ddb = new AWS.DynamoDB.DocumentClient({apiVersion: '2018-03-24'});
 var email = require('sendgrid')(process.env.SENDGRID_API_KEY);
-
-
-const crearArchivo = (observaciones, nombre,segundonombre,apellido,segundoapellido, concurso,url,file,correo, success, error) => {
-  var archivo = file;
-  var nombreCompleto = archivo.name.split('.');
-  var extension = nombreCompleto[nombreCompleto.length - 1];
-  let idarchivo=uuidv4();
-  let urlInicial = url.split('concurso/url/')[1];
-  //archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/inicial/' + archivo.name + "_" + concurso +"_"+idarchivo + "." + extension, function (err) {
-  archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/inicial/' + idarchivo + '.' + extension, function (err) {
-    if (err)
-      error(err);
-    else{
-      let d = new Date();
-      let dateAudit = d.getTime();
-      let voz_convertida = null;
-      let estado = 'Sin convertir';
-      //let ruta="concurso-" + concurso;
-      let filename=`concurso-${concurso}/inicial/${idarchivo}.${extension}`;
-      console.log('extension --> '+extension);
-      guardarEnS3.saveFileToS3(filename,archivo.data,true);
-      if (extension.toLowerCase() === 'mp3') {
-        console.log('es igual');
-        filename=`concurso-${concurso}/convertida/${idarchivo}.${extension}`;
-        guardarEnS3.saveFileToS3(filename,archivo.data, false);
-        archivo.mv(RUTA_GESTOR_ARCHIVOS + concurso + '/convertida/'+ idarchivo + '.' + extension, function (err) {
-          if (err) {
-            console.log(err);
-            error(err);
-          }else{
-            voz_convertida = idarchivo+'.mp3';
-            estado = 'Convertida';
-            save(observaciones, nombre,segundonombre,apellido,segundoapellido, estado, idarchivo + '.' + extension, concurso, dateAudit, extension, voz_convertida,correo,urlInicial,error,success);
-            envioCorreo(correo, url);
-          }
-        });
-                
-      }else{
-        save(observaciones, nombre,segundonombre,apellido,segundoapellido, estado, idarchivo + '.' + extension, concurso, dateAudit, extension, voz_convertida,correo,urlInicial,error,success);
-      }
-            
-           
-    }
-  });
-    
-};
-
-function save( observaciones, nombre,segundonombre,apellido,segundoapellido, estado, voz_inicial, concurso, dateAudit, extension, voz_convertida,correo,url,error,success ){
-  let idarchivo = uuidv4();
-  var params = {
-    TableName: 'archivos',
-    Item: {
-      idarchivos: idarchivo,
-      observaciones: observaciones?observaciones:'Sin observaciones',
-      nombre: nombre,
-      apellido: apellido,
-      segundonombre:segundonombre?segundonombre:' ',
-      segundoapellido:segundoapellido?segundoapellido:' ',
-      estado:estado,
-      voz_inicial: voz_inicial,
-      idconcurso: concurso,
-      fecha: dateAudit,
-      ext_voz_inicial:extension,
-      voz_convertida: voz_convertida?voz_convertida:'Sin convertir',
-      correo:correo,
-      ruta: url
-    }
-  };
-  console.log('parametros save: ',params);
-
-  ddb.put(params,function(err,result){
-    if(err){
-      console.log('Error save: ',err);
-      error(err);
-    }else{
-      success(result);
-    }
-  });
-}
-
-const obtenerArchxConcursoURL = (urlConcurso,start,limit, success, error) => {
-  var params = {
-    TableName: 'archivos',
-    FilterExpression : 'ruta = :url',
-    ExpressionAttributeValues : {':url': urlConcurso} 
-  };
-  ddb.scan(params,function(err,result){
-    if(err){
-      error(err);
-    }else{
-      console.log('-- archivosXurl '+JSON.stringify(result));
-      success(result);
-    }
-    
-  });
-
-};
-
-
-const obtenerArchxConcurso = (idconcurso,start,limit, success, error) => {
-
-  var params = {
-    TableName: 'archivos',
-    FilterExpression : 'idconcurso = :idconcurso',
-    ExpressionAttributeValues : {':idconcurso': idconcurso} 
-  };
-  ddb.scan(params,function(err,result){
-    if(err){
-      error(err);
-    }else{
-      console.log('-- archivosXcONCURSO'+JSON.stringify(result));
-      result.url = result.ruta;
-      console.log('-- archivosXcONCURSO_____'+JSON.stringify(result));
-      success(result);
-    }
-    
-  });
-};
 
 const actualizarEstado = (idarchivos, voz_convertida, correo, ruta,idconcurso, success, error) => {
   var nombreCompleto = voz_convertida.split('.');
@@ -246,4 +127,4 @@ function envioCorreo(correo, urlConcurso) {
 
 }
 
-module.exports = {crearArchivo,actualizarEstado,obtenerArchxConcurso, obtenerArchxConcursoURL,actualizarRuta};
+module.exports = {actualizarEstado,actualizarRuta};

@@ -12,7 +12,7 @@ AWS.config.update({
   secretAccessKey:process.env.SECRET_ACCESS_KEY
 });
 var ddb = new AWS.DynamoDB.DocumentClient({apiVersion: '2018-03-24'});
-const ses = new AWS.SES({ apiVersion: '2010-12-01' });
+var email = require('sendgrid')(process.env.SENDGRID_API_KEY);
 
 
 const crearArchivo = (observaciones, nombre,segundonombre,apellido,segundoapellido, concurso,url,file,correo, success, error) => {
@@ -215,40 +215,34 @@ const actualizarRuta = (ruta,idconcurso,success, error) => {
 
 
 function envioCorreo(correo, urlConcurso) {
-  var params = {
-    Destination: { 
-      ToAddresses: [
-        correo,
-      ]
-    },
-    Source: 'grupo8.cloud@gmail.com',
-    Message: {
-      Body: {
-        Html: {
-          Charset: 'UTF-8',
-          Data:
-                    `<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en este <a href ="http://LoadBalancerWebServerD-480062229.us-east-1.elb.amazonaws.com/concurso/url/${urlConcurso}"> Concurso</a> ..Está lista para concursar!!'</p></body></html>`
+  var request = email.emptyRequest({
+    method: 'POST',
+    path: '/v3/mail/send',
+    body: {
+      personalizations: [
+        {
+          to: [
+            {
+              email: 'grupo8.cloud@gmail.com',
+            },
+          ],
+          subject: 'Voz procesada exitosamente',
         },
-        Text: {
-          Charset: 'UTF-8',
-          Data: 'Hello Charith Sample description time 1517831318946'
-        }
+      ],
+      from: {
+        email: correo,
       },
-      Subject: {
-        Charset: 'UTF-8',
-        Data: 'Voz procesada exitosamente'
-      }
-    }
-  };
-  const sendEmail = ses.sendEmail(params).promise();
+      content: [
+        {
+          type: 'text/plain',
+          value: `<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en este <a href ="http://LoadBalancerWebServerD-480062229.us-east-1.elb.amazonaws.com/concurso/url/${urlConcurso}"> Concurso</a> ..Está lista para concursar!!'</p></body></html>` ,
+        },
+      ],
+    },
+  });
 
-  sendEmail
-    .then(data => {
-      console.log('email enviado SES', data);
-    })
-    .catch(error => {
-      console.log(error);
-    });
+
+  
 
 }
 

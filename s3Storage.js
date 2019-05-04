@@ -1,9 +1,9 @@
 var AWS = require('aws-sdk');
-var aws_sqs = require ('./app/services/sqs')
-var conf= require('./config/config.json')
+var aws_sqs = require ('./sqs')
+var conf= require('config.json')
 const dotenv = require('dotenv');
 
-dotenv.config( {path: './environments/aws.env'});
+dotenv.config( {path: './environments/worker.env'});
 
 AWS.config.update({
   region: 'us-east-1',
@@ -15,7 +15,7 @@ const s3 = new AWS.S3({
   apiVersion: '2006-03-01'
 });
 
-module.exports.saveFileToS3 = (name, file, toSqs,idarchivo,concurso,correo,success) => {
+module.exports.saveFileToS3 = (name, file, toSqs, success) => {
   let bucketname= 'voces-thevoice'
   console.log("key: ", name);
   console.log("Bucket name: ", bucketname);
@@ -47,10 +47,9 @@ module.exports.saveFileToS3 = (name, file, toSqs,idarchivo,concurso,correo,succe
       success();
     });
     let urlSqs=`${conf.URLS3}/${bucketname}/${name}`;
-    let aSqs=urlSqs+';'+idarchivo +';'+ concurso + ";"+ correo;
     if(toSqs){
       console.log("url sqs: ",urlSqs);
-      aws_sqs.inQueue(aSqs);
+      aws_sqs.inQueue(urlSqs);
     }
     listBucketKeys(name);
 

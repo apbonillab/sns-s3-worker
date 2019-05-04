@@ -4,7 +4,6 @@ const uuidv4 = require('uuid/v4');
 var AWS = require('aws-sdk');
 var guardarEnS3= require('./s3Storage');
 
-
 AWS.config.update({
   region: 'us-east-1',
   accessKeyId:process.env.ACCES_KEY_ID,
@@ -115,13 +114,22 @@ function envioCorreo(correo, urlConcurso) {
       },
       content: [
         {
-          type: 'text/plain',
+          type: 'text/UTF-8',
           value: `<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en este <a href ="http://LoadBalancerWebServerD-480062229.us-east-1.elb.amazonaws.com/concurso/url/${urlConcurso}"> Concurso</a> ..Está lista para concursar!!'</p></body></html>` ,
         },
       ],
     },
   });
 
+  email.API(request, function(error, response) {
+    if (error) {
+      console.log('Error response received');
+    }
+    console.log(response.statusCode);
+    console.log(response.body);
+    console.log(response.headers);
+  });
+  
 
   
 

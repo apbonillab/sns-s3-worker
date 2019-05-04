@@ -1,9 +1,6 @@
 'use strict';
-var conf = require('./config.js');
 const uuidv4 = require('uuid/v4');
 var AWS = require('aws-sdk');
-var guardarEnS3= require('./s3Storage');
-
 
 AWS.config.update({
   region: 'us-east-1',

@@ -45,7 +45,7 @@ module.exports.saveFileToS3 = (name, file, toSqs, success) => {
       console.log(textResponse);
       success();
     });
-    let urlSqs=`https://s3.amazonaws.com/${bucketname}/${name}`;
+    let urlSqs=`${process.env.URLS3}/${bucketname}/${name}`;
     if(toSqs){
       console.log("url sqs: ",urlSqs);
       aws_sqs.inQueue(urlSqs);

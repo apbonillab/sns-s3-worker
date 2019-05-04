@@ -1,6 +1,5 @@
 var ffmpeg = require('fluent-ffmpeg');
-var conf = require('./config.js');
-const RUTA_GESTOR_ARCHIVOS = conf.get('ruta_gestion_archivos');
+const RUTA_GESTOR_ARCHIVOS = process.env.ruta_gestion_archivos;
 let date = require('date-and-time');
 const winston = require('winston');
 var AWS = require('aws-sdk');
@@ -11,7 +10,6 @@ AWS.config.update({
 });
 var ddb = new AWS.DynamoDB.DocumentClient({ apiVersion: '2018-03-24' });
 const s3 = require('./s3Storage');
-const URLS3 = conf.get('URLS3');
 var fs = require('fs');
 const archivos = require('./archivos.srv');
 
@@ -30,10 +28,7 @@ const logger = winston.createLogger({
   ]
 });
 module.exports.convertirAudio = (url, success, error) => {
-  //var nombreCompleto = archivo.voz_inicial.split('.');
-  //var voz = nombreCompleto[0];
-  //var bucket = `voces-thevoice/concurso-${archivo.idconcurso}`;
-  //var rutas3 = `${URLS3}/${bucket}/inicial/${archivo.voz_inicial}`;
+ 
   let trama = url.split(';')
   let urlArchivo = trama[0].split('/');
   let bucket = urlArchivo[3];

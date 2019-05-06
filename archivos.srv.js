@@ -113,7 +113,7 @@ function envioCorreo(correo, urlConcurso) {
       content: [
         {
           type: 'text/UTF-8',
-          value: `<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en este <a href ="http://LoadBalancerWebServerD-480062229.us-east-1.elb.amazonaws.com/concurso/url/${urlConcurso}"> Concurso</a> ..Está lista para concursar!!'</p></body></html>` ,
+          value: `<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en este <a href ="https://supervoices08.herokuapp.com/concurso/url/${urlConcurso}"> Concurso</a> ..Está lista para concursar!!'</p></body></html>` ,
         },
       ],
     },

@@ -101,18 +101,18 @@ function envioCorreo(correo, urlConcurso) {
         {
           to: [
             {
-              email: 'grupo8.cloud@gmail.com',
+              email: correo,
             },
           ],
           subject: 'Voz procesada exitosamente',
         },
       ],
       from: {
-        email: correo,
+        email: 'grupo8.cloud@gmail.com',
       },
       content: [
         {
-          type: 'text/UTF-8',
+          type: 'text/html',
           value: `<html><body><h1>Voz Procesada!!</h1> <p>Tú voz ha sido procesada, en este <a href ="https://supervoices08.herokuapp.com/concurso/url/${urlConcurso}"> Concurso</a> ..Está lista para concursar!!'</p></body></html>` ,
         },
       ],
